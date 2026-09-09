@@ -1,0 +1,30 @@
+@use 'styles/breakpoints' as *;
+
+.hero {
+  display: grid;
+  gap: var(--space-8);
+  align-items: center;
+
+  @include from('lg') {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.intro {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+  max-width: 55ch;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.image {
+  border-radius: var(--radius-md);
+  width: 100%;
+  height: auto;
+}

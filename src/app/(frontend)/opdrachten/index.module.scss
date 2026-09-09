@@ -1,0 +1,35 @@
+@use 'styles/breakpoints' as *;
+
+.page {
+  padding-block: var(--space-16);
+}
+
+.header {
+  max-width: 40rem;
+  margin-bottom: var(--space-12);
+}
+
+.intro {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include from('md') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include from('lg') {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.empty {
+  color: var(--color-text-muted);
+}

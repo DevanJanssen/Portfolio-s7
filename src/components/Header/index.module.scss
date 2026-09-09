@@ -1,0 +1,53 @@
+@use 'styles/breakpoints' as *;
+
+.header {
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-background);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding-block: var(--space-4);
+}
+
+.logo {
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-primary);
+  }
+}
+
+.navWrapper {
+  min-width: 0;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navLink {
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+}
+
+.navLinkActive {
+  font-weight: 600;
+}

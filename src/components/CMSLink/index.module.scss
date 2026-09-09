@@ -1,0 +1,49 @@
+.cmsLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+}
+
+.button {
+  justify-content: center;
+  min-height: 2.75rem;
+  padding-inline: 1.25rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+}
+
+.default {
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
+
+  &:hover,
+  &:focus-visible {
+    filter: brightness(0.92);
+  }
+}
+
+.outline {
+  border: 1px solid var(--button-ink, var(--color-text));
+  color: var(--button-ink, var(--color-text));
+
+  &:hover,
+  &:focus-visible {
+    background: var(--button-ink, var(--color-text));
+    color: var(--button-ink-contrast, var(--color-background));
+  }
+}
+
+.plain {
+  min-height: 0;
+  padding-inline: 0;
+  color: var(--button-ink, var(--color-text));
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+}

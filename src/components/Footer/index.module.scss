@@ -1,0 +1,39 @@
+.footer {
+  margin-top: auto;
+  border-top: 1px solid var(--color-border);
+  padding-block: var(--space-8);
+}
+
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.note {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  color: var(--color-text-muted);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-text);
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+}

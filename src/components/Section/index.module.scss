@@ -1,0 +1,29 @@
+.section {
+  padding-block: var(--space-12);
+
+  :where(.section) + & {
+    padding-top: 0;
+  }
+}
+
+.light {
+  background: var(--color-surface);
+}
+
+.dark {
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
+
+  /* `outline` en `plain` uit `CMSLink` hebben geen eigen vulling en zouden hier
+   * dus zwart op zwart staan. */
+  --button-ink: var(--color-on-dark);
+  --button-ink-contrast: var(--color-surface-dark);
+}
+
+// Overbodig naast de regel hierboven, maar hij legt de bedoeling vast: twee
+// vlakken van dezelfde kleur horen er als één uit te zien. Zelfde `:where()`, om
+// dezelfde reden.
+:where(.light) + .light,
+:where(.dark) + .dark {
+  padding-top: 0;
+}

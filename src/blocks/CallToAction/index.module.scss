@@ -1,0 +1,22 @@
+@use 'styles/breakpoints' as *;
+
+.cta {
+  display: grid;
+  gap: var(--space-6);
+  align-items: center;
+
+  @include from('lg') {
+    grid-template-columns: 1fr auto;
+  }
+}
+
+.text {
+  margin-bottom: 0;
+  max-width: 60ch;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}

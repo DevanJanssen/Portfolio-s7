@@ -1,0 +1,22 @@
+@use 'sass:map';
+
+// Eén plek voor de breekpunten. Blokken importeren dit met
+// `@use 'styles/breakpoints' as *;` — dat werkt dankzij `sassOptions.loadPaths`
+// in next.config.ts, zodat er geen ../../../ in blokstyling staat.
+
+$breakpoints: (
+  'sm': 480px,
+  'md': 768px,
+  'lg': 1024px,
+  'xl': 1280px,
+);
+
+@mixin from($name) {
+  @if not map.has-key($breakpoints, $name) {
+    @error 'Onbekend breekpunt: #{$name}';
+  }
+
+  @media (min-width: map.get($breakpoints, $name)) {
+    @content;
+  }
+}
