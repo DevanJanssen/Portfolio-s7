@@ -42,20 +42,13 @@ const nextConfig: NextConfig = {
     // de Next-standaard (640 als kleinste) haalt zo'n kaart een veel te groot
     // bestand op.
     deviceSizes: [384, 480, 640, 750, 828, 1080, 1200, 1600, 1920],
-    // Next 16 weigert standaard optimalisatie vanaf private IP's (SSRF-guard).
-    // Lokaal is de media-API juist localhost; zonder dit (en zonder relatieve
-    // URL's in `Media`) verschijnt een kapot icoontje i.p.v. de afbeelding.
-    dangerouslyAllowLocalIP: process.env.NODE_ENV === 'development',
     remotePatterns,
   },
   sassOptions: {
-    // Zodat een blok `@use 'styles/breakpoints'` kan schrijven in plaats van een
-    // rij ../../. `loadPaths` hoort bij de moderne Sass-API die Next gebruikt;
-    // `includePaths` is de legacy-naam en wordt genegeerd.
+    // Next 15: includePaths. (loadPaths is de nieuwere Sass-API / Next 16.)
+    includePaths: [path.join(dirname, 'src')],
     loadPaths: [path.join(dirname, 'src')],
   },
-  // Nodig voor de Docker-image; laat het staan ook als je op Vercel deployt.
-  output: 'standalone',
   turbopack: {
     root: path.resolve(dirname),
   },
