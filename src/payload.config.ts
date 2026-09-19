@@ -48,6 +48,8 @@ export default buildConfig({
   editor: defaultLexical,
 
   db: postgresAdapter({
+    // Nooit schema pushen in CI/productie — alleen migraties (pnpm migrate / ci).
+    push: false,
     pool: {
       connectionString: databaseURL,
       ssl: isLocalDatabase ? undefined : { rejectUnauthorized: false },
