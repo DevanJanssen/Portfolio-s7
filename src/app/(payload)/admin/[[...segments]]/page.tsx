@@ -5,6 +5,9 @@ import type { Metadata } from 'next'
 
 import { importMap } from '../importMap'
 
+// Admin must always be dynamic — a static empty Suspense shell breaks login on Vercel.
+export const dynamic = 'force-dynamic'
+
 type Args = {
   params: Promise<{
     segments: string[]

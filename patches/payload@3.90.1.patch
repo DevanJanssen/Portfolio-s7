@@ -1,0 +1,22 @@
+diff --git a/dist/config/client.js b/dist/config/client.js
+index 2aa37abb6245ac053fbfba47959825a88d2a9caf..ec39fc2507983c81ba78ef9dfa7a27257959006d 100644
+--- a/dist/config/client.js
++++ b/dist/config/client.js	
+@@ -30,7 +30,17 @@ export const createUnauthenticatedClientConfig = ({ clientConfig })=>{
+    */ const adminUserCollection = clientConfig.collections.find(({ slug })=>slug === clientConfig.admin.user);
+     return {
+         admin: {
++            // Keep UI settings so ThemeProvider / AuthProvider don't crash on
++            // unauthenticated routes (login) — see payload#17545 / #17638.
++            autoLogin: clientConfig.admin.autoLogin,
++            autoRefresh: clientConfig.admin.autoRefresh,
++            avatar: clientConfig.admin.avatar,
++            custom: clientConfig.admin.custom,
++            dateFormat: clientConfig.admin.dateFormat,
++            meta: clientConfig.admin.meta,
+             routes: clientConfig.admin.routes,
++            theme: clientConfig.admin.theme,
++            toast: clientConfig.admin.toast,
+             user: clientConfig.admin.user
+         },
+         collections: [

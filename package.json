@@ -67,6 +67,9 @@
       "esbuild",
       "sharp",
       "unrs-resolver"
-    ]
+    ],
+    "patchedDependencies": {
+      "payload@3.90.1": "patches/payload@3.90.1.patch"
+    }
   }
 }
