@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --turbo",
     "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
+    "ci": "cross-env NODE_OPTIONS=--no-deprecation payload migrate && pnpm build",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
     "lint:fix": "cross-env NODE_OPTIONS=--no-deprecation eslint . --fix",

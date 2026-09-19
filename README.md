@@ -111,11 +111,77 @@ ze er stonden.
 ## Media en S3
 
 Zonder `S3_BUCKET` blijven uploads op de lokale schijf staan (`public/media`).
-Prima om mee te beginnen, niet goed genoeg voor een deploy met meer dan één
-instantie.
+Prima om mee te beginnen; op Vercel is de schijf efemeer — daar is S3 verplicht.
 
 Voeg de hostname van je bucket toe aan `IMAGE_ALLOWED_REMOTE_HOSTS`, anders
-weigert `next/image` de afbeelding. Die lijst wordt op **buildtijd** bevroren.
+weigert `next/image` de afbeelding. Die lijst wordt op **buildtijd** bevroren
+(dus op Vercel als Environment Variable voor de build, niet alleen runtime).
+
+## Deploy: Vercel + Neon + S3
+
+Productiedomein: **https://devanjanssen.com**.
+
+### 1. Neon
+
+Gebruik de **pooled** connection string (hostname bevat `-pooler`) als
+`DATABASE_URL`. Migraties draaien automatisch in de Vercel-build via
+`pnpm run ci`.
+
+Na de eerste geslaagde deploy: seed één keer tegen Neon (of maak de eerste
+gebruiker via `/admin`):
+
+```bash
+# .env tijdelijk op de Neon-URL, of:
+DATABASE_URL='postgres://…-pooler…/neondb?sslmode=require' pnpm seed
+```
+
+### 2. S3
+
+Maak een S3-compatibele bucket (AWS, Cloudflare R2 of TransIP). Vul op Vercel
+`S3_BUCKET`, `S3_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY_ID`,
+`S3_SECRET_ACCESS_KEY` en `IMAGE_ALLOWED_REMOTE_HOSTS` (publieke hostname van
+bucket of CDN). De app gebruikt path-style (`forcePathStyle`) — past bij R2 en
+TransIP.
+
+### 3. Vercel-project
+
+1. Importeer `DevanJanssen/Portfolio-s7` op [vercel.com](https://vercel.com).
+2. Framework: Next.js. Install: `pnpm install`. **Build Command: `pnpm run ci`**
+   (migreert Neon, daarna `next build`). Gebruik `pnpm run ci`, niet `pnpm ci`
+   — dat laatste is pnpm’s frozen install.
+3. Environment Variables (Production; Preview naar smaak):
+
+| Variabele | Waarde |
+| --- | --- |
+| `DATABASE_URL` | Neon pooled URL |
+| `DATABASE_POOL_MAX` | `3` |
+| `PAYLOAD_SECRET` | lange random string (niet dezelfde als lokaal) |
+| `PREVIEW_SECRET` | lange random string |
+| `SERVER_URL` | `https://devanjanssen.com` |
+| `ROBOTS_ALLOW_INDEXING` | `true` |
+| `S3_BUCKET` / `S3_ENDPOINT` / `S3_REGION` | uit je bucket |
+| `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` | uit je bucket |
+| `IMAGE_ALLOWED_REMOTE_HOSTS` | S3/CDN-hostname |
+
+`SERVER_URL` en `IMAGE_ALLOWED_REMOTE_HOSTS` moeten beschikbaar zijn tijdens de
+**build** (zie `next.config.ts`).
+
+4. Deploy. Los migrate/build-fouten op vóór je DNS omzet.
+
+### 4. Domein `devanjanssen.com`
+
+1. Vercel → Project → Domains → voeg `devanjanssen.com` en `www` toe
+   (redirect www → apex of andersom).
+2. Bij je DNS-provider: A/CNAME zoals Vercel toont. Het bestand `CNAME` in de
+   repo wordt door Vercel niet gelezen — DNS bij de registrar telt.
+3. Wacht op SSL; check `https://devanjanssen.com` en `/admin`.
+
+### Na go-live
+
+- Upload een testafbeelding in `/admin` — die moet in S3 belanden, niet in
+  lokale `media/`.
+- Header/Footer/home vullen als je niet geseed hebt.
+- Preview: knop in de admin gebruikt `PREVIEW_SECRET` + ingelogde gebruiker.
 
 ## Commando's
 
@@ -123,6 +189,7 @@ weigert `next/image` de afbeelding. Die lijst wordt op **buildtijd** bevroren.
 | --- | --- |
 | `pnpm dev` | Ontwikkelserver op :3000 |
 | `pnpm build` / `pnpm start` | Productiebuild draaien |
+| `pnpm run ci` | Migraties + productiebuild (Vercel Build Command) |
 | `pnpm typecheck` | TypeScript zonder output |
 | `pnpm lint` / `pnpm lint:fix` | ESLint |
 | `pnpm generate:types` | `src/payload-types.ts` bijwerken |
