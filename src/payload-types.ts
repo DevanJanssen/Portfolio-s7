@@ -424,7 +424,7 @@ export interface AssignmentsBlock {
   blockType: 'assignments';
 }
 /**
- * Eén document per schoolopdracht. Het overzicht staat op /opdrachten; elke opdracht krijgt /opdrachten/<slug>.
+ * Eén document per project (school, werk of side). Het overzicht staat op /opdrachten; elk project krijgt /opdrachten/<slug>.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "assignments".
@@ -433,11 +433,26 @@ export interface Assignment {
   id: number;
   title: string;
   /**
-   * Bijvoorbeeld "Web development" of "Project 3".
+   * School, werk of side project — bepaalt de sectie op /opdrachten.
    */
-  course?: string | null;
+  kind: 'school' | 'work' | 'side';
   /**
-   * Bijvoorbeeld "Semester 2, 2026".
+   * Alleen relevant voor schoolprojecten. Lijst aanpassen in Assignments/options.ts.
+   */
+  course?:
+    | (
+        | 'Web Development'
+        | 'Project'
+        | 'User Experience'
+        | 'Databases'
+        | 'Software Design'
+        | 'Infrastructure'
+        | 'Security'
+        | 'Overig'
+      )
+    | null;
+  /**
+   * Bijvoorbeeld "Semester 2, 2026" of "2024 – 2025".
    */
   period?: string | null;
   /**
@@ -869,6 +884,7 @@ export interface AssignmentsBlockSelect<T extends boolean = true> {
  */
 export interface AssignmentsSelect<T extends boolean = true> {
   title?: T;
+  kind?: T;
   course?: T;
   period?: T;
   summary?: T;

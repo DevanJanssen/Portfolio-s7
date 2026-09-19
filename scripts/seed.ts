@@ -126,7 +126,8 @@ const seed = async () => {
     data: {
       title: 'Voorbeeldopdracht',
       slug: 'voorbeeldopdracht',
-      course: 'Web development',
+      kind: 'school',
+      course: 'Web Development',
       period: 'Semester 1, 2026',
       summary:
         'Een voorbeeld van hoe een schoolopdracht eruitziet. Dupliceer dit document of maak een nieuwe opdracht aan.',

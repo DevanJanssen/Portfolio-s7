@@ -14,6 +14,7 @@ import { pageBlocks } from '@/blocks'
 import { assignmentPath } from '@/utilities/assignmentPath'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 import { revalidateAssignment, revalidateAssignmentDelete } from './hooks/revalidateAssignment'
+import { ASSIGNMENT_COURSE_OPTIONS, ASSIGNMENT_KIND_OPTIONS } from './options'
 
 export const Assignments: CollectionConfig<'assignments'> = {
   slug: 'assignments',
@@ -30,6 +31,7 @@ export const Assignments: CollectionConfig<'assignments'> = {
   defaultPopulate: {
     title: true,
     slug: true,
+    kind: true,
     course: true,
     period: true,
     summary: true,
@@ -37,10 +39,10 @@ export const Assignments: CollectionConfig<'assignments'> = {
   },
   admin: {
     group: 'Inhoud',
-    defaultColumns: ['title', 'course', 'period', '_status', 'updatedAt'],
+    defaultColumns: ['title', 'kind', 'course', 'period', '_status', 'updatedAt'],
     useAsTitle: 'title',
     description:
-      'Eén document per schoolopdracht. Het overzicht staat op /opdrachten; elke opdracht krijgt /opdrachten/<slug>.',
+      'Eén document per project (school, werk of side). Het overzicht staat op /opdrachten; elk project krijgt /opdrachten/<slug>.',
     pagination: { defaultLimit: 25 },
     livePreview: {
       url: ({ data }) =>
@@ -76,24 +78,37 @@ export const Assignments: CollectionConfig<'assignments'> = {
               type: 'row',
               fields: [
                 {
-                  name: 'course',
-                  type: 'text',
-                  label: 'Vak / module',
+                  name: 'kind',
+                  type: 'select',
+                  label: 'Soort project',
+                  required: true,
+                  defaultValue: 'school',
+                  options: [...ASSIGNMENT_KIND_OPTIONS],
                   admin: {
                     width: '50%',
-                    description: 'Bijvoorbeeld "Web development" of "Project 3".',
+                    description: 'School, werk of side project — bepaalt de sectie op /opdrachten.',
                   },
                 },
                 {
-                  name: 'period',
-                  type: 'text',
-                  label: 'Periode',
+                  name: 'course',
+                  type: 'select',
+                  label: 'Vak / module',
+                  options: [...ASSIGNMENT_COURSE_OPTIONS],
                   admin: {
                     width: '50%',
-                    description: 'Bijvoorbeeld "Semester 2, 2026".',
+                    description: 'Alleen relevant voor schoolprojecten. Lijst aanpassen in Assignments/options.ts.',
+                    condition: (_, siblingData) => siblingData?.kind === 'school',
                   },
                 },
               ],
+            },
+            {
+              name: 'period',
+              type: 'text',
+              label: 'Periode',
+              admin: {
+                description: 'Bijvoorbeeld "Semester 2, 2026" of "2024 – 2025".',
+              },
             },
             {
               name: 'summary',

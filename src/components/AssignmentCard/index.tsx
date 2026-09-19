@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import Media from '@/components/Media'
+import { assignmentKindLabel } from '@/collections/Assignments/options'
 import type { Assignment } from '@/payload-types'
 import { assignmentPath } from '@/utilities/assignmentPath'
 import styles from './index.module.scss'
@@ -11,7 +12,13 @@ type Props = {
 
 export const AssignmentCard = ({ assignment }: Props) => {
   const href = assignmentPath(assignment.slug)
-  const meta = [assignment.course, assignment.period].filter(Boolean).join(' · ')
+  const meta = [
+    assignmentKindLabel(assignment.kind),
+    assignment.kind === 'school' ? assignment.course : null,
+    assignment.period,
+  ]
+    .filter(Boolean)
+    .join(' · ')
 
   return (
     <article className={styles.card}>

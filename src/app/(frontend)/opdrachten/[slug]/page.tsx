@@ -7,6 +7,7 @@ import BlockRenderer from '@/components/BlockRenderer'
 import LivePreviewListener from '@/components/LivePreviewListener'
 import Media from '@/components/Media'
 import PayloadRedirects from '@/components/PayloadRedirects'
+import { assignmentKindLabel } from '@/collections/Assignments/options'
 import { generateMeta } from '@/utilities/generateMeta'
 import { getServerSideURL } from '@/utilities/getURL'
 import { assignmentPath } from '@/utilities/assignmentPath'
@@ -57,7 +58,13 @@ const AssignmentPage = async ({ params }: Args) => {
   }
 
   const { isEnabled: isDraft } = await draftMode()
-  const meta = [assignment.course, assignment.period].filter(Boolean).join(' · ')
+  const meta = [
+    assignmentKindLabel(assignment.kind),
+    assignment.kind === 'school' ? assignment.course : null,
+    assignment.period,
+  ]
+    .filter(Boolean)
+    .join(' · ')
   const competencies = assignment.competencies ?? []
   const links = assignment.links ?? []
 
