@@ -8,32 +8,32 @@ export const HeroBlock: Block = {
   interfaceName: 'HeroBlock',
   labels: {
     singular: 'Hero',
-    plural: "Hero's",
+    plural: "Heroes",
   },
   fields: [
     sectionTabs([
       {
         name: 'heading',
         type: 'text',
-        label: 'Kop',
+        label: 'Heading',
         required: true,
       },
       {
         name: 'intro',
         type: 'textarea',
-        label: 'Introductie',
+        label: 'Introduction',
       },
       {
         name: 'image',
         type: 'upload',
         relationTo: 'media',
-        label: 'Afbeelding',
+        label: 'Image',
       },
       linkGroup({
         overrides: {
           maxRows: 2,
           admin: {
-            description: 'Maximaal twee knoppen; meer leest niet meer als een keuze.',
+            description: 'Two buttons at most; more stops reading as a choice.',
           },
         },
       }),

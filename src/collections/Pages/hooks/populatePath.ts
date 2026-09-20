@@ -6,7 +6,11 @@ import { buildPagePath } from '../buildPagePath'
 /** Voorkomt dat het opnieuw opslaan van kinderen zichzelf blijft aanroepen. */
 const RESAVING_CHILDREN = 'resavingChildren'
 
-export const populatePath: CollectionBeforeChangeHook<Page> = async ({ data, originalDoc, req }) => {
+export const populatePath: CollectionBeforeChangeHook<Page> = async ({
+  data,
+  originalDoc,
+  req,
+}) => {
   const slug = data.slug ?? originalDoc?.slug
   const parent = data.parent !== undefined ? data.parent : originalDoc?.parent
 

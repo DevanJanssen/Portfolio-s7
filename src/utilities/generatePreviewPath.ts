@@ -1,7 +1,7 @@
 import type { CollectionSlug } from 'payload'
 
 const COLLECTION_PREFIX: Partial<Record<CollectionSlug, string>> = {
-  // Opdrachten bouwen hun pad zelf via `assignmentPath`; hier geen extra prefix.
+  // Projects build their own path via `projectPath`; no extra prefix needed here.
 }
 
 type Args = {

@@ -68,7 +68,11 @@ export interface Config {
   blocks: {};
   collections: {
     pages: Page;
-    assignments: Assignment;
+    projects: Project;
+    'learning-outcomes': LearningOutcome;
+    technologies: Technology;
+    courses: Course;
+    organisations: Organisation;
     media: Media;
     users: User;
     redirects: Redirect;
@@ -81,7 +85,11 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
-    assignments: AssignmentsSelect<false> | AssignmentsSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    'learning-outcomes': LearningOutcomesSelect<false> | LearningOutcomesSelect<true>;
+    technologies: TechnologiesSelect<false> | TechnologiesSelect<true>;
+    courses: CoursesSelect<false> | CoursesSelect<true>;
+    organisations: OrganisationsSelect<false> | OrganisationsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -144,7 +152,7 @@ export interface UserAuthOperations {
 export interface Page {
   id: number;
   title: string;
-  layout: (HeroBlock | RichTextBlock | MediaBlock | ColumnsBlock | CallToActionBlock | AssignmentsBlock)[];
+  layout: (HeroBlock | RichTextBlock | MediaBlock | ColumnsBlock | CallToActionBlock | ProjectsBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -153,12 +161,12 @@ export interface Page {
     image?: (number | null) | Media;
     description?: string | null;
     /**
-     * De pagina blijft bereikbaar, maar verdwijnt uit de sitemap en krijgt een noindex-tag.
+     * The page stays reachable, but drops out of the sitemap and gets a noindex tag.
      */
     noindex?: boolean | null;
   };
   /**
-   * Bepaalt waar de pagina in de URL komt te staan.
+   * Decides where the page sits in the URL.
    */
   parent?: (number | null) | Page;
   /**
@@ -167,7 +175,7 @@ export interface Page {
   generateSlug?: boolean | null;
   slug: string;
   /**
-   * Afgeleid van de slug en de bovenliggende pagina.
+   * Derived from the slug and the parent page.
    */
   path?: string | null;
   publishedAt?: string | null;
@@ -184,7 +192,7 @@ export interface HeroBlock {
   intro?: string | null;
   image?: (number | null) | Media;
   /**
-   * Maximaal twee knoppen; meer leest niet meer als een keuze.
+   * Two buttons at most; more stops reading as a choice.
    */
   links?:
     | {
@@ -196,7 +204,7 @@ export interface HeroBlock {
           tel?: string | null;
           media?: (number | null) | Media;
           /**
-           * Optioneel. Laat de link naar een sectie springen; een blok krijgt een anker via Layout → Anker.
+           * Optional. Makes the link jump to a section; a block gets its anchor under Layout → Anchor.
            */
           anchor?: string | null;
           newTab?: boolean | null;
@@ -207,7 +215,7 @@ export interface HeroBlock {
       }[]
     | null;
   /**
-   * Optioneel. Alleen letters, cijfers en streepjes. Een link kan hiernaartoe springen met #anker.
+   * Optional. Letters, numbers and dashes only. A link can jump here with #anchor.
    */
   anchor?: string | null;
   background?: ('none' | 'light' | 'dark') | null;
@@ -222,13 +230,14 @@ export interface HeroBlock {
 export interface Media {
   id: number;
   /**
-   * Beschrijf wat er op de afbeelding te zien is. Verplicht bij afbeeldingen: schermlezers en Google Afbeeldingen hebben dit nodig.
+   * Describe what the image shows. Required for images: screen readers and Google Images need it.
    */
   alt?: string | null;
   /**
-   * Optioneel. Wordt onder de afbeelding getoond als het blok dat ondersteunt.
+   * Optional. Shown under the image when the block supports it.
    */
   caption?: string | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -304,7 +313,7 @@ export interface RichTextBlock {
     [k: string]: unknown;
   };
   /**
-   * Optioneel. Alleen letters, cijfers en streepjes. Een link kan hiernaartoe springen met #anker.
+   * Optional. Letters, numbers and dashes only. A link can jump here with #anchor.
    */
   anchor?: string | null;
   background?: ('none' | 'light' | 'dark') | null;
@@ -319,12 +328,12 @@ export interface RichTextBlock {
 export interface MediaBlock {
   media: number | Media;
   /**
-   * Laat leeg om het bijschrift van het mediabestand zelf te gebruiken.
+   * Leave empty to use the caption from the media file itself.
    */
   caption?: string | null;
   width?: ('content' | 'full') | null;
   /**
-   * Optioneel. Alleen letters, cijfers en streepjes. Een link kan hiernaartoe springen met #anker.
+   * Optional. Letters, numbers and dashes only. A link can jump here with #anchor.
    */
   anchor?: string | null;
   background?: ('none' | 'light' | 'dark') | null;
@@ -359,7 +368,7 @@ export interface ColumnsBlock {
       }[]
     | null;
   /**
-   * Optioneel. Alleen letters, cijfers en streepjes. Een link kan hiernaartoe springen met #anker.
+   * Optional. Letters, numbers and dashes only. A link can jump here with #anchor.
    */
   anchor?: string | null;
   background?: ('none' | 'light' | 'dark') | null;
@@ -384,7 +393,7 @@ export interface CallToActionBlock {
           tel?: string | null;
           media?: (number | null) | Media;
           /**
-           * Optioneel. Laat de link naar een sectie springen; een blok krijgt een anker via Layout → Anker.
+           * Optional. Makes the link jump to a section; a block gets its anchor under Layout → Anchor.
            */
           anchor?: string | null;
           newTab?: boolean | null;
@@ -395,7 +404,7 @@ export interface CallToActionBlock {
       }[]
     | null;
   /**
-   * Optioneel. Alleen letters, cijfers en streepjes. Een link kan hiernaartoe springen met #anker.
+   * Optional. Letters, numbers and dashes only. A link can jump here with #anchor.
    */
   anchor?: string | null;
   background?: ('none' | 'light' | 'dark') | null;
@@ -405,85 +414,249 @@ export interface CallToActionBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AssignmentsBlock".
+ * via the `definition` "ProjectsBlock".
  */
-export interface AssignmentsBlock {
+export interface ProjectsBlock {
   heading?: string | null;
   intro?: string | null;
+  source?: ('featured' | 'all' | 'kind') | null;
+  kind?: ('school' | 'work' | 'side') | null;
   /**
-   * Leeg laten toont alle gepubliceerde opdrachten, nieuwste eerst.
+   * Leave empty to show everything that matches.
    */
   limit?: number | null;
+  showLinkToOverview?: boolean | null;
   /**
-   * Optioneel. Alleen letters, cijfers en streepjes. Een link kan hiernaartoe springen met #anker.
+   * Optional. Letters, numbers and dashes only. A link can jump here with #anchor.
    */
   anchor?: string | null;
   background?: ('none' | 'light' | 'dark') | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'assignments';
+  blockType: 'projects';
 }
 /**
- * Eén document per project (school, werk of side). Het overzicht staat op /opdrachten; elk project krijgt /opdrachten/<slug>.
+ * One document per project, whether it is school, work or side. The overview lives at /projects; each project gets /projects/<slug>.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "assignments".
+ * via the `definition` "projects".
  */
-export interface Assignment {
+export interface Project {
   id: number;
   title: string;
   /**
-   * School, werk of side project — bepaalt de sectie op /opdrachten.
+   * Decides which section of /projects it lands in.
    */
   kind: 'school' | 'work' | 'side';
   /**
-   * Alleen relevant voor schoolprojecten. Lijst aanpassen in Assignments/options.ts.
+   * Tells a visitor whether the demo link is still worth clicking.
    */
-  course?:
-    | (
-        | 'Web Development'
-        | 'Project'
-        | 'User Experience'
-        | 'Databases'
-        | 'Software Design'
-        | 'Infrastructure'
-        | 'Security'
-        | 'Overig'
-      )
-    | null;
+  projectStatus: 'in-progress' | 'completed' | 'shipped' | 'archived';
   /**
-   * Bijvoorbeeld "Semester 2, 2026" of "2024 – 2025".
+   * One line on the card. Keep it short so cards stay the same height — the longer version goes in the summary.
    */
-  period?: string | null;
+  tagline?: string | null;
   /**
-   * Korte beschrijving op het overzicht en bovenaan de opdrachtpagina.
+   * The opening paragraph of the project page.
    */
   summary?: string | null;
+  /**
+   * Carries the card. A project without one looks unfinished.
+   */
   cover?: (number | null) | Media;
   /**
-   * Wat je met deze opdracht aantoont. Komt als lijst op de pagina.
+   * Drives chronological sorting and the timeline.
    */
-  competencies?:
-    | {
-        title: string;
-        description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  startDate?: string | null;
   /**
-   * GitHub, live demo, Figma, rapport — wat bij de opdracht hoort.
+   * Leave empty if the project is still running.
+   */
+  endDate?: string | null;
+  /**
+   * For example "Full-stack developer" or "Tech lead".
+   */
+  role?: string | null;
+  /**
+   * Including yourself. 1 renders as "solo project".
+   */
+  teamSize?: number | null;
+  course?: (number | null) | Course;
+  /**
+   * The employer, client or school this project belongs to.
+   */
+  organisation?: (number | null) | Organisation;
+  /**
+   * Everything you actually worked with. Powers filtering by technology.
+   */
+  techStack?: (number | Technology)[] | null;
+  /**
+   * What needed solving, and for whom. Skipping straight to the tech loses the reader.
+   */
+  problem?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * How you tackled it: research, choices made, trade-offs.
+   */
+  approach?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Your part, separate from the team’s. Both assessors and recruiters ask this first on group work.
+   */
+  myContribution?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * What came of it — shipped, handed over, graded, abandoned. Honest beats impressive.
+   */
+  outcome?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Optional deep dive below the story: screenshots, diagrams, a long write-up.
+   */
+  layout?: (HeroBlock | RichTextBlock | MediaBlock | ColumnsBlock | CallToActionBlock | ProjectsBlock)[] | null;
+  /**
+   * Repository, live demo, report, design file.
    */
   links?:
     | {
         label: string;
+        type: 'repo' | 'demo' | 'report' | 'design' | 'video' | 'package' | 'article' | 'other';
         url: string;
         id?: string | null;
       }[]
     | null;
   /**
-   * Het verhaal van de opdracht: proces, screenshots, reflectie. Leeg laten mag; de velden onder Opdracht staan dan alleen.
+   * Screenshots with captions. The caption is the argument — an uncaptioned screenshot proves nothing.
    */
-  layout?: (HeroBlock | RichTextBlock | MediaBlock | ColumnsBlock | CallToActionBlock | AssignmentsBlock)[] | null;
+  gallery?:
+    | {
+        image: number | Media;
+        /**
+         * What this shows, and why it matters.
+         */
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Reports, assessment forms, advisory documents.
+   */
+  documents?:
+    | {
+        file: number | Media;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * What this project proves, and where. Each entry shows up under its outcome on /learning-outcomes.
+   */
+  learningOutcomes?:
+    | {
+        outcome: number | LearningOutcome;
+        level?: ('1' | '2' | '3' | '4') | null;
+        /**
+         * Point at something concrete in this project. Link to the commit, the document, the decision.
+         */
+        evidence?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * What went well, what you would do differently next time.
+   */
+  reflection?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Quotes from a teacher, client or teammate. Far stronger evidence than self-assessment, and almost nobody includes it.
+   */
+  feedback?:
+    | {
+        source: string;
+        sourceRole?: string | null;
+        quote: string;
+        date?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   meta?: {
     title?: string | null;
     /**
@@ -498,10 +671,152 @@ export interface Assignment {
    */
   generateSlug?: boolean | null;
   slug: string;
+  /**
+   * Use this for work under an NDA.
+   */
+  visibility: 'public' | 'anonymised' | 'on-request';
+  /**
+   * Shown instead of the organisation, for example "a logistics company".
+   */
+  clientAlias?: string | null;
+  /**
+   * Featured projects lead the homepage.
+   */
+  featured?: boolean | null;
+  /**
+   * Lowest first within its section. Equal values fall back to newest first.
+   */
+  sortOrder?: number | null;
   publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * Modules and semesters you can attach to a school project. Replaces the hard-coded dropdown, so adding one no longer needs a deploy.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses".
+ */
+export interface Course {
+  id: number;
+  title: string;
+  /**
+   * For example "S7". Used to order the study timeline.
+   */
+  semester?: string | null;
+  institution?: string | null;
+  description?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Employers, clients and schools you can attach to a project.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "organisations".
+ */
+export interface Organisation {
+  id: number;
+  name: string;
+  type: 'employer' | 'client' | 'school';
+  logo?: (number | null) | Media;
+  url?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * The stack you pick per project. Keeping these as documents instead of free text is what makes "everything I built with React" possible.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "technologies".
+ */
+export interface Technology {
+  id: number;
+  name: string;
+  /**
+   * Groups the technology on the skills overview.
+   */
+  category: 'language' | 'framework' | 'database' | 'infrastructure' | 'tooling' | 'design';
+  /**
+   * Optional. Square, transparent background works best.
+   */
+  logo?: (number | null) | Media;
+  url?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * The outcomes you are assessed on, in your programme’s own wording. Projects link to these, which is what lets /learning-outcomes list the evidence per outcome.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "learning-outcomes".
+ */
+export interface LearningOutcome {
+  id: number;
+  /**
+   * Short handle, for example "LO1".
+   */
+  code: string;
+  title: string;
+  /**
+   * One or two lines, used on cards and the overview.
+   */
+  shortDescription?: string | null;
+  /**
+   * Paste the exact text from your programme so assessors recognise it.
+   */
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Optional. What each level means for this outcome.
+   */
+  levels?:
+    | {
+        level: '1' | '2' | '3' | '4';
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  /**
+   * Lowest first, so LO1 stays above LO2.
+   */
+  sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -518,6 +833,7 @@ export interface User {
   resetPasswordExpiration?: string | null;
   salt?: string | null;
   hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
   sessions?:
@@ -531,7 +847,7 @@ export interface User {
   collection: 'users';
 }
 /**
- * Stuurt een oud pad door naar een nieuw. Wordt pas geraadpleegd als er geen pagina op het oude pad ligt.
+ * Points an old path at a new one. Only consulted when no page exists at the old path.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
@@ -671,8 +987,24 @@ export interface PayloadLockedDocument {
         value: number | Page;
       } | null)
     | ({
-        relationTo: 'assignments';
-        value: number | Assignment;
+        relationTo: 'projects';
+        value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'learning-outcomes';
+        value: number | LearningOutcome;
+      } | null)
+    | ({
+        relationTo: 'technologies';
+        value: number | Technology;
+      } | null)
+    | ({
+        relationTo: 'courses';
+        value: number | Course;
+      } | null)
+    | ({
+        relationTo: 'organisations';
+        value: number | Organisation;
       } | null)
     | ({
         relationTo: 'media';
@@ -742,7 +1074,7 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         columns?: T | ColumnsBlockSelect<T>;
         callToAction?: T | CallToActionBlockSelect<T>;
-        assignments?: T | AssignmentsBlockSelect<T>;
+        projects?: T | ProjectsBlockSelect<T>;
       };
   meta?:
     | T
@@ -867,12 +1199,15 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AssignmentsBlock_select".
+ * via the `definition` "ProjectsBlock_select".
  */
-export interface AssignmentsBlockSelect<T extends boolean = true> {
+export interface ProjectsBlockSelect<T extends boolean = true> {
   heading?: T;
   intro?: T;
+  source?: T;
+  kind?: T;
   limit?: T;
+  showLinkToOverview?: T;
   anchor?: T;
   background?: T;
   id?: T;
@@ -880,29 +1215,26 @@ export interface AssignmentsBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "assignments_select".
+ * via the `definition` "projects_select".
  */
-export interface AssignmentsSelect<T extends boolean = true> {
+export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   kind?: T;
-  course?: T;
-  period?: T;
+  projectStatus?: T;
+  tagline?: T;
   summary?: T;
   cover?: T;
-  competencies?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        id?: T;
-      };
-  links?:
-    | T
-    | {
-        label?: T;
-        url?: T;
-        id?: T;
-      };
+  startDate?: T;
+  endDate?: T;
+  role?: T;
+  teamSize?: T;
+  course?: T;
+  organisation?: T;
+  techStack?: T;
+  problem?: T;
+  approach?: T;
+  myContribution?: T;
+  outcome?: T;
   layout?:
     | T
     | {
@@ -911,7 +1243,47 @@ export interface AssignmentsSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         columns?: T | ColumnsBlockSelect<T>;
         callToAction?: T | CallToActionBlockSelect<T>;
-        assignments?: T | AssignmentsBlockSelect<T>;
+        projects?: T | ProjectsBlockSelect<T>;
+      };
+  links?:
+    | T
+    | {
+        label?: T;
+        type?: T;
+        url?: T;
+        id?: T;
+      };
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  documents?:
+    | T
+    | {
+        file?: T;
+        label?: T;
+        id?: T;
+      };
+  learningOutcomes?:
+    | T
+    | {
+        outcome?: T;
+        level?: T;
+        evidence?: T;
+        id?: T;
+      };
+  reflection?: T;
+  feedback?:
+    | T
+    | {
+        source?: T;
+        sourceRole?: T;
+        quote?: T;
+        date?: T;
+        id?: T;
       };
   meta?:
     | T
@@ -923,10 +1295,78 @@ export interface AssignmentsSelect<T extends boolean = true> {
       };
   generateSlug?: T;
   slug?: T;
+  visibility?: T;
+  clientAlias?: T;
+  featured?: T;
+  sortOrder?: T;
   publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "learning-outcomes_select".
+ */
+export interface LearningOutcomesSelect<T extends boolean = true> {
+  code?: T;
+  title?: T;
+  shortDescription?: T;
+  description?: T;
+  levels?:
+    | T
+    | {
+        level?: T;
+        description?: T;
+        id?: T;
+      };
+  generateSlug?: T;
+  slug?: T;
+  sortOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "technologies_select".
+ */
+export interface TechnologiesSelect<T extends boolean = true> {
+  name?: T;
+  category?: T;
+  logo?: T;
+  url?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses_select".
+ */
+export interface CoursesSelect<T extends boolean = true> {
+  title?: T;
+  semester?: T;
+  institution?: T;
+  description?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "organisations_select".
+ */
+export interface OrganisationsSelect<T extends boolean = true> {
+  name?: T;
+  type?: T;
+  logo?: T;
+  url?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -935,6 +1375,7 @@ export interface AssignmentsSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1015,6 +1456,7 @@ export interface UsersSelect<T extends boolean = true> {
   resetPasswordExpiration?: T;
   salt?: T;
   hash?: T;
+  resetPasswordRequestedAt?: T;
   loginAttempts?: T;
   lockUntil?: T;
   sessions?:
@@ -1129,7 +1571,7 @@ export interface Header {
           tel?: string | null;
           media?: (number | null) | Media;
           /**
-           * Optioneel. Laat de link naar een sectie springen; een blok krijgt een anker via Layout → Anker.
+           * Optional. Makes the link jump to a section; a block gets its anchor under Layout → Anchor.
            */
           anchor?: string | null;
           newTab?: boolean | null;
@@ -1158,7 +1600,7 @@ export interface Footer {
           tel?: string | null;
           media?: (number | null) | Media;
           /**
-           * Optioneel. Laat de link naar een sectie springen; een blok krijgt een anker via Layout → Anker.
+           * Optional. Makes the link jump to a section; a block gets its anchor under Layout → Anchor.
            */
           anchor?: string | null;
           newTab?: boolean | null;
@@ -1250,11 +1692,14 @@ export interface TaskSchedulePublish {
           value: number | Page;
         } | null)
       | ({
-          relationTo: 'assignments';
-          value: number | Assignment;
+          relationTo: 'projects';
+          value: number | Project;
         } | null);
     global?: string | null;
-    user?: (number | null) | User;
+    user?: {
+      relationTo: 'users';
+      value: number | User;
+    } | null;
   };
   output?: unknown;
 }

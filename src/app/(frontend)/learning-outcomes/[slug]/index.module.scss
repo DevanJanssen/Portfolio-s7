@@ -1,0 +1,97 @@
+.page {
+  padding-block: var(--space-16);
+}
+
+.header {
+  margin-bottom: var(--space-12);
+}
+
+.back {
+  margin: 0 0 var(--space-6);
+  font-size: 0.875rem;
+}
+
+.code {
+  margin: 0 0 var(--space-2);
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.intro {
+  color: var(--color-text-muted);
+  font-size: 1.125rem;
+}
+
+.levels {
+  margin-bottom: var(--space-12);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+
+  h2 {
+    margin-bottom: var(--space-4);
+    font-size: 1.125rem;
+  }
+
+  dl {
+    margin: 0;
+  }
+}
+
+.level {
+  & + & {
+    margin-top: var(--space-4);
+  }
+
+  dt {
+    font-weight: 600;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+}
+
+.entryList {
+  display: grid;
+  gap: var(--space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.entry {
+  padding-left: var(--space-6);
+  border-left: 3px solid var(--color-border);
+
+  h3 {
+    margin: 0 0 var(--space-2);
+    font-size: 1.125rem;
+  }
+}
+
+.badge {
+  display: inline-block;
+  margin-left: var(--space-3);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.projectMeta {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.missing {
+  color: var(--color-text-muted);
+  font-style: italic;
+}

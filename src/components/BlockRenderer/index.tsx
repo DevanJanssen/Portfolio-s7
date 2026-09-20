@@ -1,23 +1,21 @@
 import { Fragment, type ReactNode } from 'react'
 
-import { AssignmentsBlockComponent } from '@/blocks/Assignments/Component'
 import { CallToActionBlockComponent } from '@/blocks/CallToAction/Component'
 import { ColumnsBlockComponent } from '@/blocks/Columns/Component'
 import { HeroBlockComponent } from '@/blocks/Hero/Component'
 import { MediaBlockComponent } from '@/blocks/MediaBlock/Component'
+import { ProjectsBlockComponent } from '@/blocks/Projects/Component'
 import { RichTextBlockComponent } from '@/blocks/RichText/Component'
-import type { Assignment, Page } from '@/payload-types'
+import type { Page, Project } from '@/payload-types'
 
-type LayoutBlock =
-  | NonNullable<Page['layout']>[number]
-  | NonNullable<Assignment['layout']>[number]
+type LayoutBlock = NonNullable<Page['layout']>[number] | NonNullable<Project['layout']>[number]
 
 const BLOCK_COMPONENTS: Record<string, (props: any) => ReactNode> = {
-  assignments: AssignmentsBlockComponent,
   callToAction: CallToActionBlockComponent,
   columns: ColumnsBlockComponent,
   hero: HeroBlockComponent,
   mediaBlock: MediaBlockComponent,
+  projects: ProjectsBlockComponent,
   richText: RichTextBlockComponent,
 }
 
@@ -30,7 +28,7 @@ export const BlockRenderer = ({ blocks }: { blocks?: LayoutBlock[] | null }) => 
         const Component = BLOCK_COMPONENTS[block.blockType]
 
         if (!Component) {
-          console.warn(`Geen component gekoppeld aan blok "${block.blockType}".`)
+          console.warn(`No component wired up for block "${block.blockType}".`)
 
           return null
         }

@@ -13,7 +13,7 @@ export const Footer: GlobalConfig = {
     update: canEditContent,
   },
   admin: {
-    group: 'Site-instellingen',
+    group: 'Site settings',
   },
   hooks: {
     afterChange: [revalidateGlobal],
@@ -22,7 +22,7 @@ export const Footer: GlobalConfig = {
     {
       name: 'note',
       type: 'text',
-      label: 'Copyrightregel',
+      label: 'Copyright line',
     },
     {
       name: 'navItems',

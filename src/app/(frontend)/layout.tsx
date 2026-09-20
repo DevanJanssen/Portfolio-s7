@@ -19,10 +19,10 @@ export const metadata: Metadata = {
 }
 
 const RootLayout = ({ children }: { children: ReactNode }) => (
-  <html lang="nl">
+  <html lang="en">
     <body>
       <a className="skip-link" href="#main">
-        Naar de inhoud
+        Skip to content
       </a>
       <Header />
       <main id="main">{children}</main>

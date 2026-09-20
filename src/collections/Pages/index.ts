@@ -18,8 +18,8 @@ import { revalidatePage, revalidatePageDelete } from './hooks/revalidatePage'
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
   labels: {
-    singular: 'Pagina',
-    plural: "Pagina's",
+    singular: 'Page',
+    plural: 'Pages',
   },
   access: {
     create: canEditContent,
@@ -36,7 +36,7 @@ export const Pages: CollectionConfig<'pages'> = {
     path: true,
   },
   admin: {
-    group: 'Inhoud',
+    group: 'Content',
     defaultColumns: ['title', 'path', '_status', 'updatedAt'],
     useAsTitle: 'title',
     // Deze lijst draagt zware blok- en rich-text-velden; een grote pagina maakt
@@ -58,19 +58,19 @@ export const Pages: CollectionConfig<'pages'> = {
     {
       name: 'title',
       type: 'text',
-      label: 'Titel',
+      label: 'Title',
       required: true,
     },
     {
       type: 'tabs',
       tabs: [
         {
-          label: 'Inhoud',
+          label: 'Content',
           fields: [
             {
               name: 'layout',
               type: 'blocks',
-              label: 'Blokken',
+              label: 'Blocks',
               blocks: pageBlocks,
               required: true,
               admin: {
@@ -104,10 +104,10 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'noindex',
               type: 'checkbox',
-              label: 'Uitsluiten van zoekmachines (noindex)',
+              label: 'Exclude from search engines (noindex)',
               admin: {
                 description:
-                  'De pagina blijft bereikbaar, maar verdwijnt uit de sitemap en krijgt een noindex-tag.',
+                  'The page stays reachable, but drops out of the sitemap and gets a noindex tag.',
               },
             },
           ],
@@ -118,15 +118,15 @@ export const Pages: CollectionConfig<'pages'> = {
       name: 'parent',
       type: 'relationship',
       relationTo: 'pages',
-      label: 'Bovenliggende pagina',
+      label: 'Parent page',
       admin: {
         position: 'sidebar',
-        description: 'Bepaalt waar de pagina in de URL komt te staan.',
+        description: 'Decides where the page sits in the URL.',
       },
       filterOptions: ({ id }) => (id ? { id: { not_equals: id } } : true),
       validate: (value: unknown, { id }: { id?: number | string }) => {
         if (value && id && String(value) === String(id)) {
-          return 'Een pagina kan niet haar eigen bovenliggende pagina zijn.'
+          return 'A page cannot be its own parent.'
         }
 
         return true
@@ -139,19 +139,19 @@ export const Pages: CollectionConfig<'pages'> = {
     {
       name: 'path',
       type: 'text',
-      label: 'Pad',
+      label: 'Path',
       index: true,
       unique: true,
       admin: {
         position: 'sidebar',
         readOnly: true,
-        description: 'Afgeleid van de slug en de bovenliggende pagina.',
+        description: 'Derived from the slug and the parent page.',
       },
     },
     {
       name: 'publishedAt',
       type: 'date',
-      label: 'Gepubliceerd op',
+      label: 'Published at',
       admin: {
         position: 'sidebar',
       },

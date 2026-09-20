@@ -52,6 +52,13 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(dirname),
   },
+
+  // De site heette eerst /opdrachten. Deze twee regels houden gedeelde links en
+  // de zoekindex intact; ze mogen weg zodra er geen verkeer meer op binnenkomt.
+  redirects: async () => [
+    { source: '/opdrachten', destination: '/projects', permanent: true },
+    { source: '/opdrachten/:slug', destination: '/projects/:slug', permanent: true },
+  ],
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })

@@ -19,17 +19,17 @@ const TARGET_FIELD_BY_TYPE: Record<
 const ALL_TARGET_FIELDS = ['reference', 'url', 'mailto', 'tel', 'media'] as const
 
 const appearanceOptions: Record<LinkAppearance, { label: string; value: LinkAppearance }> = {
-  default: { label: 'Knop', value: 'default' },
-  outline: { label: 'Omlijnd', value: 'outline' },
-  plain: { label: 'Tekstlink', value: 'plain' },
+  default: { label: 'Button', value: 'default' },
+  outline: { label: 'Outlined', value: 'outline' },
+  plain: { label: 'Text link', value: 'plain' },
 }
 
 const targetOptions: Record<LinkTargetType, { label: string; value: LinkTargetType }> = {
-  reference: { label: 'Interne pagina', value: 'reference' },
-  custom: { label: 'Aangepaste URL', value: 'custom' },
-  mailto: { label: 'E-maillink (mailto)', value: 'mailto' },
-  tel: { label: 'Telefoonlink (tel)', value: 'tel' },
-  download: { label: 'Bestand downloaden', value: 'download' },
+  reference: { label: 'Internal page', value: 'reference' },
+  custom: { label: 'Custom URL', value: 'custom' },
+  mailto: { label: 'Email link (mailto)', value: 'mailto' },
+  tel: { label: 'Phone link (tel)', value: 'tel' },
+  download: { label: 'File download', value: 'download' },
 }
 
 type LinkValue = {
@@ -98,26 +98,26 @@ export const link = ({
       const type = current.type
 
       if (!type) return true
-      if (!available.includes(type)) return 'Dit linktype is hier niet beschikbaar.'
+      if (!available.includes(type)) return 'This link type is not available here.'
 
       if (type === 'custom') {
         const url = typeof current.url === 'string' ? current.url.trim() : ''
-        if (!url) return 'Geef een URL op.'
+        if (!url) return 'Enter a URL.'
         if (!isValidURL(url)) {
-          return 'Geef een geldige URL op (bijvoorbeeld /contact, #sectie of https://example.com).'
+          return 'Enter a valid URL (for example /contact, #section or https://example.com).'
         }
       }
 
       if (type === 'mailto') {
         const mailto = typeof current.mailto === 'string' ? current.mailto.trim() : ''
-        if (!mailto) return 'Geef een e-mailadres op.'
-        if (!isValidEmail(mailto)) return 'Geef een geldig e-mailadres op.'
+        if (!mailto) return 'Enter an email address.'
+        if (!isValidEmail(mailto)) return 'Enter a valid email address.'
       }
 
       if (type === 'tel') {
         const tel = typeof current.tel === 'string' ? current.tel.trim() : ''
-        if (!tel) return 'Geef een telefoonnummer op.'
-        if (!isValidPhone(tel)) return 'Geef een geldig telefoonnummer op.'
+        if (!tel) return 'Enter a phone number.'
+        if (!isValidPhone(tel)) return 'Enter a valid phone number.'
       }
 
       return true
@@ -136,7 +136,7 @@ export const link = ({
             name: 'reference',
             type: 'relationship',
             relationTo: 'pages',
-            label: 'Pagina',
+            label: 'Page',
             admin: {
               width: '50%',
               condition: (_, siblingData) => siblingData?.type === 'reference',
@@ -155,17 +155,17 @@ export const link = ({
           {
             name: 'mailto',
             type: 'text',
-            label: 'E-mailadres',
+            label: 'Email address',
             admin: {
               width: '50%',
               condition: (_, siblingData) => siblingData?.type === 'mailto',
-              placeholder: 'naam@example.com',
+              placeholder: 'name@example.com',
             },
           },
           {
             name: 'tel',
             type: 'text',
-            label: 'Telefoonnummer',
+            label: 'Phone number',
             admin: {
               width: '50%',
               condition: (_, siblingData) => siblingData?.type === 'tel',
@@ -176,7 +176,7 @@ export const link = ({
             name: 'media',
             type: 'upload',
             relationTo: 'media',
-            label: 'Bestand',
+            label: 'File',
             admin: {
               width: '50%',
               condition: (_, siblingData) => siblingData?.type === 'download',
@@ -187,17 +187,17 @@ export const link = ({
       {
         name: 'anchor',
         type: 'text',
-        label: 'Anker op de pagina',
+        label: 'Anchor on the page',
         admin: {
           condition: (_, siblingData) => siblingData?.type === 'reference',
           description:
-            'Optioneel. Laat de link naar een sectie springen; een blok krijgt een anker via Layout → Anker.',
+            'Optional. Makes the link jump to a section; a block gets its anchor under Layout → Anchor.',
         },
       },
       {
         name: 'newTab',
         type: 'checkbox',
-        label: 'Openen in een nieuw tabblad',
+        label: 'Open in a new tab',
       },
     ],
   }
@@ -219,7 +219,7 @@ export const link = ({
     linkField.fields.push({
       name: 'appearance',
       type: 'select',
-      label: 'Weergave',
+      label: 'Appearance',
       defaultValue: options[0]?.value,
       options,
     })

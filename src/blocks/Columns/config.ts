@@ -6,27 +6,27 @@ export const ColumnsBlock: Block = {
   slug: 'columns',
   interfaceName: 'ColumnsBlock',
   labels: {
-    singular: 'Kolommen',
-    plural: 'Kolommenblokken',
+    singular: 'Columns',
+    plural: 'Column blocks',
   },
   fields: [
     sectionTabs([
       {
         name: 'columns',
         type: 'array',
-        label: 'Kolommen',
+        label: 'Columns',
         minRows: 2,
         maxRows: 4,
         fields: [
           {
             name: 'heading',
             type: 'text',
-            label: 'Kop',
+            label: 'Heading',
           },
           {
             name: 'content',
             type: 'richText',
-            label: 'Tekst',
+            label: 'Text',
           },
         ],
       },

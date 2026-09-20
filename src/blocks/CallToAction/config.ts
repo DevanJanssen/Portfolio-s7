@@ -8,20 +8,20 @@ export const CallToActionBlock: Block = {
   interfaceName: 'CallToActionBlock',
   labels: {
     singular: 'Call to action',
-    plural: "Call to action's",
+    plural: "Calls to action",
   },
   fields: [
     sectionTabs([
       {
         name: 'heading',
         type: 'text',
-        label: 'Kop',
+        label: 'Heading',
         required: true,
       },
       {
         name: 'text',
         type: 'textarea',
-        label: 'Tekst',
+        label: 'Text',
       },
       linkGroup({
         overrides: {

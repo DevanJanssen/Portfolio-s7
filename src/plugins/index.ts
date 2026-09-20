@@ -4,9 +4,9 @@ import { s3Storage } from '@payloadcms/storage-s3'
 import type { Plugin } from 'payload'
 
 import { canEditContent } from '@/access/roles'
-import type { Assignment, Page } from '@/payload-types'
-import { assignmentPath } from '@/utilities/assignmentPath'
+import type { Page, Project } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
+import { projectPath } from '@/utilities/projectPath'
 
 const hasS3 = Boolean(process.env.S3_BUCKET)
 
@@ -15,15 +15,15 @@ export const plugins: Plugin[] = [
     // Geen `collections` hier: de SEO-velden staan expliciet in de SEO-tab van
     // de Pages-collectie. Zou de plugin ze ook toevoegen, dan kreeg elke pagina
     // twee meta-groepen.
-    generateTitle: ({ doc }: { doc: Partial<Page | Assignment> }) =>
+    generateTitle: ({ doc }: { doc: Partial<Page | Project> }) =>
       doc?.title ? `${doc.title} | Portfolio` : 'Portfolio',
-    generateURL: ({ doc }: { doc: Partial<Page | Assignment> }) => {
+    generateURL: ({ doc }: { doc: Partial<Page | Project> }) => {
       if ('path' in doc && typeof doc.path === 'string') {
         return `${getServerSideURL()}${doc.path}`
       }
 
       if ('slug' in doc && typeof doc.slug === 'string') {
-        return `${getServerSideURL()}${assignmentPath(doc.slug)}`
+        return `${getServerSideURL()}${projectPath(doc.slug)}`
       }
 
       return getServerSideURL()
@@ -35,9 +35,9 @@ export const plugins: Plugin[] = [
     collections: ['pages'],
     overrides: {
       admin: {
-        group: 'Site-instellingen',
+        group: 'Site settings',
         description:
-          'Stuurt een oud pad door naar een nieuw. Wordt pas geraadpleegd als er geen pagina op het oude pad ligt.',
+          'Points an old path at a new one. Only consulted when no page exists at the old path.',
       },
       access: {
         create: canEditContent,

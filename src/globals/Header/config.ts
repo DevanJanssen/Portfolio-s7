@@ -13,7 +13,7 @@ export const Header: GlobalConfig = {
     update: canEditContent,
   },
   admin: {
-    group: 'Site-instellingen',
+    group: 'Site settings',
   },
   hooks: {
     afterChange: [revalidateGlobal],
@@ -22,13 +22,13 @@ export const Header: GlobalConfig = {
     {
       name: 'siteTitle',
       type: 'text',
-      label: 'Sitenaam',
+      label: 'Site name',
       defaultValue: 'Portfolio',
     },
     {
       name: 'navItems',
       type: 'array',
-      label: 'Menu-items',
+      label: 'Menu items',
       maxRows: 8,
       fields: [link({ appearances: false })],
       admin: {

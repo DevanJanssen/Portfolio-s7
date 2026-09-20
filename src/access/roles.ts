@@ -5,8 +5,8 @@ import type { User } from '@/payload-types'
 export type Role = 'admin' | 'editor'
 
 export const ROLE_OPTIONS: { label: string; value: Role }[] = [
-  { label: 'Beheerder', value: 'admin' },
-  { label: 'Redacteur', value: 'editor' },
+  { label: 'Administrator', value: 'admin' },
+  { label: 'Editor', value: 'editor' },
 ]
 
 export const hasRole = (user: unknown, ...roles: Role[]): boolean => {

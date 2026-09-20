@@ -5,8 +5,8 @@ import { isAdmin, isAdminField, ROLE_OPTIONS } from '@/access/roles'
 export const Users: CollectionConfig = {
   slug: 'users',
   labels: {
-    singular: 'Gebruiker',
-    plural: 'Gebruikers',
+    singular: 'User',
+    plural: 'Users',
   },
   auth: true,
   access: {
@@ -19,7 +19,7 @@ export const Users: CollectionConfig = {
     admin: ({ req: { user } }) => Boolean(user),
   },
   admin: {
-    group: 'Instellingen',
+    group: 'Settings',
     defaultColumns: ['name', 'email', 'roles'],
     useAsTitle: 'name',
   },
@@ -27,13 +27,13 @@ export const Users: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
-      label: 'Naam',
+      label: 'Name',
       required: true,
     },
     {
       name: 'roles',
       type: 'select',
-      label: 'Rollen',
+      label: 'Roles',
       hasMany: true,
       required: true,
       defaultValue: ['editor'],

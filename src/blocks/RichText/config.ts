@@ -6,15 +6,15 @@ export const RichTextBlock: Block = {
   slug: 'richText',
   interfaceName: 'RichTextBlock',
   labels: {
-    singular: 'Tekst',
-    plural: 'Tekstblokken',
+    singular: 'Text',
+    plural: 'Text blocks',
   },
   fields: [
     sectionTabs([
       {
         name: 'content',
         type: 'richText',
-        label: 'Tekst',
+        label: 'Text',
         required: true,
       },
     ]),

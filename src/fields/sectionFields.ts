@@ -8,17 +8,17 @@ import type { Field } from 'payload'
 export const anchorField: Field = {
   name: 'anchor',
   type: 'text',
-  label: 'Anker',
+  label: 'Anchor',
   admin: {
     description:
-      'Optioneel. Alleen letters, cijfers en streepjes. Een link kan hiernaartoe springen met #anker.',
+      'Optional. Letters, numbers and dashes only. A link can jump here with #anchor.',
   },
   validate: (value: string | null | undefined) => {
     if (!value) return true
 
     return /^[a-z0-9][a-z0-9-]*$/.test(value)
       ? true
-      : 'Gebruik alleen kleine letters, cijfers en streepjes, beginnend met een letter of cijfer.'
+      : 'Use lowercase letters, numbers and dashes only, starting with a letter or number.'
   },
 }
 
@@ -26,12 +26,12 @@ export const anchorField: Field = {
 export const backgroundField: Field = {
   name: 'background',
   type: 'select',
-  label: 'Achtergrond',
+  label: 'Background',
   defaultValue: 'none',
   options: [
-    { label: 'Geen', value: 'none' },
-    { label: 'Licht', value: 'light' },
-    { label: 'Donker', value: 'dark' },
+    { label: 'None', value: 'none' },
+    { label: 'Light', value: 'light' },
+    { label: 'Dark', value: 'dark' },
   ],
 }
 
@@ -64,7 +64,7 @@ export const sectionTabs = (
   type: 'tabs',
   tabs: [
     {
-      label: 'Inhoud',
+      label: 'Content',
       fields: content,
     },
     {

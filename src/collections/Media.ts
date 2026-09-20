@@ -20,7 +20,7 @@ export const Media: CollectionConfig = {
     read: anyone,
   },
   admin: {
-    group: 'Inhoud',
+    group: 'Content',
     defaultColumns: ['filename', 'alt', 'updatedAt'],
   },
   upload: {
@@ -42,27 +42,30 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
-      label: 'Alt-tekst',
+      label: 'Alt text',
       admin: {
         description:
-          'Beschrijf wat er op de afbeelding te zien is. Verplicht bij afbeeldingen: schermlezers en Google Afbeeldingen hebben dit nodig.',
+          'Describe what the image shows. Required for images: screen readers and Google Images need it.',
       },
       // Geen `required: true`: dat zou ook voor pdf's en video gelden, waar
       // alt-tekst niets betekent. Vandaar de check op mimetype.
-      validate: (value: string | null | undefined, { data }: { data: Partial<{ mimeType?: string | null }> }) => {
+      validate: (
+        value: string | null | undefined,
+        { data }: { data: Partial<{ mimeType?: string | null }> },
+      ) => {
         if (!isImage(data?.mimeType)) return true
 
         return typeof value === 'string' && value.trim().length > 0
           ? true
-          : 'Vul een alt-tekst in voor deze afbeelding.'
+          : 'Enter alt text for this image.'
       },
     },
     {
       name: 'caption',
       type: 'text',
-      label: 'Bijschrift',
+      label: 'Caption',
       admin: {
-        description: 'Optioneel. Wordt onder de afbeelding getoond als het blok dat ondersteunt.',
+        description: 'Optional. Shown under the image when the block supports it.',
       },
     },
   ],

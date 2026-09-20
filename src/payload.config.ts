@@ -6,9 +6,13 @@ import { nl } from 'payload/i18n/nl'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-import { Assignments } from './collections/Assignments'
+import { Courses } from './collections/Courses'
+import { LearningOutcomes } from './collections/LearningOutcomes'
 import { Media } from './collections/Media'
+import { Organisations } from './collections/Organisations'
 import { Pages } from './collections/Pages'
+import { Projects } from './collections/Projects'
+import { Technologies } from './collections/Technologies'
 import { Users } from './collections/Users'
 import { defaultLexical } from './fields/defaultLexical'
 import { Footer } from './globals/Footer/config'
@@ -32,7 +36,7 @@ export default buildConfig({
     },
     livePreview: {
       breakpoints: [
-        { label: 'Mobiel', name: 'mobile', width: 375, height: 667 },
+        { label: 'Mobile', name: 'mobile', width: 375, height: 667 },
         { label: 'Tablet', name: 'tablet', width: 768, height: 1024 },
         { label: 'Desktop', name: 'desktop', width: 1440, height: 900 },
       ],
@@ -42,7 +46,16 @@ export default buildConfig({
     },
   },
 
-  collections: [Pages, Assignments, Media, Users],
+  collections: [
+    Pages,
+    Projects,
+    LearningOutcomes,
+    Technologies,
+    Courses,
+    Organisations,
+    Media,
+    Users,
+  ],
   globals: [Header, Footer],
 
   editor: defaultLexical,
@@ -69,11 +82,11 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || '',
   serverURL: getServerSideURL(),
 
-  // Admin-interface in het Nederlands; `en` blijft beschikbaar als iemand hem
-  // in zijn profiel omzet.
+  // Admin interface in English, matching the public site; `nl` stays available
+  // for anyone who switches it in their profile.
   i18n: {
     supportedLanguages: { en, nl },
-    fallbackLanguage: 'nl',
+    fallbackLanguage: 'en',
   },
 
   typescript: {

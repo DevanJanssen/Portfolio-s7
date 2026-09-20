@@ -1,17 +1,27 @@
 @use 'styles/breakpoints' as *;
 
-.assignments {
-  color: var(--color-text);
+.page {
+  padding-block: var(--space-16);
 }
 
-.heading {
-  margin: 0 0 var(--space-4);
+.header {
+  max-width: 40rem;
+  margin-bottom: var(--space-12);
 }
 
 .intro {
-  max-width: 40rem;
-  margin: 0 0 var(--space-8);
+  margin: 0;
   color: var(--color-text-muted);
+}
+
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.groupTitle {
+  margin: 0 0 var(--space-6);
 }
 
 .grid {
@@ -28,4 +38,8 @@
   @include from('lg') {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+.empty {
+  color: var(--color-text-muted);
 }

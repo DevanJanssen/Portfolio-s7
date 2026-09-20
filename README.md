@@ -2,8 +2,8 @@
 
 Schoolportfolio op Next.js 16 + Payload 3 + Postgres. Gebouwd op dezelfde
 stack en patronen als de stofloos-website-template: een redacteur (jij) bouwt
-pagina's door blokken te stapelen, en elke schoolopdracht is een eigen
-document in het CMS.
+pagina's door blokken te stapelen, en elk project — school, werk of side — is
+een eigen document in het CMS.
 
 ## Snelstart
 
@@ -12,7 +12,7 @@ pnpm install
 cp env.example .env          # en vul PAYLOAD_SECRET en PREVIEW_SECRET in
 pnpm db:up                   # Postgres in Docker, op poort 5434
 pnpm migrate                 # schema aanmaken
-pnpm seed                    # beheerder, homepage en een voorbeeldopdracht
+pnpm seed                    # beheerder, homepage, taxonomie en één voorbeeldproject
 pnpm dev
 ```
 
@@ -29,25 +29,57 @@ Postgres draait hier op poort **5434**, zodat hij naast een lokale Postgres
 
 | Onderdeel | Waar |
 | --- | --- |
-| Vrije pagina's (home, over mij, …) | `src/collections/Pages` |
-| Schoolopdrachten | `src/collections/Assignments` — `/opdrachten/<slug>` |
-| Blokken | Hero, tekst, media, kolommen, call-to-action, opdrachtenoverzicht |
+| Vrije pagina's (home, about, …) | `src/collections/Pages` |
+| Projecten (school, werk, side) | `src/collections/Projects` — `/projects/<slug>` |
+| Leeruitkomsten | `src/collections/LearningOutcomes` — `/learning-outcomes` |
+| Taxonomie | `Technologies`, `Courses`, `Organisations` |
+| Blokken | Hero, tekst, media, kolommen, call-to-action, projectoverzicht |
 | Header en footer | `src/globals` |
 | Media, optioneel S3 | `src/collections/Media.ts`, `src/plugins` |
-| Concepten en live preview | `versions` op Pages en Assignments |
+| Concepten en live preview | `versions` op Pages en Projects |
 | SEO, sitemap, robots | SEO-tab, `src/app/sitemap.ts` |
 
-## Een opdracht toevoegen
+De site is Engelstalig — zowel publiek als in de admin.
 
-1. Open `/admin` → **Inhoud** → **Opdrachten** → Create New.
-2. Vul titel, vak/module, periode en een korte samenvatting in.
-3. Voeg leeruitkomsten en links (GitHub, demo) toe als je die hebt.
-4. Onder **Inhoud** stapel je blokken: tekst, media, kolommen, enzovoort.
-5. Publish. De opdracht staat op `/opdrachten/<slug>` en verschijnt op het
-   overzicht en in het opdrachtenblok op de homepage.
+## Twee ingangen, één set data
 
-Maak geen CMS-pagina met slug `opdrachten`: die URL is gereserveerd voor het
-overzicht.
+Een portfolio heeft twee soorten lezers die het tegengesteld doorlopen:
+
+- **Docenten en assessoren** kijken *per leeruitkomst*: waar bewijs je LO3, en
+  op welk niveau? Dat is `/learning-outcomes`.
+- **Stagebedrijven** kijken *per project*: wat heb je gebouwd, waarmee, en wat
+  was jóuw aandeel? Dat is `/projects`.
+
+Beide pagina's lezen dezelfde documenten. Je schrijft dus niets dubbel: zodra je
+op een project onder **Assessment** een leeruitkomst aanvinkt met bewijs, staat
+dat bewijs automatisch onder die leeruitkomst.
+
+## Een project toevoegen
+
+1. Open `/admin` → **Content** → **Projects** → Create New.
+2. **Overview** — soort project, status, tagline, periode, rol, teamgrootte,
+   tech stack. De tagline is de regel op de kaart; houd hem kort.
+3. **Story** — het probleem, je aanpak, **wat jíj deed**, en de uitkomst. Dat
+   vierde veld is het belangrijkste bij groepswerk en wordt het vaakst vergeten.
+4. **Proof** — links (repo, demo, rapport), screenshots mét bijschrift, en
+   eventuele pdf's. Een screenshot zonder bijschrift bewijst niets.
+5. **Assessment** — leeruitkomsten met niveau en bewijs, je reflectie, en
+   ontvangen feedback. Een citaat van een docent of opdrachtgever weegt zwaarder
+   dan je eigen inschatting.
+6. Publish. Het project staat op `/projects/<slug>`.
+
+Werk onder een NDA? Zet **Visibility** in de zijbalk op *anonymised* en vul een
+alias in ("een logistiek bedrijf"). De organisatienaam verdwijnt dan van de site.
+
+Maak geen CMS-pagina met slug `projects` of `learning-outcomes`: die URL's zijn
+gereserveerd voor de overzichten.
+
+## Leeruitkomsten invullen
+
+De collectie is leeg opgeleverd, omdat de formulering van je eigen
+opleiding moet komen. Voeg ze toe onder **Taxonomy** → **Learning outcomes**:
+code (`LO1`), titel, de officiële tekst, en eventueel wat elk niveau betekent.
+`Order` bepaalt de volgorde op het overzicht.
 
 ## Een blok toevoegen
 
@@ -98,6 +130,13 @@ gebruiker. Uitzetten kan via `/next/exit-preview`.
 Overgenomen uit de stofloos-template; verwijder ze niet zonder te weten waarom
 ze er stonden.
 
+- **Eén `DATABASE_URL` in `.env`, niet twee.** Bij dubbele sleutels wint de
+  laatste regel. Staat de Neon-URL eronder, dan draaien `pnpm migrate` en
+  `pnpm seed` ongemerkt op productie. Controleer dit vóór elke migratie.
+- **Noem een veld nooit `status` op een collectie met drafts.** Payload maakt
+  zelf `_status` en leidt daar `enum_<collectie>_status` uit af; een eigen
+  `status`-veld botst op dezelfde enumnaam en de migratie faalt met
+  "invalid input value for enum". Vandaar `projectStatus`.
 - **`NEXT_PUBLIC_*` bereikt de productiebuild niet.** Lees waardes server-side
   (`getServerSideURL()`) en geef ze als prop door. Vandaar `SERVER_URL`.
 - **Geen `IF NOT EXISTS` in migraties.** Schrijf ze plain. Herschrijf nooit een

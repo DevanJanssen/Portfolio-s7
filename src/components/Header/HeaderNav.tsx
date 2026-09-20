@@ -42,7 +42,7 @@ export const HeaderNav = ({ items }: { items: HeaderNavItem[] }) => {
   if (items.length === 0) return null
 
   return (
-    <nav aria-label="Hoofdmenu" className={styles.navWrapper}>
+    <nav aria-label="Main menu" className={styles.navWrapper}>
       <ul className={styles.nav}>
         {items.map((item) => {
           const current = isCurrent(pathname, item.href)

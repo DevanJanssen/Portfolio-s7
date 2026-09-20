@@ -12,7 +12,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_pages_blocks_call_to_action_links_link_type" AS ENUM('reference', 'custom', 'mailto', 'tel', 'download');
   CREATE TYPE "public"."enum_pages_blocks_call_to_action_links_link_appearance" AS ENUM('default', 'outline', 'plain');
   CREATE TYPE "public"."enum_pages_blocks_call_to_action_background" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum_pages_blocks_assignments_background" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum_pages_blocks_projects_source" AS ENUM('featured', 'all', 'kind');
+  CREATE TYPE "public"."enum_pages_blocks_projects_kind" AS ENUM('school', 'work', 'side');
+  CREATE TYPE "public"."enum_pages_blocks_projects_background" AS ENUM('none', 'light', 'dark');
   CREATE TYPE "public"."enum_pages_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum__pages_v_blocks_hero_links_link_type" AS ENUM('reference', 'custom', 'mailto', 'tel', 'download');
   CREATE TYPE "public"."enum__pages_v_blocks_hero_links_link_appearance" AS ENUM('default', 'outline', 'plain');
@@ -24,32 +26,51 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum__pages_v_blocks_call_to_action_links_link_type" AS ENUM('reference', 'custom', 'mailto', 'tel', 'download');
   CREATE TYPE "public"."enum__pages_v_blocks_call_to_action_links_link_appearance" AS ENUM('default', 'outline', 'plain');
   CREATE TYPE "public"."enum__pages_v_blocks_call_to_action_background" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum__pages_v_blocks_assignments_background" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum__pages_v_blocks_projects_source" AS ENUM('featured', 'all', 'kind');
+  CREATE TYPE "public"."enum__pages_v_blocks_projects_kind" AS ENUM('school', 'work', 'side');
+  CREATE TYPE "public"."enum__pages_v_blocks_projects_background" AS ENUM('none', 'light', 'dark');
   CREATE TYPE "public"."enum__pages_v_version_status" AS ENUM('draft', 'published');
-  CREATE TYPE "public"."enum_assignments_blocks_hero_links_link_type" AS ENUM('reference', 'custom', 'mailto', 'tel', 'download');
-  CREATE TYPE "public"."enum_assignments_blocks_hero_links_link_appearance" AS ENUM('default', 'outline', 'plain');
-  CREATE TYPE "public"."enum_assignments_blocks_hero_background" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum_assignments_blocks_rich_text_background" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum_assignments_blocks_media_block_width" AS ENUM('content', 'full');
-  CREATE TYPE "public"."enum_assignments_blocks_media_block_background" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum_assignments_blocks_columns_background" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum_assignments_blocks_call_to_action_links_link_type" AS ENUM('reference', 'custom', 'mailto', 'tel', 'download');
-  CREATE TYPE "public"."enum_assignments_blocks_call_to_action_links_link_appearance" AS ENUM('default', 'outline', 'plain');
-  CREATE TYPE "public"."enum_assignments_blocks_call_to_action_background" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum_assignments_blocks_assignments_background" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum_assignments_status" AS ENUM('draft', 'published');
-  CREATE TYPE "public"."enum__assignments_v_blocks_hero_links_link_type" AS ENUM('reference', 'custom', 'mailto', 'tel', 'download');
-  CREATE TYPE "public"."enum__assignments_v_blocks_hero_links_link_appearance" AS ENUM('default', 'outline', 'plain');
-  CREATE TYPE "public"."enum__assignments_v_blocks_hero_background" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum__assignments_v_blocks_rich_text_background" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum__assignments_v_blocks_media_block_width" AS ENUM('content', 'full');
-  CREATE TYPE "public"."enum__assignments_v_blocks_media_block_background" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum__assignments_v_blocks_columns_background" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum__assignments_v_blocks_call_to_action_links_link_type" AS ENUM('reference', 'custom', 'mailto', 'tel', 'download');
-  CREATE TYPE "public"."enum__assignments_v_blocks_call_to_action_links_link_appearance" AS ENUM('default', 'outline', 'plain');
-  CREATE TYPE "public"."enum__assignments_v_blocks_call_to_action_background" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum__assignments_v_blocks_assignments_background" AS ENUM('none', 'light', 'dark');
-  CREATE TYPE "public"."enum__assignments_v_version_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum_projects_blocks_hero_links_link_type" AS ENUM('reference', 'custom', 'mailto', 'tel', 'download');
+  CREATE TYPE "public"."enum_projects_blocks_hero_links_link_appearance" AS ENUM('default', 'outline', 'plain');
+  CREATE TYPE "public"."enum_projects_blocks_hero_background" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum_projects_blocks_rich_text_background" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum_projects_blocks_media_block_width" AS ENUM('content', 'full');
+  CREATE TYPE "public"."enum_projects_blocks_media_block_background" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum_projects_blocks_columns_background" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum_projects_blocks_call_to_action_links_link_type" AS ENUM('reference', 'custom', 'mailto', 'tel', 'download');
+  CREATE TYPE "public"."enum_projects_blocks_call_to_action_links_link_appearance" AS ENUM('default', 'outline', 'plain');
+  CREATE TYPE "public"."enum_projects_blocks_call_to_action_background" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum_projects_blocks_projects_source" AS ENUM('featured', 'all', 'kind');
+  CREATE TYPE "public"."enum_projects_blocks_projects_kind" AS ENUM('school', 'work', 'side');
+  CREATE TYPE "public"."enum_projects_blocks_projects_background" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum_projects_links_type" AS ENUM('repo', 'demo', 'report', 'design', 'video', 'package', 'article', 'other');
+  CREATE TYPE "public"."enum_projects_learning_outcomes_level" AS ENUM('1', '2', '3', '4');
+  CREATE TYPE "public"."enum_projects_kind" AS ENUM('school', 'work', 'side');
+  CREATE TYPE "public"."enum_projects_project_status" AS ENUM('in-progress', 'completed', 'shipped', 'archived');
+  CREATE TYPE "public"."enum_projects_visibility" AS ENUM('public', 'anonymised', 'on-request');
+  CREATE TYPE "public"."enum_projects_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum__projects_v_blocks_hero_links_link_type" AS ENUM('reference', 'custom', 'mailto', 'tel', 'download');
+  CREATE TYPE "public"."enum__projects_v_blocks_hero_links_link_appearance" AS ENUM('default', 'outline', 'plain');
+  CREATE TYPE "public"."enum__projects_v_blocks_hero_background" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum__projects_v_blocks_rich_text_background" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum__projects_v_blocks_media_block_width" AS ENUM('content', 'full');
+  CREATE TYPE "public"."enum__projects_v_blocks_media_block_background" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum__projects_v_blocks_columns_background" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum__projects_v_blocks_call_to_action_links_link_type" AS ENUM('reference', 'custom', 'mailto', 'tel', 'download');
+  CREATE TYPE "public"."enum__projects_v_blocks_call_to_action_links_link_appearance" AS ENUM('default', 'outline', 'plain');
+  CREATE TYPE "public"."enum__projects_v_blocks_call_to_action_background" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum__projects_v_blocks_projects_source" AS ENUM('featured', 'all', 'kind');
+  CREATE TYPE "public"."enum__projects_v_blocks_projects_kind" AS ENUM('school', 'work', 'side');
+  CREATE TYPE "public"."enum__projects_v_blocks_projects_background" AS ENUM('none', 'light', 'dark');
+  CREATE TYPE "public"."enum__projects_v_version_links_type" AS ENUM('repo', 'demo', 'report', 'design', 'video', 'package', 'article', 'other');
+  CREATE TYPE "public"."enum__projects_v_version_learning_outcomes_level" AS ENUM('1', '2', '3', '4');
+  CREATE TYPE "public"."enum__projects_v_version_kind" AS ENUM('school', 'work', 'side');
+  CREATE TYPE "public"."enum__projects_v_version_project_status" AS ENUM('in-progress', 'completed', 'shipped', 'archived');
+  CREATE TYPE "public"."enum__projects_v_version_visibility" AS ENUM('public', 'anonymised', 'on-request');
+  CREATE TYPE "public"."enum__projects_v_version_status" AS ENUM('draft', 'published');
+  CREATE TYPE "public"."enum_learning_outcomes_levels_level" AS ENUM('1', '2', '3', '4');
+  CREATE TYPE "public"."enum_technologies_category" AS ENUM('language', 'framework', 'database', 'infrastructure', 'tooling', 'design');
+  CREATE TYPE "public"."enum_organisations_type" AS ENUM('employer', 'client', 'school');
   CREATE TYPE "public"."enum_users_roles" AS ENUM('admin', 'editor');
   CREATE TYPE "public"."enum_redirects_to_type" AS ENUM('reference', 'custom');
   CREATE TYPE "public"."enum_payload_jobs_log_task_slug" AS ENUM('inline', 'schedulePublish');
@@ -156,16 +177,19 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"block_name" varchar
   );
   
-  CREATE TABLE "pages_blocks_assignments" (
+  CREATE TABLE "pages_blocks_projects" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
-  	"heading" varchar DEFAULT 'Opdrachten',
+  	"heading" varchar DEFAULT 'Projects',
   	"intro" varchar,
+  	"source" "enum_pages_blocks_projects_source" DEFAULT 'featured',
+  	"kind" "enum_pages_blocks_projects_kind",
   	"limit" numeric,
+  	"show_link_to_overview" boolean DEFAULT true,
   	"anchor" varchar,
-  	"background" "enum_pages_blocks_assignments_background" DEFAULT 'none',
+  	"background" "enum_pages_blocks_projects_background" DEFAULT 'none',
   	"block_name" varchar
   );
   
@@ -293,16 +317,19 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"block_name" varchar
   );
   
-  CREATE TABLE "_pages_v_blocks_assignments" (
+  CREATE TABLE "_pages_v_blocks_projects" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
   	"id" serial PRIMARY KEY NOT NULL,
-  	"heading" varchar DEFAULT 'Opdrachten',
+  	"heading" varchar DEFAULT 'Projects',
   	"intro" varchar,
+  	"source" "enum__pages_v_blocks_projects_source" DEFAULT 'featured',
+  	"kind" "enum__pages_v_blocks_projects_kind",
   	"limit" numeric,
+  	"show_link_to_overview" boolean DEFAULT true,
   	"anchor" varchar,
-  	"background" "enum__pages_v_blocks_assignments_background" DEFAULT 'none',
+  	"background" "enum__pages_v_blocks_projects_background" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );
@@ -329,27 +356,11 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"autosave" boolean
   );
   
-  CREATE TABLE "assignments_competencies" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"title" varchar,
-  	"description" varchar
-  );
-  
-  CREATE TABLE "assignments_links" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"label" varchar,
-  	"url" varchar
-  );
-  
-  CREATE TABLE "assignments_blocks_hero_links" (
+  CREATE TABLE "projects_blocks_hero_links" (
   	"_order" integer NOT NULL,
   	"_parent_id" varchar NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
-  	"link_type" "enum_assignments_blocks_hero_links_link_type" DEFAULT 'reference',
+  	"link_type" "enum_projects_blocks_hero_links_link_type" DEFAULT 'reference',
   	"link_reference_id" integer,
   	"link_url" varchar,
   	"link_mailto" varchar,
@@ -358,10 +369,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"link_anchor" varchar,
   	"link_new_tab" boolean,
   	"link_label" varchar,
-  	"link_appearance" "enum_assignments_blocks_hero_links_link_appearance" DEFAULT 'default'
+  	"link_appearance" "enum_projects_blocks_hero_links_link_appearance" DEFAULT 'default'
   );
   
-  CREATE TABLE "assignments_blocks_hero" (
+  CREATE TABLE "projects_blocks_hero" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
@@ -370,35 +381,35 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"intro" varchar,
   	"image_id" integer,
   	"anchor" varchar,
-  	"background" "enum_assignments_blocks_hero_background" DEFAULT 'none',
+  	"background" "enum_projects_blocks_hero_background" DEFAULT 'none',
   	"block_name" varchar
   );
   
-  CREATE TABLE "assignments_blocks_rich_text" (
+  CREATE TABLE "projects_blocks_rich_text" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
   	"content" jsonb,
   	"anchor" varchar,
-  	"background" "enum_assignments_blocks_rich_text_background" DEFAULT 'none',
+  	"background" "enum_projects_blocks_rich_text_background" DEFAULT 'none',
   	"block_name" varchar
   );
   
-  CREATE TABLE "assignments_blocks_media_block" (
+  CREATE TABLE "projects_blocks_media_block" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
   	"media_id" integer,
   	"caption" varchar,
-  	"width" "enum_assignments_blocks_media_block_width" DEFAULT 'content',
+  	"width" "enum_projects_blocks_media_block_width" DEFAULT 'content',
   	"anchor" varchar,
-  	"background" "enum_assignments_blocks_media_block_background" DEFAULT 'none',
+  	"background" "enum_projects_blocks_media_block_background" DEFAULT 'none',
   	"block_name" varchar
   );
   
-  CREATE TABLE "assignments_blocks_columns_columns" (
+  CREATE TABLE "projects_blocks_columns_columns" (
   	"_order" integer NOT NULL,
   	"_parent_id" varchar NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
@@ -406,21 +417,21 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"content" jsonb
   );
   
-  CREATE TABLE "assignments_blocks_columns" (
+  CREATE TABLE "projects_blocks_columns" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
   	"anchor" varchar,
-  	"background" "enum_assignments_blocks_columns_background" DEFAULT 'none',
+  	"background" "enum_projects_blocks_columns_background" DEFAULT 'none',
   	"block_name" varchar
   );
   
-  CREATE TABLE "assignments_blocks_call_to_action_links" (
+  CREATE TABLE "projects_blocks_call_to_action_links" (
   	"_order" integer NOT NULL,
   	"_parent_id" varchar NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
-  	"link_type" "enum_assignments_blocks_call_to_action_links_link_type" DEFAULT 'reference',
+  	"link_type" "enum_projects_blocks_call_to_action_links_link_type" DEFAULT 'reference',
   	"link_reference_id" integer,
   	"link_url" varchar,
   	"link_mailto" varchar,
@@ -429,10 +440,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"link_anchor" varchar,
   	"link_new_tab" boolean,
   	"link_label" varchar,
-  	"link_appearance" "enum_assignments_blocks_call_to_action_links_link_appearance" DEFAULT 'default'
+  	"link_appearance" "enum_projects_blocks_call_to_action_links_link_appearance" DEFAULT 'default'
   );
   
-  CREATE TABLE "assignments_blocks_call_to_action" (
+  CREATE TABLE "projects_blocks_call_to_action" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
@@ -440,65 +451,118 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"text" varchar,
   	"anchor" varchar,
-  	"background" "enum_assignments_blocks_call_to_action_background" DEFAULT 'none',
+  	"background" "enum_projects_blocks_call_to_action_background" DEFAULT 'none',
   	"block_name" varchar
   );
   
-  CREATE TABLE "assignments_blocks_assignments" (
+  CREATE TABLE "projects_blocks_projects" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
   	"id" varchar PRIMARY KEY NOT NULL,
-  	"heading" varchar DEFAULT 'Opdrachten',
+  	"heading" varchar DEFAULT 'Projects',
   	"intro" varchar,
+  	"source" "enum_projects_blocks_projects_source" DEFAULT 'featured',
+  	"kind" "enum_projects_blocks_projects_kind",
   	"limit" numeric,
+  	"show_link_to_overview" boolean DEFAULT true,
   	"anchor" varchar,
-  	"background" "enum_assignments_blocks_assignments_background" DEFAULT 'none',
+  	"background" "enum_projects_blocks_projects_background" DEFAULT 'none',
   	"block_name" varchar
   );
   
-  CREATE TABLE "assignments" (
+  CREATE TABLE "projects_links" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"label" varchar,
+  	"type" "enum_projects_links_type" DEFAULT 'repo',
+  	"url" varchar
+  );
+  
+  CREATE TABLE "projects_gallery" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"image_id" integer,
+  	"caption" varchar
+  );
+  
+  CREATE TABLE "projects_documents" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"file_id" integer,
+  	"label" varchar
+  );
+  
+  CREATE TABLE "projects_learning_outcomes" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"outcome_id" integer,
+  	"level" "enum_projects_learning_outcomes_level",
+  	"evidence" jsonb
+  );
+  
+  CREATE TABLE "projects_feedback" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"source" varchar,
+  	"source_role" varchar,
+  	"quote" varchar,
+  	"date" timestamp(3) with time zone
+  );
+  
+  CREATE TABLE "projects" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"title" varchar,
-  	"course" varchar,
-  	"period" varchar,
+  	"kind" "enum_projects_kind" DEFAULT 'school',
+  	"project_status" "enum_projects_project_status" DEFAULT 'completed',
+  	"tagline" varchar,
   	"summary" varchar,
   	"cover_id" integer,
+  	"start_date" timestamp(3) with time zone,
+  	"end_date" timestamp(3) with time zone,
+  	"role" varchar,
+  	"team_size" numeric,
+  	"course_id" integer,
+  	"organisation_id" integer,
+  	"problem" jsonb,
+  	"approach" jsonb,
+  	"my_contribution" jsonb,
+  	"outcome" jsonb,
+  	"reflection" jsonb,
   	"meta_title" varchar,
   	"meta_image_id" integer,
   	"meta_description" varchar,
   	"meta_noindex" boolean,
   	"generate_slug" boolean DEFAULT true,
   	"slug" varchar,
+  	"visibility" "enum_projects_visibility" DEFAULT 'public',
+  	"client_alias" varchar,
+  	"featured" boolean DEFAULT false,
+  	"sort_order" numeric DEFAULT 0,
   	"published_at" timestamp(3) with time zone,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"_status" "enum_assignments_status" DEFAULT 'draft'
+  	"_status" "enum_projects_status" DEFAULT 'draft'
   );
   
-  CREATE TABLE "_assignments_v_version_competencies" (
+  CREATE TABLE "projects_rels" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"order" integer,
+  	"parent_id" integer NOT NULL,
+  	"path" varchar NOT NULL,
+  	"technologies_id" integer
+  );
+  
+  CREATE TABLE "_projects_v_blocks_hero_links" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"id" serial PRIMARY KEY NOT NULL,
-  	"title" varchar,
-  	"description" varchar,
-  	"_uuid" varchar
-  );
-  
-  CREATE TABLE "_assignments_v_version_links" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"label" varchar,
-  	"url" varchar,
-  	"_uuid" varchar
-  );
-  
-  CREATE TABLE "_assignments_v_blocks_hero_links" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"link_type" "enum__assignments_v_blocks_hero_links_link_type" DEFAULT 'reference',
+  	"link_type" "enum__projects_v_blocks_hero_links_link_type" DEFAULT 'reference',
   	"link_reference_id" integer,
   	"link_url" varchar,
   	"link_mailto" varchar,
@@ -507,11 +571,11 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"link_anchor" varchar,
   	"link_new_tab" boolean,
   	"link_label" varchar,
-  	"link_appearance" "enum__assignments_v_blocks_hero_links_link_appearance" DEFAULT 'default',
+  	"link_appearance" "enum__projects_v_blocks_hero_links_link_appearance" DEFAULT 'default',
   	"_uuid" varchar
   );
   
-  CREATE TABLE "_assignments_v_blocks_hero" (
+  CREATE TABLE "_projects_v_blocks_hero" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
@@ -520,38 +584,38 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"intro" varchar,
   	"image_id" integer,
   	"anchor" varchar,
-  	"background" "enum__assignments_v_blocks_hero_background" DEFAULT 'none',
+  	"background" "enum__projects_v_blocks_hero_background" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );
   
-  CREATE TABLE "_assignments_v_blocks_rich_text" (
+  CREATE TABLE "_projects_v_blocks_rich_text" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
   	"id" serial PRIMARY KEY NOT NULL,
   	"content" jsonb,
   	"anchor" varchar,
-  	"background" "enum__assignments_v_blocks_rich_text_background" DEFAULT 'none',
+  	"background" "enum__projects_v_blocks_rich_text_background" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );
   
-  CREATE TABLE "_assignments_v_blocks_media_block" (
+  CREATE TABLE "_projects_v_blocks_media_block" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
   	"id" serial PRIMARY KEY NOT NULL,
   	"media_id" integer,
   	"caption" varchar,
-  	"width" "enum__assignments_v_blocks_media_block_width" DEFAULT 'content',
+  	"width" "enum__projects_v_blocks_media_block_width" DEFAULT 'content',
   	"anchor" varchar,
-  	"background" "enum__assignments_v_blocks_media_block_background" DEFAULT 'none',
+  	"background" "enum__projects_v_blocks_media_block_background" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );
   
-  CREATE TABLE "_assignments_v_blocks_columns_columns" (
+  CREATE TABLE "_projects_v_blocks_columns_columns" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"id" serial PRIMARY KEY NOT NULL,
@@ -560,22 +624,22 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"_uuid" varchar
   );
   
-  CREATE TABLE "_assignments_v_blocks_columns" (
+  CREATE TABLE "_projects_v_blocks_columns" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
   	"id" serial PRIMARY KEY NOT NULL,
   	"anchor" varchar,
-  	"background" "enum__assignments_v_blocks_columns_background" DEFAULT 'none',
+  	"background" "enum__projects_v_blocks_columns_background" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );
   
-  CREATE TABLE "_assignments_v_blocks_call_to_action_links" (
+  CREATE TABLE "_projects_v_blocks_call_to_action_links" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"id" serial PRIMARY KEY NOT NULL,
-  	"link_type" "enum__assignments_v_blocks_call_to_action_links_link_type" DEFAULT 'reference',
+  	"link_type" "enum__projects_v_blocks_call_to_action_links_link_type" DEFAULT 'reference',
   	"link_reference_id" integer,
   	"link_url" varchar,
   	"link_mailto" varchar,
@@ -584,11 +648,11 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"link_anchor" varchar,
   	"link_new_tab" boolean,
   	"link_label" varchar,
-  	"link_appearance" "enum__assignments_v_blocks_call_to_action_links_link_appearance" DEFAULT 'default',
+  	"link_appearance" "enum__projects_v_blocks_call_to_action_links_link_appearance" DEFAULT 'default',
   	"_uuid" varchar
   );
   
-  CREATE TABLE "_assignments_v_blocks_call_to_action" (
+  CREATE TABLE "_projects_v_blocks_call_to_action" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
@@ -596,53 +660,187 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"heading" varchar,
   	"text" varchar,
   	"anchor" varchar,
-  	"background" "enum__assignments_v_blocks_call_to_action_background" DEFAULT 'none',
+  	"background" "enum__projects_v_blocks_call_to_action_background" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );
   
-  CREATE TABLE "_assignments_v_blocks_assignments" (
+  CREATE TABLE "_projects_v_blocks_projects" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
   	"id" serial PRIMARY KEY NOT NULL,
-  	"heading" varchar DEFAULT 'Opdrachten',
+  	"heading" varchar DEFAULT 'Projects',
   	"intro" varchar,
+  	"source" "enum__projects_v_blocks_projects_source" DEFAULT 'featured',
+  	"kind" "enum__projects_v_blocks_projects_kind",
   	"limit" numeric,
+  	"show_link_to_overview" boolean DEFAULT true,
   	"anchor" varchar,
-  	"background" "enum__assignments_v_blocks_assignments_background" DEFAULT 'none',
+  	"background" "enum__projects_v_blocks_projects_background" DEFAULT 'none',
   	"_uuid" varchar,
   	"block_name" varchar
   );
   
-  CREATE TABLE "_assignments_v" (
+  CREATE TABLE "_projects_v_version_links" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"label" varchar,
+  	"type" "enum__projects_v_version_links_type" DEFAULT 'repo',
+  	"url" varchar,
+  	"_uuid" varchar
+  );
+  
+  CREATE TABLE "_projects_v_version_gallery" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"image_id" integer,
+  	"caption" varchar,
+  	"_uuid" varchar
+  );
+  
+  CREATE TABLE "_projects_v_version_documents" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"file_id" integer,
+  	"label" varchar,
+  	"_uuid" varchar
+  );
+  
+  CREATE TABLE "_projects_v_version_learning_outcomes" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"outcome_id" integer,
+  	"level" "enum__projects_v_version_learning_outcomes_level",
+  	"evidence" jsonb,
+  	"_uuid" varchar
+  );
+  
+  CREATE TABLE "_projects_v_version_feedback" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"source" varchar,
+  	"source_role" varchar,
+  	"quote" varchar,
+  	"date" timestamp(3) with time zone,
+  	"_uuid" varchar
+  );
+  
+  CREATE TABLE "_projects_v" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"parent_id" integer,
   	"version_title" varchar,
-  	"version_course" varchar,
-  	"version_period" varchar,
+  	"version_kind" "enum__projects_v_version_kind" DEFAULT 'school',
+  	"version_project_status" "enum__projects_v_version_project_status" DEFAULT 'completed',
+  	"version_tagline" varchar,
   	"version_summary" varchar,
   	"version_cover_id" integer,
+  	"version_start_date" timestamp(3) with time zone,
+  	"version_end_date" timestamp(3) with time zone,
+  	"version_role" varchar,
+  	"version_team_size" numeric,
+  	"version_course_id" integer,
+  	"version_organisation_id" integer,
+  	"version_problem" jsonb,
+  	"version_approach" jsonb,
+  	"version_my_contribution" jsonb,
+  	"version_outcome" jsonb,
+  	"version_reflection" jsonb,
   	"version_meta_title" varchar,
   	"version_meta_image_id" integer,
   	"version_meta_description" varchar,
   	"version_meta_noindex" boolean,
   	"version_generate_slug" boolean DEFAULT true,
   	"version_slug" varchar,
+  	"version_visibility" "enum__projects_v_version_visibility" DEFAULT 'public',
+  	"version_client_alias" varchar,
+  	"version_featured" boolean DEFAULT false,
+  	"version_sort_order" numeric DEFAULT 0,
   	"version_published_at" timestamp(3) with time zone,
   	"version_updated_at" timestamp(3) with time zone,
   	"version_created_at" timestamp(3) with time zone,
-  	"version__status" "enum__assignments_v_version_status" DEFAULT 'draft',
+  	"version__status" "enum__projects_v_version_status" DEFAULT 'draft',
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"latest" boolean,
   	"autosave" boolean
   );
   
+  CREATE TABLE "_projects_v_rels" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"order" integer,
+  	"parent_id" integer NOT NULL,
+  	"path" varchar NOT NULL,
+  	"technologies_id" integer
+  );
+  
+  CREATE TABLE "learning_outcomes_levels" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"level" "enum_learning_outcomes_levels_level" NOT NULL,
+  	"description" varchar
+  );
+  
+  CREATE TABLE "learning_outcomes" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"code" varchar NOT NULL,
+  	"title" varchar NOT NULL,
+  	"short_description" varchar,
+  	"description" jsonb,
+  	"generate_slug" boolean DEFAULT true,
+  	"slug" varchar NOT NULL,
+  	"sort_order" numeric DEFAULT 0,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "technologies" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"name" varchar NOT NULL,
+  	"category" "enum_technologies_category" DEFAULT 'framework' NOT NULL,
+  	"logo_id" integer,
+  	"url" varchar,
+  	"generate_slug" boolean DEFAULT true,
+  	"slug" varchar NOT NULL,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "courses" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"title" varchar NOT NULL,
+  	"semester" varchar,
+  	"institution" varchar DEFAULT 'Fontys ICT',
+  	"description" varchar,
+  	"generate_slug" boolean DEFAULT true,
+  	"slug" varchar NOT NULL,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "organisations" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"name" varchar NOT NULL,
+  	"type" "enum_organisations_type" DEFAULT 'client' NOT NULL,
+  	"logo_id" integer,
+  	"url" varchar,
+  	"generate_slug" boolean DEFAULT true,
+  	"slug" varchar NOT NULL,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
   CREATE TABLE "media" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"alt" varchar,
   	"caption" varchar,
+  	"_objectkey" varchar,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"url" varchar,
@@ -711,6 +909,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"reset_password_expiration" timestamp(3) with time zone,
   	"salt" varchar,
   	"hash" varchar,
+  	"reset_password_requested_at" timestamp(3) with time zone,
   	"login_attempts" numeric DEFAULT 0,
   	"lock_until" timestamp(3) with time zone
   );
@@ -780,7 +979,11 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"parent_id" integer NOT NULL,
   	"path" varchar NOT NULL,
   	"pages_id" integer,
-  	"assignments_id" integer,
+  	"projects_id" integer,
+  	"learning_outcomes_id" integer,
+  	"technologies_id" integer,
+  	"courses_id" integer,
+  	"organisations_id" integer,
   	"media_id" integer,
   	"users_id" integer,
   	"redirects_id" integer
@@ -868,7 +1071,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "pages_blocks_call_to_action_links" ADD CONSTRAINT "pages_blocks_call_to_action_links_link_media_id_media_id_fk" FOREIGN KEY ("link_media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "pages_blocks_call_to_action_links" ADD CONSTRAINT "pages_blocks_call_to_action_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages_blocks_call_to_action"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "pages_blocks_call_to_action" ADD CONSTRAINT "pages_blocks_call_to_action_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "pages_blocks_assignments" ADD CONSTRAINT "pages_blocks_assignments_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "pages_blocks_projects" ADD CONSTRAINT "pages_blocks_projects_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "pages" ADD CONSTRAINT "pages_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "pages" ADD CONSTRAINT "pages_parent_id_pages_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_pages_v_blocks_hero_links" ADD CONSTRAINT "_pages_v_blocks_hero_links_link_reference_id_pages_id_fk" FOREIGN KEY ("link_reference_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
@@ -885,49 +1088,72 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_pages_v_blocks_call_to_action_links" ADD CONSTRAINT "_pages_v_blocks_call_to_action_links_link_media_id_media_id_fk" FOREIGN KEY ("link_media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_pages_v_blocks_call_to_action_links" ADD CONSTRAINT "_pages_v_blocks_call_to_action_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v_blocks_call_to_action"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_pages_v_blocks_call_to_action" ADD CONSTRAINT "_pages_v_blocks_call_to_action_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_pages_v_blocks_assignments" ADD CONSTRAINT "_pages_v_blocks_assignments_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_pages_v_blocks_projects" ADD CONSTRAINT "_pages_v_blocks_projects_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_pages_v" ADD CONSTRAINT "_pages_v_parent_id_pages_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_pages_v" ADD CONSTRAINT "_pages_v_version_meta_image_id_media_id_fk" FOREIGN KEY ("version_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_pages_v" ADD CONSTRAINT "_pages_v_version_parent_id_pages_id_fk" FOREIGN KEY ("version_parent_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "assignments_competencies" ADD CONSTRAINT "assignments_competencies_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."assignments"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "assignments_links" ADD CONSTRAINT "assignments_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."assignments"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_hero_links" ADD CONSTRAINT "assignments_blocks_hero_links_link_reference_id_pages_id_fk" FOREIGN KEY ("link_reference_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_hero_links" ADD CONSTRAINT "assignments_blocks_hero_links_link_media_id_media_id_fk" FOREIGN KEY ("link_media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_hero_links" ADD CONSTRAINT "assignments_blocks_hero_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."assignments_blocks_hero"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_hero" ADD CONSTRAINT "assignments_blocks_hero_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_hero" ADD CONSTRAINT "assignments_blocks_hero_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."assignments"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_rich_text" ADD CONSTRAINT "assignments_blocks_rich_text_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."assignments"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_media_block" ADD CONSTRAINT "assignments_blocks_media_block_media_id_media_id_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_media_block" ADD CONSTRAINT "assignments_blocks_media_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."assignments"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_columns_columns" ADD CONSTRAINT "assignments_blocks_columns_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."assignments_blocks_columns"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_columns" ADD CONSTRAINT "assignments_blocks_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."assignments"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_call_to_action_links" ADD CONSTRAINT "assignments_blocks_call_to_action_links_link_reference_id_pages_id_fk" FOREIGN KEY ("link_reference_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_call_to_action_links" ADD CONSTRAINT "assignments_blocks_call_to_action_links_link_media_id_media_id_fk" FOREIGN KEY ("link_media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_call_to_action_links" ADD CONSTRAINT "assignments_blocks_call_to_action_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."assignments_blocks_call_to_action"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_call_to_action" ADD CONSTRAINT "assignments_blocks_call_to_action_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."assignments"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "assignments_blocks_assignments" ADD CONSTRAINT "assignments_blocks_assignments_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."assignments"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "assignments" ADD CONSTRAINT "assignments_cover_id_media_id_fk" FOREIGN KEY ("cover_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "assignments" ADD CONSTRAINT "assignments_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_assignments_v_version_competencies" ADD CONSTRAINT "_assignments_v_version_competencies_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_assignments_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_assignments_v_version_links" ADD CONSTRAINT "_assignments_v_version_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_assignments_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_hero_links" ADD CONSTRAINT "_assignments_v_blocks_hero_links_link_reference_id_pages_id_fk" FOREIGN KEY ("link_reference_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_hero_links" ADD CONSTRAINT "_assignments_v_blocks_hero_links_link_media_id_media_id_fk" FOREIGN KEY ("link_media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_hero_links" ADD CONSTRAINT "_assignments_v_blocks_hero_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_assignments_v_blocks_hero"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_hero" ADD CONSTRAINT "_assignments_v_blocks_hero_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_hero" ADD CONSTRAINT "_assignments_v_blocks_hero_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_assignments_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_rich_text" ADD CONSTRAINT "_assignments_v_blocks_rich_text_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_assignments_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_media_block" ADD CONSTRAINT "_assignments_v_blocks_media_block_media_id_media_id_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_media_block" ADD CONSTRAINT "_assignments_v_blocks_media_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_assignments_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_columns_columns" ADD CONSTRAINT "_assignments_v_blocks_columns_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_assignments_v_blocks_columns"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_columns" ADD CONSTRAINT "_assignments_v_blocks_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_assignments_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_call_to_action_links" ADD CONSTRAINT "_assignments_v_blocks_call_to_action_links_link_reference_id_pages_id_fk" FOREIGN KEY ("link_reference_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_call_to_action_links" ADD CONSTRAINT "_assignments_v_blocks_call_to_action_links_link_media_id_media_id_fk" FOREIGN KEY ("link_media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_call_to_action_links" ADD CONSTRAINT "_assignments_v_blocks_call_to_action_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_assignments_v_blocks_call_to_action"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_call_to_action" ADD CONSTRAINT "_assignments_v_blocks_call_to_action_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_assignments_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_assignments_v_blocks_assignments" ADD CONSTRAINT "_assignments_v_blocks_assignments_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_assignments_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_assignments_v" ADD CONSTRAINT "_assignments_v_parent_id_assignments_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."assignments"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_assignments_v" ADD CONSTRAINT "_assignments_v_version_cover_id_media_id_fk" FOREIGN KEY ("version_cover_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_assignments_v" ADD CONSTRAINT "_assignments_v_version_meta_image_id_media_id_fk" FOREIGN KEY ("version_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "projects_blocks_hero_links" ADD CONSTRAINT "projects_blocks_hero_links_link_reference_id_pages_id_fk" FOREIGN KEY ("link_reference_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "projects_blocks_hero_links" ADD CONSTRAINT "projects_blocks_hero_links_link_media_id_media_id_fk" FOREIGN KEY ("link_media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "projects_blocks_hero_links" ADD CONSTRAINT "projects_blocks_hero_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects_blocks_hero"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects_blocks_hero" ADD CONSTRAINT "projects_blocks_hero_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "projects_blocks_hero" ADD CONSTRAINT "projects_blocks_hero_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects_blocks_rich_text" ADD CONSTRAINT "projects_blocks_rich_text_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects_blocks_media_block" ADD CONSTRAINT "projects_blocks_media_block_media_id_media_id_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "projects_blocks_media_block" ADD CONSTRAINT "projects_blocks_media_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects_blocks_columns_columns" ADD CONSTRAINT "projects_blocks_columns_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects_blocks_columns"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects_blocks_columns" ADD CONSTRAINT "projects_blocks_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects_blocks_call_to_action_links" ADD CONSTRAINT "projects_blocks_call_to_action_links_link_reference_id_pages_id_fk" FOREIGN KEY ("link_reference_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "projects_blocks_call_to_action_links" ADD CONSTRAINT "projects_blocks_call_to_action_links_link_media_id_media_id_fk" FOREIGN KEY ("link_media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "projects_blocks_call_to_action_links" ADD CONSTRAINT "projects_blocks_call_to_action_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects_blocks_call_to_action"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects_blocks_call_to_action" ADD CONSTRAINT "projects_blocks_call_to_action_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects_blocks_projects" ADD CONSTRAINT "projects_blocks_projects_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects_links" ADD CONSTRAINT "projects_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects_gallery" ADD CONSTRAINT "projects_gallery_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "projects_gallery" ADD CONSTRAINT "projects_gallery_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects_documents" ADD CONSTRAINT "projects_documents_file_id_media_id_fk" FOREIGN KEY ("file_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "projects_documents" ADD CONSTRAINT "projects_documents_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects_learning_outcomes" ADD CONSTRAINT "projects_learning_outcomes_outcome_id_learning_outcomes_id_fk" FOREIGN KEY ("outcome_id") REFERENCES "public"."learning_outcomes"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "projects_learning_outcomes" ADD CONSTRAINT "projects_learning_outcomes_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects_feedback" ADD CONSTRAINT "projects_feedback_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects" ADD CONSTRAINT "projects_cover_id_media_id_fk" FOREIGN KEY ("cover_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "projects" ADD CONSTRAINT "projects_course_id_courses_id_fk" FOREIGN KEY ("course_id") REFERENCES "public"."courses"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "projects" ADD CONSTRAINT "projects_organisation_id_organisations_id_fk" FOREIGN KEY ("organisation_id") REFERENCES "public"."organisations"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "projects" ADD CONSTRAINT "projects_meta_image_id_media_id_fk" FOREIGN KEY ("meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "projects_rels" ADD CONSTRAINT "projects_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "projects_rels" ADD CONSTRAINT "projects_rels_technologies_fk" FOREIGN KEY ("technologies_id") REFERENCES "public"."technologies"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_hero_links" ADD CONSTRAINT "_projects_v_blocks_hero_links_link_reference_id_pages_id_fk" FOREIGN KEY ("link_reference_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_hero_links" ADD CONSTRAINT "_projects_v_blocks_hero_links_link_media_id_media_id_fk" FOREIGN KEY ("link_media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_hero_links" ADD CONSTRAINT "_projects_v_blocks_hero_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v_blocks_hero"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_hero" ADD CONSTRAINT "_projects_v_blocks_hero_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_hero" ADD CONSTRAINT "_projects_v_blocks_hero_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_rich_text" ADD CONSTRAINT "_projects_v_blocks_rich_text_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_media_block" ADD CONSTRAINT "_projects_v_blocks_media_block_media_id_media_id_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_media_block" ADD CONSTRAINT "_projects_v_blocks_media_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_columns_columns" ADD CONSTRAINT "_projects_v_blocks_columns_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v_blocks_columns"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_columns" ADD CONSTRAINT "_projects_v_blocks_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_call_to_action_links" ADD CONSTRAINT "_projects_v_blocks_call_to_action_links_link_reference_id_pages_id_fk" FOREIGN KEY ("link_reference_id") REFERENCES "public"."pages"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_call_to_action_links" ADD CONSTRAINT "_projects_v_blocks_call_to_action_links_link_media_id_media_id_fk" FOREIGN KEY ("link_media_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_call_to_action_links" ADD CONSTRAINT "_projects_v_blocks_call_to_action_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v_blocks_call_to_action"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_call_to_action" ADD CONSTRAINT "_projects_v_blocks_call_to_action_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_blocks_projects" ADD CONSTRAINT "_projects_v_blocks_projects_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_version_links" ADD CONSTRAINT "_projects_v_version_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_version_gallery" ADD CONSTRAINT "_projects_v_version_gallery_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_projects_v_version_gallery" ADD CONSTRAINT "_projects_v_version_gallery_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_version_documents" ADD CONSTRAINT "_projects_v_version_documents_file_id_media_id_fk" FOREIGN KEY ("file_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_projects_v_version_documents" ADD CONSTRAINT "_projects_v_version_documents_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_version_learning_outcomes" ADD CONSTRAINT "_projects_v_version_learning_outcomes_outcome_id_learning_outcomes_id_fk" FOREIGN KEY ("outcome_id") REFERENCES "public"."learning_outcomes"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_projects_v_version_learning_outcomes" ADD CONSTRAINT "_projects_v_version_learning_outcomes_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_version_feedback" ADD CONSTRAINT "_projects_v_version_feedback_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v" ADD CONSTRAINT "_projects_v_parent_id_projects_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."projects"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_projects_v" ADD CONSTRAINT "_projects_v_version_cover_id_media_id_fk" FOREIGN KEY ("version_cover_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_projects_v" ADD CONSTRAINT "_projects_v_version_course_id_courses_id_fk" FOREIGN KEY ("version_course_id") REFERENCES "public"."courses"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_projects_v" ADD CONSTRAINT "_projects_v_version_organisation_id_organisations_id_fk" FOREIGN KEY ("version_organisation_id") REFERENCES "public"."organisations"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_projects_v" ADD CONSTRAINT "_projects_v_version_meta_image_id_media_id_fk" FOREIGN KEY ("version_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_projects_v_rels" ADD CONSTRAINT "_projects_v_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_projects_v_rels" ADD CONSTRAINT "_projects_v_rels_technologies_fk" FOREIGN KEY ("technologies_id") REFERENCES "public"."technologies"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "learning_outcomes_levels" ADD CONSTRAINT "learning_outcomes_levels_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."learning_outcomes"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "technologies" ADD CONSTRAINT "technologies_logo_id_media_id_fk" FOREIGN KEY ("logo_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "organisations" ADD CONSTRAINT "organisations_logo_id_media_id_fk" FOREIGN KEY ("logo_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "users_roles" ADD CONSTRAINT "users_roles_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "users_sessions" ADD CONSTRAINT "users_sessions_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "redirects_rels" ADD CONSTRAINT "redirects_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."redirects"("id") ON DELETE cascade ON UPDATE no action;
@@ -935,7 +1161,11 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "payload_jobs_log" ADD CONSTRAINT "payload_jobs_log_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."payload_jobs"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."payload_locked_documents"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_assignments_fk" FOREIGN KEY ("assignments_id") REFERENCES "public"."assignments"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_projects_fk" FOREIGN KEY ("projects_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_learning_outcomes_fk" FOREIGN KEY ("learning_outcomes_id") REFERENCES "public"."learning_outcomes"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_technologies_fk" FOREIGN KEY ("technologies_id") REFERENCES "public"."technologies"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_courses_fk" FOREIGN KEY ("courses_id") REFERENCES "public"."courses"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_organisations_fk" FOREIGN KEY ("organisations_id") REFERENCES "public"."organisations"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_media_fk" FOREIGN KEY ("media_id") REFERENCES "public"."media"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_users_fk" FOREIGN KEY ("users_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_redirects_fk" FOREIGN KEY ("redirects_id") REFERENCES "public"."redirects"("id") ON DELETE cascade ON UPDATE no action;
@@ -974,9 +1204,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "pages_blocks_call_to_action_order_idx" ON "pages_blocks_call_to_action" USING btree ("_order");
   CREATE INDEX "pages_blocks_call_to_action_parent_id_idx" ON "pages_blocks_call_to_action" USING btree ("_parent_id");
   CREATE INDEX "pages_blocks_call_to_action_path_idx" ON "pages_blocks_call_to_action" USING btree ("_path");
-  CREATE INDEX "pages_blocks_assignments_order_idx" ON "pages_blocks_assignments" USING btree ("_order");
-  CREATE INDEX "pages_blocks_assignments_parent_id_idx" ON "pages_blocks_assignments" USING btree ("_parent_id");
-  CREATE INDEX "pages_blocks_assignments_path_idx" ON "pages_blocks_assignments" USING btree ("_path");
+  CREATE INDEX "pages_blocks_projects_order_idx" ON "pages_blocks_projects" USING btree ("_order");
+  CREATE INDEX "pages_blocks_projects_parent_id_idx" ON "pages_blocks_projects" USING btree ("_parent_id");
+  CREATE INDEX "pages_blocks_projects_path_idx" ON "pages_blocks_projects" USING btree ("_path");
   CREATE INDEX "pages_meta_meta_image_idx" ON "pages" USING btree ("meta_image_id");
   CREATE INDEX "pages_parent_idx" ON "pages" USING btree ("parent_id");
   CREATE INDEX "pages_slug_idx" ON "pages" USING btree ("slug");
@@ -1011,9 +1241,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_pages_v_blocks_call_to_action_order_idx" ON "_pages_v_blocks_call_to_action" USING btree ("_order");
   CREATE INDEX "_pages_v_blocks_call_to_action_parent_id_idx" ON "_pages_v_blocks_call_to_action" USING btree ("_parent_id");
   CREATE INDEX "_pages_v_blocks_call_to_action_path_idx" ON "_pages_v_blocks_call_to_action" USING btree ("_path");
-  CREATE INDEX "_pages_v_blocks_assignments_order_idx" ON "_pages_v_blocks_assignments" USING btree ("_order");
-  CREATE INDEX "_pages_v_blocks_assignments_parent_id_idx" ON "_pages_v_blocks_assignments" USING btree ("_parent_id");
-  CREATE INDEX "_pages_v_blocks_assignments_path_idx" ON "_pages_v_blocks_assignments" USING btree ("_path");
+  CREATE INDEX "_pages_v_blocks_projects_order_idx" ON "_pages_v_blocks_projects" USING btree ("_order");
+  CREATE INDEX "_pages_v_blocks_projects_parent_id_idx" ON "_pages_v_blocks_projects" USING btree ("_parent_id");
+  CREATE INDEX "_pages_v_blocks_projects_path_idx" ON "_pages_v_blocks_projects" USING btree ("_path");
   CREATE INDEX "_pages_v_parent_idx" ON "_pages_v" USING btree ("parent_id");
   CREATE INDEX "_pages_v_version_meta_version_meta_image_idx" ON "_pages_v" USING btree ("version_meta_image_id");
   CREATE INDEX "_pages_v_version_version_parent_idx" ON "_pages_v" USING btree ("version_parent_id");
@@ -1026,91 +1256,138 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_pages_v_updated_at_idx" ON "_pages_v" USING btree ("updated_at");
   CREATE INDEX "_pages_v_latest_idx" ON "_pages_v" USING btree ("latest");
   CREATE INDEX "_pages_v_autosave_idx" ON "_pages_v" USING btree ("autosave");
-  CREATE INDEX "assignments_competencies_order_idx" ON "assignments_competencies" USING btree ("_order");
-  CREATE INDEX "assignments_competencies_parent_id_idx" ON "assignments_competencies" USING btree ("_parent_id");
-  CREATE INDEX "assignments_links_order_idx" ON "assignments_links" USING btree ("_order");
-  CREATE INDEX "assignments_links_parent_id_idx" ON "assignments_links" USING btree ("_parent_id");
-  CREATE INDEX "assignments_blocks_hero_links_order_idx" ON "assignments_blocks_hero_links" USING btree ("_order");
-  CREATE INDEX "assignments_blocks_hero_links_parent_id_idx" ON "assignments_blocks_hero_links" USING btree ("_parent_id");
-  CREATE INDEX "assignments_blocks_hero_links_link_link_reference_idx" ON "assignments_blocks_hero_links" USING btree ("link_reference_id");
-  CREATE INDEX "assignments_blocks_hero_links_link_link_media_idx" ON "assignments_blocks_hero_links" USING btree ("link_media_id");
-  CREATE INDEX "assignments_blocks_hero_order_idx" ON "assignments_blocks_hero" USING btree ("_order");
-  CREATE INDEX "assignments_blocks_hero_parent_id_idx" ON "assignments_blocks_hero" USING btree ("_parent_id");
-  CREATE INDEX "assignments_blocks_hero_path_idx" ON "assignments_blocks_hero" USING btree ("_path");
-  CREATE INDEX "assignments_blocks_hero_image_idx" ON "assignments_blocks_hero" USING btree ("image_id");
-  CREATE INDEX "assignments_blocks_rich_text_order_idx" ON "assignments_blocks_rich_text" USING btree ("_order");
-  CREATE INDEX "assignments_blocks_rich_text_parent_id_idx" ON "assignments_blocks_rich_text" USING btree ("_parent_id");
-  CREATE INDEX "assignments_blocks_rich_text_path_idx" ON "assignments_blocks_rich_text" USING btree ("_path");
-  CREATE INDEX "assignments_blocks_media_block_order_idx" ON "assignments_blocks_media_block" USING btree ("_order");
-  CREATE INDEX "assignments_blocks_media_block_parent_id_idx" ON "assignments_blocks_media_block" USING btree ("_parent_id");
-  CREATE INDEX "assignments_blocks_media_block_path_idx" ON "assignments_blocks_media_block" USING btree ("_path");
-  CREATE INDEX "assignments_blocks_media_block_media_idx" ON "assignments_blocks_media_block" USING btree ("media_id");
-  CREATE INDEX "assignments_blocks_columns_columns_order_idx" ON "assignments_blocks_columns_columns" USING btree ("_order");
-  CREATE INDEX "assignments_blocks_columns_columns_parent_id_idx" ON "assignments_blocks_columns_columns" USING btree ("_parent_id");
-  CREATE INDEX "assignments_blocks_columns_order_idx" ON "assignments_blocks_columns" USING btree ("_order");
-  CREATE INDEX "assignments_blocks_columns_parent_id_idx" ON "assignments_blocks_columns" USING btree ("_parent_id");
-  CREATE INDEX "assignments_blocks_columns_path_idx" ON "assignments_blocks_columns" USING btree ("_path");
-  CREATE INDEX "assignments_blocks_call_to_action_links_order_idx" ON "assignments_blocks_call_to_action_links" USING btree ("_order");
-  CREATE INDEX "assignments_blocks_call_to_action_links_parent_id_idx" ON "assignments_blocks_call_to_action_links" USING btree ("_parent_id");
-  CREATE INDEX "assignments_blocks_call_to_action_links_link_link_refere_idx" ON "assignments_blocks_call_to_action_links" USING btree ("link_reference_id");
-  CREATE INDEX "assignments_blocks_call_to_action_links_link_link_media_idx" ON "assignments_blocks_call_to_action_links" USING btree ("link_media_id");
-  CREATE INDEX "assignments_blocks_call_to_action_order_idx" ON "assignments_blocks_call_to_action" USING btree ("_order");
-  CREATE INDEX "assignments_blocks_call_to_action_parent_id_idx" ON "assignments_blocks_call_to_action" USING btree ("_parent_id");
-  CREATE INDEX "assignments_blocks_call_to_action_path_idx" ON "assignments_blocks_call_to_action" USING btree ("_path");
-  CREATE INDEX "assignments_blocks_assignments_order_idx" ON "assignments_blocks_assignments" USING btree ("_order");
-  CREATE INDEX "assignments_blocks_assignments_parent_id_idx" ON "assignments_blocks_assignments" USING btree ("_parent_id");
-  CREATE INDEX "assignments_blocks_assignments_path_idx" ON "assignments_blocks_assignments" USING btree ("_path");
-  CREATE INDEX "assignments_cover_idx" ON "assignments" USING btree ("cover_id");
-  CREATE INDEX "assignments_meta_meta_image_idx" ON "assignments" USING btree ("meta_image_id");
-  CREATE UNIQUE INDEX "assignments_slug_idx" ON "assignments" USING btree ("slug");
-  CREATE INDEX "assignments_updated_at_idx" ON "assignments" USING btree ("updated_at");
-  CREATE INDEX "assignments_created_at_idx" ON "assignments" USING btree ("created_at");
-  CREATE INDEX "assignments__status_idx" ON "assignments" USING btree ("_status");
-  CREATE INDEX "_assignments_v_version_competencies_order_idx" ON "_assignments_v_version_competencies" USING btree ("_order");
-  CREATE INDEX "_assignments_v_version_competencies_parent_id_idx" ON "_assignments_v_version_competencies" USING btree ("_parent_id");
-  CREATE INDEX "_assignments_v_version_links_order_idx" ON "_assignments_v_version_links" USING btree ("_order");
-  CREATE INDEX "_assignments_v_version_links_parent_id_idx" ON "_assignments_v_version_links" USING btree ("_parent_id");
-  CREATE INDEX "_assignments_v_blocks_hero_links_order_idx" ON "_assignments_v_blocks_hero_links" USING btree ("_order");
-  CREATE INDEX "_assignments_v_blocks_hero_links_parent_id_idx" ON "_assignments_v_blocks_hero_links" USING btree ("_parent_id");
-  CREATE INDEX "_assignments_v_blocks_hero_links_link_link_reference_idx" ON "_assignments_v_blocks_hero_links" USING btree ("link_reference_id");
-  CREATE INDEX "_assignments_v_blocks_hero_links_link_link_media_idx" ON "_assignments_v_blocks_hero_links" USING btree ("link_media_id");
-  CREATE INDEX "_assignments_v_blocks_hero_order_idx" ON "_assignments_v_blocks_hero" USING btree ("_order");
-  CREATE INDEX "_assignments_v_blocks_hero_parent_id_idx" ON "_assignments_v_blocks_hero" USING btree ("_parent_id");
-  CREATE INDEX "_assignments_v_blocks_hero_path_idx" ON "_assignments_v_blocks_hero" USING btree ("_path");
-  CREATE INDEX "_assignments_v_blocks_hero_image_idx" ON "_assignments_v_blocks_hero" USING btree ("image_id");
-  CREATE INDEX "_assignments_v_blocks_rich_text_order_idx" ON "_assignments_v_blocks_rich_text" USING btree ("_order");
-  CREATE INDEX "_assignments_v_blocks_rich_text_parent_id_idx" ON "_assignments_v_blocks_rich_text" USING btree ("_parent_id");
-  CREATE INDEX "_assignments_v_blocks_rich_text_path_idx" ON "_assignments_v_blocks_rich_text" USING btree ("_path");
-  CREATE INDEX "_assignments_v_blocks_media_block_order_idx" ON "_assignments_v_blocks_media_block" USING btree ("_order");
-  CREATE INDEX "_assignments_v_blocks_media_block_parent_id_idx" ON "_assignments_v_blocks_media_block" USING btree ("_parent_id");
-  CREATE INDEX "_assignments_v_blocks_media_block_path_idx" ON "_assignments_v_blocks_media_block" USING btree ("_path");
-  CREATE INDEX "_assignments_v_blocks_media_block_media_idx" ON "_assignments_v_blocks_media_block" USING btree ("media_id");
-  CREATE INDEX "_assignments_v_blocks_columns_columns_order_idx" ON "_assignments_v_blocks_columns_columns" USING btree ("_order");
-  CREATE INDEX "_assignments_v_blocks_columns_columns_parent_id_idx" ON "_assignments_v_blocks_columns_columns" USING btree ("_parent_id");
-  CREATE INDEX "_assignments_v_blocks_columns_order_idx" ON "_assignments_v_blocks_columns" USING btree ("_order");
-  CREATE INDEX "_assignments_v_blocks_columns_parent_id_idx" ON "_assignments_v_blocks_columns" USING btree ("_parent_id");
-  CREATE INDEX "_assignments_v_blocks_columns_path_idx" ON "_assignments_v_blocks_columns" USING btree ("_path");
-  CREATE INDEX "_assignments_v_blocks_call_to_action_links_order_idx" ON "_assignments_v_blocks_call_to_action_links" USING btree ("_order");
-  CREATE INDEX "_assignments_v_blocks_call_to_action_links_parent_id_idx" ON "_assignments_v_blocks_call_to_action_links" USING btree ("_parent_id");
-  CREATE INDEX "_assignments_v_blocks_call_to_action_links_link_link_ref_idx" ON "_assignments_v_blocks_call_to_action_links" USING btree ("link_reference_id");
-  CREATE INDEX "_assignments_v_blocks_call_to_action_links_link_link_med_idx" ON "_assignments_v_blocks_call_to_action_links" USING btree ("link_media_id");
-  CREATE INDEX "_assignments_v_blocks_call_to_action_order_idx" ON "_assignments_v_blocks_call_to_action" USING btree ("_order");
-  CREATE INDEX "_assignments_v_blocks_call_to_action_parent_id_idx" ON "_assignments_v_blocks_call_to_action" USING btree ("_parent_id");
-  CREATE INDEX "_assignments_v_blocks_call_to_action_path_idx" ON "_assignments_v_blocks_call_to_action" USING btree ("_path");
-  CREATE INDEX "_assignments_v_blocks_assignments_order_idx" ON "_assignments_v_blocks_assignments" USING btree ("_order");
-  CREATE INDEX "_assignments_v_blocks_assignments_parent_id_idx" ON "_assignments_v_blocks_assignments" USING btree ("_parent_id");
-  CREATE INDEX "_assignments_v_blocks_assignments_path_idx" ON "_assignments_v_blocks_assignments" USING btree ("_path");
-  CREATE INDEX "_assignments_v_parent_idx" ON "_assignments_v" USING btree ("parent_id");
-  CREATE INDEX "_assignments_v_version_version_cover_idx" ON "_assignments_v" USING btree ("version_cover_id");
-  CREATE INDEX "_assignments_v_version_meta_version_meta_image_idx" ON "_assignments_v" USING btree ("version_meta_image_id");
-  CREATE INDEX "_assignments_v_version_version_slug_idx" ON "_assignments_v" USING btree ("version_slug");
-  CREATE INDEX "_assignments_v_version_version_updated_at_idx" ON "_assignments_v" USING btree ("version_updated_at");
-  CREATE INDEX "_assignments_v_version_version_created_at_idx" ON "_assignments_v" USING btree ("version_created_at");
-  CREATE INDEX "_assignments_v_version_version__status_idx" ON "_assignments_v" USING btree ("version__status");
-  CREATE INDEX "_assignments_v_created_at_idx" ON "_assignments_v" USING btree ("created_at");
-  CREATE INDEX "_assignments_v_updated_at_idx" ON "_assignments_v" USING btree ("updated_at");
-  CREATE INDEX "_assignments_v_latest_idx" ON "_assignments_v" USING btree ("latest");
-  CREATE INDEX "_assignments_v_autosave_idx" ON "_assignments_v" USING btree ("autosave");
+  CREATE INDEX "projects_blocks_hero_links_order_idx" ON "projects_blocks_hero_links" USING btree ("_order");
+  CREATE INDEX "projects_blocks_hero_links_parent_id_idx" ON "projects_blocks_hero_links" USING btree ("_parent_id");
+  CREATE INDEX "projects_blocks_hero_links_link_link_reference_idx" ON "projects_blocks_hero_links" USING btree ("link_reference_id");
+  CREATE INDEX "projects_blocks_hero_links_link_link_media_idx" ON "projects_blocks_hero_links" USING btree ("link_media_id");
+  CREATE INDEX "projects_blocks_hero_order_idx" ON "projects_blocks_hero" USING btree ("_order");
+  CREATE INDEX "projects_blocks_hero_parent_id_idx" ON "projects_blocks_hero" USING btree ("_parent_id");
+  CREATE INDEX "projects_blocks_hero_path_idx" ON "projects_blocks_hero" USING btree ("_path");
+  CREATE INDEX "projects_blocks_hero_image_idx" ON "projects_blocks_hero" USING btree ("image_id");
+  CREATE INDEX "projects_blocks_rich_text_order_idx" ON "projects_blocks_rich_text" USING btree ("_order");
+  CREATE INDEX "projects_blocks_rich_text_parent_id_idx" ON "projects_blocks_rich_text" USING btree ("_parent_id");
+  CREATE INDEX "projects_blocks_rich_text_path_idx" ON "projects_blocks_rich_text" USING btree ("_path");
+  CREATE INDEX "projects_blocks_media_block_order_idx" ON "projects_blocks_media_block" USING btree ("_order");
+  CREATE INDEX "projects_blocks_media_block_parent_id_idx" ON "projects_blocks_media_block" USING btree ("_parent_id");
+  CREATE INDEX "projects_blocks_media_block_path_idx" ON "projects_blocks_media_block" USING btree ("_path");
+  CREATE INDEX "projects_blocks_media_block_media_idx" ON "projects_blocks_media_block" USING btree ("media_id");
+  CREATE INDEX "projects_blocks_columns_columns_order_idx" ON "projects_blocks_columns_columns" USING btree ("_order");
+  CREATE INDEX "projects_blocks_columns_columns_parent_id_idx" ON "projects_blocks_columns_columns" USING btree ("_parent_id");
+  CREATE INDEX "projects_blocks_columns_order_idx" ON "projects_blocks_columns" USING btree ("_order");
+  CREATE INDEX "projects_blocks_columns_parent_id_idx" ON "projects_blocks_columns" USING btree ("_parent_id");
+  CREATE INDEX "projects_blocks_columns_path_idx" ON "projects_blocks_columns" USING btree ("_path");
+  CREATE INDEX "projects_blocks_call_to_action_links_order_idx" ON "projects_blocks_call_to_action_links" USING btree ("_order");
+  CREATE INDEX "projects_blocks_call_to_action_links_parent_id_idx" ON "projects_blocks_call_to_action_links" USING btree ("_parent_id");
+  CREATE INDEX "projects_blocks_call_to_action_links_link_link_reference_idx" ON "projects_blocks_call_to_action_links" USING btree ("link_reference_id");
+  CREATE INDEX "projects_blocks_call_to_action_links_link_link_media_idx" ON "projects_blocks_call_to_action_links" USING btree ("link_media_id");
+  CREATE INDEX "projects_blocks_call_to_action_order_idx" ON "projects_blocks_call_to_action" USING btree ("_order");
+  CREATE INDEX "projects_blocks_call_to_action_parent_id_idx" ON "projects_blocks_call_to_action" USING btree ("_parent_id");
+  CREATE INDEX "projects_blocks_call_to_action_path_idx" ON "projects_blocks_call_to_action" USING btree ("_path");
+  CREATE INDEX "projects_blocks_projects_order_idx" ON "projects_blocks_projects" USING btree ("_order");
+  CREATE INDEX "projects_blocks_projects_parent_id_idx" ON "projects_blocks_projects" USING btree ("_parent_id");
+  CREATE INDEX "projects_blocks_projects_path_idx" ON "projects_blocks_projects" USING btree ("_path");
+  CREATE INDEX "projects_links_order_idx" ON "projects_links" USING btree ("_order");
+  CREATE INDEX "projects_links_parent_id_idx" ON "projects_links" USING btree ("_parent_id");
+  CREATE INDEX "projects_gallery_order_idx" ON "projects_gallery" USING btree ("_order");
+  CREATE INDEX "projects_gallery_parent_id_idx" ON "projects_gallery" USING btree ("_parent_id");
+  CREATE INDEX "projects_gallery_image_idx" ON "projects_gallery" USING btree ("image_id");
+  CREATE INDEX "projects_documents_order_idx" ON "projects_documents" USING btree ("_order");
+  CREATE INDEX "projects_documents_parent_id_idx" ON "projects_documents" USING btree ("_parent_id");
+  CREATE INDEX "projects_documents_file_idx" ON "projects_documents" USING btree ("file_id");
+  CREATE INDEX "projects_learning_outcomes_order_idx" ON "projects_learning_outcomes" USING btree ("_order");
+  CREATE INDEX "projects_learning_outcomes_parent_id_idx" ON "projects_learning_outcomes" USING btree ("_parent_id");
+  CREATE INDEX "projects_learning_outcomes_outcome_idx" ON "projects_learning_outcomes" USING btree ("outcome_id");
+  CREATE INDEX "projects_feedback_order_idx" ON "projects_feedback" USING btree ("_order");
+  CREATE INDEX "projects_feedback_parent_id_idx" ON "projects_feedback" USING btree ("_parent_id");
+  CREATE INDEX "projects_cover_idx" ON "projects" USING btree ("cover_id");
+  CREATE INDEX "projects_course_idx" ON "projects" USING btree ("course_id");
+  CREATE INDEX "projects_organisation_idx" ON "projects" USING btree ("organisation_id");
+  CREATE INDEX "projects_meta_meta_image_idx" ON "projects" USING btree ("meta_image_id");
+  CREATE UNIQUE INDEX "projects_slug_idx" ON "projects" USING btree ("slug");
+  CREATE INDEX "projects_updated_at_idx" ON "projects" USING btree ("updated_at");
+  CREATE INDEX "projects_created_at_idx" ON "projects" USING btree ("created_at");
+  CREATE INDEX "projects__status_idx" ON "projects" USING btree ("_status");
+  CREATE INDEX "projects_rels_order_idx" ON "projects_rels" USING btree ("order");
+  CREATE INDEX "projects_rels_parent_idx" ON "projects_rels" USING btree ("parent_id");
+  CREATE INDEX "projects_rels_path_idx" ON "projects_rels" USING btree ("path");
+  CREATE INDEX "projects_rels_technologies_id_idx" ON "projects_rels" USING btree ("technologies_id");
+  CREATE INDEX "_projects_v_blocks_hero_links_order_idx" ON "_projects_v_blocks_hero_links" USING btree ("_order");
+  CREATE INDEX "_projects_v_blocks_hero_links_parent_id_idx" ON "_projects_v_blocks_hero_links" USING btree ("_parent_id");
+  CREATE INDEX "_projects_v_blocks_hero_links_link_link_reference_idx" ON "_projects_v_blocks_hero_links" USING btree ("link_reference_id");
+  CREATE INDEX "_projects_v_blocks_hero_links_link_link_media_idx" ON "_projects_v_blocks_hero_links" USING btree ("link_media_id");
+  CREATE INDEX "_projects_v_blocks_hero_order_idx" ON "_projects_v_blocks_hero" USING btree ("_order");
+  CREATE INDEX "_projects_v_blocks_hero_parent_id_idx" ON "_projects_v_blocks_hero" USING btree ("_parent_id");
+  CREATE INDEX "_projects_v_blocks_hero_path_idx" ON "_projects_v_blocks_hero" USING btree ("_path");
+  CREATE INDEX "_projects_v_blocks_hero_image_idx" ON "_projects_v_blocks_hero" USING btree ("image_id");
+  CREATE INDEX "_projects_v_blocks_rich_text_order_idx" ON "_projects_v_blocks_rich_text" USING btree ("_order");
+  CREATE INDEX "_projects_v_blocks_rich_text_parent_id_idx" ON "_projects_v_blocks_rich_text" USING btree ("_parent_id");
+  CREATE INDEX "_projects_v_blocks_rich_text_path_idx" ON "_projects_v_blocks_rich_text" USING btree ("_path");
+  CREATE INDEX "_projects_v_blocks_media_block_order_idx" ON "_projects_v_blocks_media_block" USING btree ("_order");
+  CREATE INDEX "_projects_v_blocks_media_block_parent_id_idx" ON "_projects_v_blocks_media_block" USING btree ("_parent_id");
+  CREATE INDEX "_projects_v_blocks_media_block_path_idx" ON "_projects_v_blocks_media_block" USING btree ("_path");
+  CREATE INDEX "_projects_v_blocks_media_block_media_idx" ON "_projects_v_blocks_media_block" USING btree ("media_id");
+  CREATE INDEX "_projects_v_blocks_columns_columns_order_idx" ON "_projects_v_blocks_columns_columns" USING btree ("_order");
+  CREATE INDEX "_projects_v_blocks_columns_columns_parent_id_idx" ON "_projects_v_blocks_columns_columns" USING btree ("_parent_id");
+  CREATE INDEX "_projects_v_blocks_columns_order_idx" ON "_projects_v_blocks_columns" USING btree ("_order");
+  CREATE INDEX "_projects_v_blocks_columns_parent_id_idx" ON "_projects_v_blocks_columns" USING btree ("_parent_id");
+  CREATE INDEX "_projects_v_blocks_columns_path_idx" ON "_projects_v_blocks_columns" USING btree ("_path");
+  CREATE INDEX "_projects_v_blocks_call_to_action_links_order_idx" ON "_projects_v_blocks_call_to_action_links" USING btree ("_order");
+  CREATE INDEX "_projects_v_blocks_call_to_action_links_parent_id_idx" ON "_projects_v_blocks_call_to_action_links" USING btree ("_parent_id");
+  CREATE INDEX "_projects_v_blocks_call_to_action_links_link_link_refere_idx" ON "_projects_v_blocks_call_to_action_links" USING btree ("link_reference_id");
+  CREATE INDEX "_projects_v_blocks_call_to_action_links_link_link_media_idx" ON "_projects_v_blocks_call_to_action_links" USING btree ("link_media_id");
+  CREATE INDEX "_projects_v_blocks_call_to_action_order_idx" ON "_projects_v_blocks_call_to_action" USING btree ("_order");
+  CREATE INDEX "_projects_v_blocks_call_to_action_parent_id_idx" ON "_projects_v_blocks_call_to_action" USING btree ("_parent_id");
+  CREATE INDEX "_projects_v_blocks_call_to_action_path_idx" ON "_projects_v_blocks_call_to_action" USING btree ("_path");
+  CREATE INDEX "_projects_v_blocks_projects_order_idx" ON "_projects_v_blocks_projects" USING btree ("_order");
+  CREATE INDEX "_projects_v_blocks_projects_parent_id_idx" ON "_projects_v_blocks_projects" USING btree ("_parent_id");
+  CREATE INDEX "_projects_v_blocks_projects_path_idx" ON "_projects_v_blocks_projects" USING btree ("_path");
+  CREATE INDEX "_projects_v_version_links_order_idx" ON "_projects_v_version_links" USING btree ("_order");
+  CREATE INDEX "_projects_v_version_links_parent_id_idx" ON "_projects_v_version_links" USING btree ("_parent_id");
+  CREATE INDEX "_projects_v_version_gallery_order_idx" ON "_projects_v_version_gallery" USING btree ("_order");
+  CREATE INDEX "_projects_v_version_gallery_parent_id_idx" ON "_projects_v_version_gallery" USING btree ("_parent_id");
+  CREATE INDEX "_projects_v_version_gallery_image_idx" ON "_projects_v_version_gallery" USING btree ("image_id");
+  CREATE INDEX "_projects_v_version_documents_order_idx" ON "_projects_v_version_documents" USING btree ("_order");
+  CREATE INDEX "_projects_v_version_documents_parent_id_idx" ON "_projects_v_version_documents" USING btree ("_parent_id");
+  CREATE INDEX "_projects_v_version_documents_file_idx" ON "_projects_v_version_documents" USING btree ("file_id");
+  CREATE INDEX "_projects_v_version_learning_outcomes_order_idx" ON "_projects_v_version_learning_outcomes" USING btree ("_order");
+  CREATE INDEX "_projects_v_version_learning_outcomes_parent_id_idx" ON "_projects_v_version_learning_outcomes" USING btree ("_parent_id");
+  CREATE INDEX "_projects_v_version_learning_outcomes_outcome_idx" ON "_projects_v_version_learning_outcomes" USING btree ("outcome_id");
+  CREATE INDEX "_projects_v_version_feedback_order_idx" ON "_projects_v_version_feedback" USING btree ("_order");
+  CREATE INDEX "_projects_v_version_feedback_parent_id_idx" ON "_projects_v_version_feedback" USING btree ("_parent_id");
+  CREATE INDEX "_projects_v_parent_idx" ON "_projects_v" USING btree ("parent_id");
+  CREATE INDEX "_projects_v_version_version_cover_idx" ON "_projects_v" USING btree ("version_cover_id");
+  CREATE INDEX "_projects_v_version_version_course_idx" ON "_projects_v" USING btree ("version_course_id");
+  CREATE INDEX "_projects_v_version_version_organisation_idx" ON "_projects_v" USING btree ("version_organisation_id");
+  CREATE INDEX "_projects_v_version_meta_version_meta_image_idx" ON "_projects_v" USING btree ("version_meta_image_id");
+  CREATE INDEX "_projects_v_version_version_slug_idx" ON "_projects_v" USING btree ("version_slug");
+  CREATE INDEX "_projects_v_version_version_updated_at_idx" ON "_projects_v" USING btree ("version_updated_at");
+  CREATE INDEX "_projects_v_version_version_created_at_idx" ON "_projects_v" USING btree ("version_created_at");
+  CREATE INDEX "_projects_v_version_version__status_idx" ON "_projects_v" USING btree ("version__status");
+  CREATE INDEX "_projects_v_created_at_idx" ON "_projects_v" USING btree ("created_at");
+  CREATE INDEX "_projects_v_updated_at_idx" ON "_projects_v" USING btree ("updated_at");
+  CREATE INDEX "_projects_v_latest_idx" ON "_projects_v" USING btree ("latest");
+  CREATE INDEX "_projects_v_autosave_idx" ON "_projects_v" USING btree ("autosave");
+  CREATE INDEX "_projects_v_rels_order_idx" ON "_projects_v_rels" USING btree ("order");
+  CREATE INDEX "_projects_v_rels_parent_idx" ON "_projects_v_rels" USING btree ("parent_id");
+  CREATE INDEX "_projects_v_rels_path_idx" ON "_projects_v_rels" USING btree ("path");
+  CREATE INDEX "_projects_v_rels_technologies_id_idx" ON "_projects_v_rels" USING btree ("technologies_id");
+  CREATE INDEX "learning_outcomes_levels_order_idx" ON "learning_outcomes_levels" USING btree ("_order");
+  CREATE INDEX "learning_outcomes_levels_parent_id_idx" ON "learning_outcomes_levels" USING btree ("_parent_id");
+  CREATE UNIQUE INDEX "learning_outcomes_code_idx" ON "learning_outcomes" USING btree ("code");
+  CREATE UNIQUE INDEX "learning_outcomes_slug_idx" ON "learning_outcomes" USING btree ("slug");
+  CREATE INDEX "learning_outcomes_updated_at_idx" ON "learning_outcomes" USING btree ("updated_at");
+  CREATE INDEX "learning_outcomes_created_at_idx" ON "learning_outcomes" USING btree ("created_at");
+  CREATE INDEX "technologies_logo_idx" ON "technologies" USING btree ("logo_id");
+  CREATE UNIQUE INDEX "technologies_slug_idx" ON "technologies" USING btree ("slug");
+  CREATE INDEX "technologies_updated_at_idx" ON "technologies" USING btree ("updated_at");
+  CREATE INDEX "technologies_created_at_idx" ON "technologies" USING btree ("created_at");
+  CREATE UNIQUE INDEX "courses_slug_idx" ON "courses" USING btree ("slug");
+  CREATE INDEX "courses_updated_at_idx" ON "courses" USING btree ("updated_at");
+  CREATE INDEX "courses_created_at_idx" ON "courses" USING btree ("created_at");
+  CREATE INDEX "organisations_logo_idx" ON "organisations" USING btree ("logo_id");
+  CREATE UNIQUE INDEX "organisations_slug_idx" ON "organisations" USING btree ("slug");
+  CREATE INDEX "organisations_updated_at_idx" ON "organisations" USING btree ("updated_at");
+  CREATE INDEX "organisations_created_at_idx" ON "organisations" USING btree ("created_at");
   CREATE INDEX "media_updated_at_idx" ON "media" USING btree ("updated_at");
   CREATE INDEX "media_created_at_idx" ON "media" USING btree ("created_at");
   CREATE UNIQUE INDEX "media_filename_idx" ON "media" USING btree ("filename");
@@ -1152,7 +1429,11 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "payload_locked_documents_rels_parent_idx" ON "payload_locked_documents_rels" USING btree ("parent_id");
   CREATE INDEX "payload_locked_documents_rels_path_idx" ON "payload_locked_documents_rels" USING btree ("path");
   CREATE INDEX "payload_locked_documents_rels_pages_id_idx" ON "payload_locked_documents_rels" USING btree ("pages_id");
-  CREATE INDEX "payload_locked_documents_rels_assignments_id_idx" ON "payload_locked_documents_rels" USING btree ("assignments_id");
+  CREATE INDEX "payload_locked_documents_rels_projects_id_idx" ON "payload_locked_documents_rels" USING btree ("projects_id");
+  CREATE INDEX "payload_locked_documents_rels_learning_outcomes_id_idx" ON "payload_locked_documents_rels" USING btree ("learning_outcomes_id");
+  CREATE INDEX "payload_locked_documents_rels_technologies_id_idx" ON "payload_locked_documents_rels" USING btree ("technologies_id");
+  CREATE INDEX "payload_locked_documents_rels_courses_id_idx" ON "payload_locked_documents_rels" USING btree ("courses_id");
+  CREATE INDEX "payload_locked_documents_rels_organisations_id_idx" ON "payload_locked_documents_rels" USING btree ("organisations_id");
   CREATE INDEX "payload_locked_documents_rels_media_id_idx" ON "payload_locked_documents_rels" USING btree ("media_id");
   CREATE INDEX "payload_locked_documents_rels_users_id_idx" ON "payload_locked_documents_rels" USING btree ("users_id");
   CREATE INDEX "payload_locked_documents_rels_redirects_id_idx" ON "payload_locked_documents_rels" USING btree ("redirects_id");
@@ -1185,7 +1466,7 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "pages_blocks_columns" CASCADE;
   DROP TABLE "pages_blocks_call_to_action_links" CASCADE;
   DROP TABLE "pages_blocks_call_to_action" CASCADE;
-  DROP TABLE "pages_blocks_assignments" CASCADE;
+  DROP TABLE "pages_blocks_projects" CASCADE;
   DROP TABLE "pages" CASCADE;
   DROP TABLE "_pages_v_blocks_hero_links" CASCADE;
   DROP TABLE "_pages_v_blocks_hero" CASCADE;
@@ -1195,32 +1476,45 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "_pages_v_blocks_columns" CASCADE;
   DROP TABLE "_pages_v_blocks_call_to_action_links" CASCADE;
   DROP TABLE "_pages_v_blocks_call_to_action" CASCADE;
-  DROP TABLE "_pages_v_blocks_assignments" CASCADE;
+  DROP TABLE "_pages_v_blocks_projects" CASCADE;
   DROP TABLE "_pages_v" CASCADE;
-  DROP TABLE "assignments_competencies" CASCADE;
-  DROP TABLE "assignments_links" CASCADE;
-  DROP TABLE "assignments_blocks_hero_links" CASCADE;
-  DROP TABLE "assignments_blocks_hero" CASCADE;
-  DROP TABLE "assignments_blocks_rich_text" CASCADE;
-  DROP TABLE "assignments_blocks_media_block" CASCADE;
-  DROP TABLE "assignments_blocks_columns_columns" CASCADE;
-  DROP TABLE "assignments_blocks_columns" CASCADE;
-  DROP TABLE "assignments_blocks_call_to_action_links" CASCADE;
-  DROP TABLE "assignments_blocks_call_to_action" CASCADE;
-  DROP TABLE "assignments_blocks_assignments" CASCADE;
-  DROP TABLE "assignments" CASCADE;
-  DROP TABLE "_assignments_v_version_competencies" CASCADE;
-  DROP TABLE "_assignments_v_version_links" CASCADE;
-  DROP TABLE "_assignments_v_blocks_hero_links" CASCADE;
-  DROP TABLE "_assignments_v_blocks_hero" CASCADE;
-  DROP TABLE "_assignments_v_blocks_rich_text" CASCADE;
-  DROP TABLE "_assignments_v_blocks_media_block" CASCADE;
-  DROP TABLE "_assignments_v_blocks_columns_columns" CASCADE;
-  DROP TABLE "_assignments_v_blocks_columns" CASCADE;
-  DROP TABLE "_assignments_v_blocks_call_to_action_links" CASCADE;
-  DROP TABLE "_assignments_v_blocks_call_to_action" CASCADE;
-  DROP TABLE "_assignments_v_blocks_assignments" CASCADE;
-  DROP TABLE "_assignments_v" CASCADE;
+  DROP TABLE "projects_blocks_hero_links" CASCADE;
+  DROP TABLE "projects_blocks_hero" CASCADE;
+  DROP TABLE "projects_blocks_rich_text" CASCADE;
+  DROP TABLE "projects_blocks_media_block" CASCADE;
+  DROP TABLE "projects_blocks_columns_columns" CASCADE;
+  DROP TABLE "projects_blocks_columns" CASCADE;
+  DROP TABLE "projects_blocks_call_to_action_links" CASCADE;
+  DROP TABLE "projects_blocks_call_to_action" CASCADE;
+  DROP TABLE "projects_blocks_projects" CASCADE;
+  DROP TABLE "projects_links" CASCADE;
+  DROP TABLE "projects_gallery" CASCADE;
+  DROP TABLE "projects_documents" CASCADE;
+  DROP TABLE "projects_learning_outcomes" CASCADE;
+  DROP TABLE "projects_feedback" CASCADE;
+  DROP TABLE "projects" CASCADE;
+  DROP TABLE "projects_rels" CASCADE;
+  DROP TABLE "_projects_v_blocks_hero_links" CASCADE;
+  DROP TABLE "_projects_v_blocks_hero" CASCADE;
+  DROP TABLE "_projects_v_blocks_rich_text" CASCADE;
+  DROP TABLE "_projects_v_blocks_media_block" CASCADE;
+  DROP TABLE "_projects_v_blocks_columns_columns" CASCADE;
+  DROP TABLE "_projects_v_blocks_columns" CASCADE;
+  DROP TABLE "_projects_v_blocks_call_to_action_links" CASCADE;
+  DROP TABLE "_projects_v_blocks_call_to_action" CASCADE;
+  DROP TABLE "_projects_v_blocks_projects" CASCADE;
+  DROP TABLE "_projects_v_version_links" CASCADE;
+  DROP TABLE "_projects_v_version_gallery" CASCADE;
+  DROP TABLE "_projects_v_version_documents" CASCADE;
+  DROP TABLE "_projects_v_version_learning_outcomes" CASCADE;
+  DROP TABLE "_projects_v_version_feedback" CASCADE;
+  DROP TABLE "_projects_v" CASCADE;
+  DROP TABLE "_projects_v_rels" CASCADE;
+  DROP TABLE "learning_outcomes_levels" CASCADE;
+  DROP TABLE "learning_outcomes" CASCADE;
+  DROP TABLE "technologies" CASCADE;
+  DROP TABLE "courses" CASCADE;
+  DROP TABLE "organisations" CASCADE;
   DROP TABLE "media" CASCADE;
   DROP TABLE "users_roles" CASCADE;
   DROP TABLE "users_sessions" CASCADE;
@@ -1249,7 +1543,9 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TYPE "public"."enum_pages_blocks_call_to_action_links_link_type";
   DROP TYPE "public"."enum_pages_blocks_call_to_action_links_link_appearance";
   DROP TYPE "public"."enum_pages_blocks_call_to_action_background";
-  DROP TYPE "public"."enum_pages_blocks_assignments_background";
+  DROP TYPE "public"."enum_pages_blocks_projects_source";
+  DROP TYPE "public"."enum_pages_blocks_projects_kind";
+  DROP TYPE "public"."enum_pages_blocks_projects_background";
   DROP TYPE "public"."enum_pages_status";
   DROP TYPE "public"."enum__pages_v_blocks_hero_links_link_type";
   DROP TYPE "public"."enum__pages_v_blocks_hero_links_link_appearance";
@@ -1261,32 +1557,51 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TYPE "public"."enum__pages_v_blocks_call_to_action_links_link_type";
   DROP TYPE "public"."enum__pages_v_blocks_call_to_action_links_link_appearance";
   DROP TYPE "public"."enum__pages_v_blocks_call_to_action_background";
-  DROP TYPE "public"."enum__pages_v_blocks_assignments_background";
+  DROP TYPE "public"."enum__pages_v_blocks_projects_source";
+  DROP TYPE "public"."enum__pages_v_blocks_projects_kind";
+  DROP TYPE "public"."enum__pages_v_blocks_projects_background";
   DROP TYPE "public"."enum__pages_v_version_status";
-  DROP TYPE "public"."enum_assignments_blocks_hero_links_link_type";
-  DROP TYPE "public"."enum_assignments_blocks_hero_links_link_appearance";
-  DROP TYPE "public"."enum_assignments_blocks_hero_background";
-  DROP TYPE "public"."enum_assignments_blocks_rich_text_background";
-  DROP TYPE "public"."enum_assignments_blocks_media_block_width";
-  DROP TYPE "public"."enum_assignments_blocks_media_block_background";
-  DROP TYPE "public"."enum_assignments_blocks_columns_background";
-  DROP TYPE "public"."enum_assignments_blocks_call_to_action_links_link_type";
-  DROP TYPE "public"."enum_assignments_blocks_call_to_action_links_link_appearance";
-  DROP TYPE "public"."enum_assignments_blocks_call_to_action_background";
-  DROP TYPE "public"."enum_assignments_blocks_assignments_background";
-  DROP TYPE "public"."enum_assignments_status";
-  DROP TYPE "public"."enum__assignments_v_blocks_hero_links_link_type";
-  DROP TYPE "public"."enum__assignments_v_blocks_hero_links_link_appearance";
-  DROP TYPE "public"."enum__assignments_v_blocks_hero_background";
-  DROP TYPE "public"."enum__assignments_v_blocks_rich_text_background";
-  DROP TYPE "public"."enum__assignments_v_blocks_media_block_width";
-  DROP TYPE "public"."enum__assignments_v_blocks_media_block_background";
-  DROP TYPE "public"."enum__assignments_v_blocks_columns_background";
-  DROP TYPE "public"."enum__assignments_v_blocks_call_to_action_links_link_type";
-  DROP TYPE "public"."enum__assignments_v_blocks_call_to_action_links_link_appearance";
-  DROP TYPE "public"."enum__assignments_v_blocks_call_to_action_background";
-  DROP TYPE "public"."enum__assignments_v_blocks_assignments_background";
-  DROP TYPE "public"."enum__assignments_v_version_status";
+  DROP TYPE "public"."enum_projects_blocks_hero_links_link_type";
+  DROP TYPE "public"."enum_projects_blocks_hero_links_link_appearance";
+  DROP TYPE "public"."enum_projects_blocks_hero_background";
+  DROP TYPE "public"."enum_projects_blocks_rich_text_background";
+  DROP TYPE "public"."enum_projects_blocks_media_block_width";
+  DROP TYPE "public"."enum_projects_blocks_media_block_background";
+  DROP TYPE "public"."enum_projects_blocks_columns_background";
+  DROP TYPE "public"."enum_projects_blocks_call_to_action_links_link_type";
+  DROP TYPE "public"."enum_projects_blocks_call_to_action_links_link_appearance";
+  DROP TYPE "public"."enum_projects_blocks_call_to_action_background";
+  DROP TYPE "public"."enum_projects_blocks_projects_source";
+  DROP TYPE "public"."enum_projects_blocks_projects_kind";
+  DROP TYPE "public"."enum_projects_blocks_projects_background";
+  DROP TYPE "public"."enum_projects_links_type";
+  DROP TYPE "public"."enum_projects_learning_outcomes_level";
+  DROP TYPE "public"."enum_projects_kind";
+  DROP TYPE "public"."enum_projects_project_status";
+  DROP TYPE "public"."enum_projects_visibility";
+  DROP TYPE "public"."enum_projects_status";
+  DROP TYPE "public"."enum__projects_v_blocks_hero_links_link_type";
+  DROP TYPE "public"."enum__projects_v_blocks_hero_links_link_appearance";
+  DROP TYPE "public"."enum__projects_v_blocks_hero_background";
+  DROP TYPE "public"."enum__projects_v_blocks_rich_text_background";
+  DROP TYPE "public"."enum__projects_v_blocks_media_block_width";
+  DROP TYPE "public"."enum__projects_v_blocks_media_block_background";
+  DROP TYPE "public"."enum__projects_v_blocks_columns_background";
+  DROP TYPE "public"."enum__projects_v_blocks_call_to_action_links_link_type";
+  DROP TYPE "public"."enum__projects_v_blocks_call_to_action_links_link_appearance";
+  DROP TYPE "public"."enum__projects_v_blocks_call_to_action_background";
+  DROP TYPE "public"."enum__projects_v_blocks_projects_source";
+  DROP TYPE "public"."enum__projects_v_blocks_projects_kind";
+  DROP TYPE "public"."enum__projects_v_blocks_projects_background";
+  DROP TYPE "public"."enum__projects_v_version_links_type";
+  DROP TYPE "public"."enum__projects_v_version_learning_outcomes_level";
+  DROP TYPE "public"."enum__projects_v_version_kind";
+  DROP TYPE "public"."enum__projects_v_version_project_status";
+  DROP TYPE "public"."enum__projects_v_version_visibility";
+  DROP TYPE "public"."enum__projects_v_version_status";
+  DROP TYPE "public"."enum_learning_outcomes_levels_level";
+  DROP TYPE "public"."enum_technologies_category";
+  DROP TYPE "public"."enum_organisations_type";
   DROP TYPE "public"."enum_users_roles";
   DROP TYPE "public"."enum_redirects_to_type";
   DROP TYPE "public"."enum_payload_jobs_log_task_slug";

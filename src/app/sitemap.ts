@@ -2,8 +2,9 @@ import type { MetadataRoute } from 'next'
 import { getPayload } from 'payload'
 
 import configPromise from '@payload-config'
-import { assignmentPath } from '@/utilities/assignmentPath'
 import { getServerSideURL } from '@/utilities/getURL'
+import { LEARNING_OUTCOMES_PATH, learningOutcomePath } from '@/utilities/learningOutcomePath'
+import { PROJECTS_PATH, projectPath } from '@/utilities/projectPath'
 
 /**
  * Alleen gepubliceerde pagina's zonder noindex. Een pagina die uit zoekmachines
@@ -20,7 +21,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   const baseURL = getServerSideURL()
   const payload = await getPayload({ config: configPromise })
 
-  const [{ docs: pages }, { docs: assignments }] = await Promise.all([
+  const [{ docs: pages }, { docs: projects }, { docs: outcomes }] = await Promise.all([
     payload.find({
       collection: 'pages',
       depth: 0,
@@ -34,7 +35,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
       },
     }),
     payload.find({
-      collection: 'assignments',
+      collection: 'projects',
       depth: 0,
       limit: 0,
       pagination: false,
@@ -45,6 +46,14 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
         'meta.noindex': { not_equals: true },
       },
     }),
+    payload.find({
+      collection: 'learning-outcomes',
+      depth: 0,
+      limit: 0,
+      pagination: false,
+      overrideAccess: false,
+      select: { slug: true, updatedAt: true },
+    }),
   ])
 
   const pageEntries = pages.map((doc) => ({
@@ -52,12 +61,23 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     lastModified: doc.updatedAt ? new Date(doc.updatedAt) : undefined,
   }))
 
-  const assignmentEntries = assignments.flatMap((doc) => {
+  const projectEntries = projects.flatMap((doc) => {
     if (typeof doc.slug !== 'string' || doc.slug.length === 0) return []
 
     return [
       {
-        url: `${baseURL}${assignmentPath(doc.slug)}`,
+        url: `${baseURL}${projectPath(doc.slug)}`,
+        lastModified: doc.updatedAt ? new Date(doc.updatedAt) : undefined,
+      },
+    ]
+  })
+
+  const outcomeEntries = outcomes.flatMap((doc) => {
+    if (typeof doc.slug !== 'string' || doc.slug.length === 0) return []
+
+    return [
+      {
+        url: `${baseURL}${learningOutcomePath(doc.slug)}`,
         lastModified: doc.updatedAt ? new Date(doc.updatedAt) : undefined,
       },
     ]
@@ -66,10 +86,19 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   return [
     ...pageEntries,
     {
-      url: `${baseURL}/opdrachten`,
-      lastModified: assignmentEntries[0]?.lastModified,
+      url: `${baseURL}${PROJECTS_PATH}`,
+      lastModified: projectEntries[0]?.lastModified,
     },
-    ...assignmentEntries,
+    ...projectEntries,
+    ...(outcomeEntries.length > 0
+      ? [
+          {
+            url: `${baseURL}${LEARNING_OUTCOMES_PATH}`,
+            lastModified: outcomeEntries[0]?.lastModified,
+          },
+          ...outcomeEntries,
+        ]
+      : []),
   ]
 }
 

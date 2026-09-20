@@ -1,9 +1,17 @@
-import nextCoreWebVitals from 'eslint-config-next/core-web-vitals.js'
-import nextTypescript from 'eslint-config-next/typescript.js'
+import { FlatCompat } from '@eslint/eslintrc'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+// `eslint-config-next` still ships eslintrc-style configs ("plugin:@next/next/…"),
+// which flat config cannot read directly. FlatCompat translates them. Importing
+// the presets and spreading them instead throws "nextCoreWebVitals is not
+// iterable", because they are plain objects in the old format.
+const compat = new FlatCompat({
+  baseDirectory: path.dirname(fileURLToPath(import.meta.url)),
+})
 
 const eslintConfig = [
-  ...nextCoreWebVitals,
-  ...nextTypescript,
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
   {
     rules: {
       '@typescript-eslint/ban-ts-comment': 'warn',

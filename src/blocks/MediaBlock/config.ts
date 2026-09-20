@@ -6,8 +6,8 @@ export const MediaBlock: Block = {
   slug: 'mediaBlock',
   interfaceName: 'MediaBlock',
   labels: {
-    singular: 'Afbeelding',
-    plural: 'Afbeeldingen',
+    singular: 'Image',
+    plural: 'Images',
   },
   fields: [
     sectionTabs(
@@ -16,15 +16,15 @@ export const MediaBlock: Block = {
           name: 'media',
           type: 'upload',
           relationTo: 'media',
-          label: 'Afbeelding',
+          label: 'Image',
           required: true,
         },
         {
           name: 'caption',
           type: 'text',
-          label: 'Bijschrift',
+          label: 'Caption',
           admin: {
-            description: 'Laat leeg om het bijschrift van het mediabestand zelf te gebruiken.',
+            description: 'Leave empty to use the caption from the media file itself.',
           },
         },
       ],
@@ -35,11 +35,11 @@ export const MediaBlock: Block = {
           {
             name: 'width',
             type: 'select',
-            label: 'Breedte',
+            label: 'Width',
             defaultValue: 'content',
             options: [
-              { label: 'Tekstbreedte', value: 'content' },
-              { label: 'Volle breedte', value: 'full' },
+              { label: 'Text width', value: 'content' },
+              { label: 'Full width', value: 'full' },
             ],
           },
         ],

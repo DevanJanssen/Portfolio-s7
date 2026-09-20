@@ -3,16 +3,20 @@ import { getPayload } from 'payload'
 import config from '../src/payload.config'
 
 /**
- * Vult een lege database met genoeg om de site te zien werken: een beheerder,
- * een homepage, een over-mij-pagina en een voorbeeldopdracht.
+ * Fills an empty database with enough to see the site work: an administrator, a
+ * homepage, an about page, a few technologies, one course and one example
+ * project.
  *
- * Draait alleen op een lege database — bestaande content overschrijven is nooit
- * wat je bedoelde als je dit per ongeluk aanroept.
+ * Learning outcomes are deliberately left empty — they have to match your
+ * programme's own wording, so you add those yourself under Taxonomy → Learning
+ * outcomes.
  *
- * Let op `disableRevalidate` bij elke schrijfactie. Buiten een Next-request
- * bestaat de cachecontext niet, en `revalidatePath` gooit dan "Invariant: static
- * generation store missing". Elk script dat via de Local API schrijft heeft dit
- * nodig.
+ * Only runs on an empty database — overwriting existing content is never what
+ * you meant if you called this by accident.
+ *
+ * Note `disableRevalidate` on every write. Outside a Next request the cache
+ * context does not exist, and `revalidatePath` then throws "Invariant: static
+ * generation store missing". Every script writing through the Local API needs it.
  */
 const seed = async () => {
   const payload = await getPayload({ config })
@@ -21,7 +25,7 @@ const seed = async () => {
   const { totalDocs: pageCount } = await payload.count({ collection: 'pages' })
 
   if (userCount > 0 || pageCount > 0) {
-    payload.logger.warn('De database is niet leeg. Seed overgeslagen.')
+    payload.logger.warn('The database is not empty. Seed skipped.')
     process.exit(0)
   }
 
@@ -30,7 +34,7 @@ const seed = async () => {
 
   await payload.create({
     collection: 'users',
-    data: { email, password, name: 'Beheerder', roles: ['admin'] },
+    data: { email, password, name: 'Administrator', roles: ['admin'] },
     context: { disableRevalidate: true },
   })
 
@@ -56,6 +60,36 @@ const seed = async () => {
     },
   })
 
+  const technologySeeds = [
+    { name: 'TypeScript', slug: 'typescript', category: 'language' as const },
+    { name: 'React', slug: 'react', category: 'framework' as const },
+    { name: 'Next.js', slug: 'nextjs', category: 'framework' as const },
+    { name: 'PostgreSQL', slug: 'postgresql', category: 'database' as const },
+    { name: 'Payload CMS', slug: 'payload-cms', category: 'framework' as const },
+  ]
+
+  const technologies = []
+  for (const technology of technologySeeds) {
+    technologies.push(
+      await payload.create({
+        collection: 'technologies',
+        data: technology,
+        context: { disableRevalidate: true },
+      }),
+    )
+  }
+
+  const course = await payload.create({
+    collection: 'courses',
+    data: {
+      title: 'Web Development',
+      slug: 'web-development',
+      semester: 'S7',
+      institution: 'Fontys ICT',
+    },
+    context: { disableRevalidate: true },
+  })
+
   const home = await payload.create({
     collection: 'pages',
     data: {
@@ -65,27 +99,31 @@ const seed = async () => {
       layout: [
         {
           blockType: 'hero',
-          heading: 'Portfolio',
-          intro: 'Schoolopdrachten, gebouwd als pagina’s in het CMS. Pas deze tekst aan in /admin.',
+          heading: 'Devan Janssen',
+          intro:
+            'Software developer. School, work and side projects, with the story behind each one.',
           background: 'none',
         },
         {
-          blockType: 'assignments',
-          heading: 'Opdrachten',
-          intro: 'Nieuwe opdrachten verschijnen hier automatisch zodra je ze publiceert.',
+          blockType: 'projects',
+          heading: 'Selected work',
+          intro: 'Mark a project as featured in the CMS to pin it here.',
+          source: 'featured',
+          limit: 3,
+          showLinkToOverview: true,
           background: 'light',
         },
         {
           blockType: 'callToAction',
-          heading: 'Over dit portfolio',
-          text: 'Elke opdracht is een eigen pagina: samenvatting, leeruitkomsten, links en vrije blokken.',
+          heading: 'Assessing my work?',
+          text: 'The learning outcomes page lists the same projects indexed by outcome, with the evidence per claim.',
           background: 'dark',
           links: [
             {
               link: {
                 type: 'custom',
-                url: '/over-mij',
-                label: 'Over mij',
+                url: '/learning-outcomes',
+                label: 'Learning outcomes',
                 appearance: 'default',
               },
             },
@@ -99,20 +137,20 @@ const seed = async () => {
   const about = await payload.create({
     collection: 'pages',
     data: {
-      title: 'Over mij',
-      slug: 'over-mij',
+      title: 'About',
+      slug: 'about',
       _status: 'published',
       layout: [
         {
           blockType: 'hero',
-          heading: 'Over mij',
-          intro: 'Korte introductie. Vervang deze tekst in het CMS.',
+          heading: 'About me',
+          intro: 'Short introduction. Replace this text in the CMS.',
           background: 'none',
         },
         {
           blockType: 'richText',
           content: paragraph(
-            'Dit is een voorbeeldpagina. Gebruik blokken om je achtergrond, leerdoelen of contactgegevens neer te zetten.',
+            'This is an example page. Use blocks to lay out your background, your ambitions and how to reach you.',
           ),
           background: 'none',
         },
@@ -121,39 +159,39 @@ const seed = async () => {
     context: { disableRevalidate: true },
   })
 
-  const assignment = await payload.create({
-    collection: 'assignments',
+  const project = await payload.create({
+    collection: 'projects',
     data: {
-      title: 'Voorbeeldopdracht',
-      slug: 'voorbeeldopdracht',
+      title: 'Example project',
+      slug: 'example-project',
       kind: 'school',
-      course: 'Web Development',
-      period: 'Semester 1, 2026',
+      projectStatus: 'completed',
+      course: course.id,
+      startDate: new Date('2026-02-01').toISOString(),
+      endDate: new Date('2026-06-30').toISOString(),
+      role: 'Full-stack developer',
+      teamSize: 1,
+      visibility: 'public',
+      featured: true,
+      tagline: 'A worked example of how a project page is put together.',
       summary:
-        'Een voorbeeld van hoe een schoolopdracht eruitziet. Dupliceer dit document of maak een nieuwe opdracht aan.',
-      competencies: [
-        {
-          title: 'Realiseren',
-          description: 'Een werkende pagina bouwen met Next.js en content uit het CMS.',
-        },
-        {
-          title: 'Analyseren',
-          description: 'De opdracht vertalen naar velden en blokken die je later opnieuw kunt gebruiken.',
-        },
-      ],
-      links: [
-        { label: 'Broncode', url: 'https://github.com' },
-      ],
+        'Duplicate this document or create a new project to see how the fields land on the page.',
+      techStack: technologies.map((technology) => technology.id),
+      problem: paragraph(
+        'Describe what needed solving and for whom. Leading with the technology loses the reader.',
+      ),
+      approach: paragraph(
+        'Describe how you tackled it: what you researched, which choices you made, what you traded away.',
+      ),
+      myContribution: paragraph(
+        'Describe your own part, separate from the team. This is the first thing assessors and recruiters look for.',
+      ),
+      outcome: paragraph(
+        'Describe what came of it: shipped, handed over, graded, abandoned. Be honest rather than impressive.',
+      ),
+      reflection: paragraph('What went well, and what you would do differently next time.'),
+      links: [{ label: 'Source code', type: 'repo', url: 'https://github.com' }],
       _status: 'published',
-      layout: [
-        {
-          blockType: 'richText',
-          content: paragraph(
-            'Hier beschrijf je het proces: wat de opdracht was, wat je hebt gemaakt, en wat je ervan leerde. Voeg blokken toe voor screenshots, extra tekst of een call-to-action.',
-          ),
-          background: 'none',
-        },
-      ],
     },
     context: { disableRevalidate: true },
   })
@@ -161,18 +199,20 @@ const seed = async () => {
   await payload.updateGlobal({
     slug: 'header',
     data: {
-      siteTitle: 'Portfolio',
+      siteTitle: 'Devan Janssen',
       navItems: [
         { link: { type: 'custom', url: '/', label: 'Home' } },
-        { link: { type: 'custom', url: '/opdrachten', label: 'Opdrachten' } },
-        { link: { type: 'custom', url: '/over-mij', label: 'Over mij' } },
+        { link: { type: 'custom', url: '/projects', label: 'Projects' } },
+        { link: { type: 'custom', url: '/learning-outcomes', label: 'Learning outcomes' } },
+        { link: { type: 'custom', url: '/about', label: 'About' } },
       ],
     },
     context: { disableRevalidate: true },
   })
 
-  payload.logger.info(`Klaar. Inloggen met ${email} / ${password}`)
-  payload.logger.info(`Paden: ${home.path}, ${about.path}, /opdrachten/${assignment.slug}`)
+  payload.logger.info(`Done. Sign in with ${email} / ${password}`)
+  payload.logger.info(`Paths: ${home.path}, ${about.path}, /projects/${project.slug}`)
+  payload.logger.info('Next: add your learning outcomes under Taxonomy → Learning outcomes.')
   process.exit(0)
 }
 
