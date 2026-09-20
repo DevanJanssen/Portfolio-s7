@@ -31,7 +31,6 @@ Postgres draait hier op poort **5434**, zodat hij naast een lokale Postgres
 | --- | --- |
 | Vrije pagina's (home, about, …) | `src/collections/Pages` |
 | Projecten (school, werk, side) | `src/collections/Projects` — `/projects/<slug>` |
-| Leeruitkomsten | `src/collections/LearningOutcomes` — `/learning-outcomes` |
 | Taxonomie | `Technologies`, `Courses`, `Organisations` |
 | Blokken | Hero, tekst, media, kolommen, call-to-action, projectoverzicht |
 | Header en footer | `src/globals` |
@@ -40,19 +39,6 @@ Postgres draait hier op poort **5434**, zodat hij naast een lokale Postgres
 | SEO, sitemap, robots | SEO-tab, `src/app/sitemap.ts` |
 
 De site is Engelstalig — zowel publiek als in de admin.
-
-## Twee ingangen, één set data
-
-Een portfolio heeft twee soorten lezers die het tegengesteld doorlopen:
-
-- **Docenten en assessoren** kijken *per leeruitkomst*: waar bewijs je LO3, en
-  op welk niveau? Dat is `/learning-outcomes`.
-- **Stagebedrijven** kijken *per project*: wat heb je gebouwd, waarmee, en wat
-  was jóuw aandeel? Dat is `/projects`.
-
-Beide pagina's lezen dezelfde documenten. Je schrijft dus niets dubbel: zodra je
-op een project onder **Assessment** een leeruitkomst aanvinkt met bewijs, staat
-dat bewijs automatisch onder die leeruitkomst.
 
 ## Een project toevoegen
 
@@ -63,23 +49,15 @@ dat bewijs automatisch onder die leeruitkomst.
    vierde veld is het belangrijkste bij groepswerk en wordt het vaakst vergeten.
 4. **Proof** — links (repo, demo, rapport), screenshots mét bijschrift, en
    eventuele pdf's. Een screenshot zonder bijschrift bewijst niets.
-5. **Assessment** — leeruitkomsten met niveau en bewijs, je reflectie, en
-   ontvangen feedback. Een citaat van een docent of opdrachtgever weegt zwaarder
-   dan je eigen inschatting.
+5. **Reflection** — wat je ervan leerde, en ontvangen feedback. Een citaat van
+   een docent of opdrachtgever weegt zwaarder dan je eigen inschatting.
 6. Publish. Het project staat op `/projects/<slug>`.
 
 Werk onder een NDA? Zet **Visibility** in de zijbalk op *anonymised* en vul een
 alias in ("een logistiek bedrijf"). De organisatienaam verdwijnt dan van de site.
 
-Maak geen CMS-pagina met slug `projects` of `learning-outcomes`: die URL's zijn
-gereserveerd voor de overzichten.
-
-## Leeruitkomsten invullen
-
-De collectie is leeg opgeleverd, omdat de formulering van je eigen
-opleiding moet komen. Voeg ze toe onder **Taxonomy** → **Learning outcomes**:
-code (`LO1`), titel, de officiële tekst, en eventueel wat elk niveau betekent.
-`Order` bepaalt de volgorde op het overzicht.
+Maak geen CMS-pagina met slug `projects`: die URL is gereserveerd voor het
+overzicht.
 
 ## Een blok toevoegen
 

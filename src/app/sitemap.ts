@@ -3,7 +3,6 @@ import { getPayload } from 'payload'
 
 import configPromise from '@payload-config'
 import { getServerSideURL } from '@/utilities/getURL'
-import { LEARNING_OUTCOMES_PATH, learningOutcomePath } from '@/utilities/learningOutcomePath'
 import { PROJECTS_PATH, projectPath } from '@/utilities/projectPath'
 
 /**
@@ -21,7 +20,7 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   const baseURL = getServerSideURL()
   const payload = await getPayload({ config: configPromise })
 
-  const [{ docs: pages }, { docs: projects }, { docs: outcomes }] = await Promise.all([
+  const [{ docs: pages }, { docs: projects }] = await Promise.all([
     payload.find({
       collection: 'pages',
       depth: 0,
@@ -46,14 +45,6 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
         'meta.noindex': { not_equals: true },
       },
     }),
-    payload.find({
-      collection: 'learning-outcomes',
-      depth: 0,
-      limit: 0,
-      pagination: false,
-      overrideAccess: false,
-      select: { slug: true, updatedAt: true },
-    }),
   ])
 
   const pageEntries = pages.map((doc) => ({
@@ -72,17 +63,6 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
     ]
   })
 
-  const outcomeEntries = outcomes.flatMap((doc) => {
-    if (typeof doc.slug !== 'string' || doc.slug.length === 0) return []
-
-    return [
-      {
-        url: `${baseURL}${learningOutcomePath(doc.slug)}`,
-        lastModified: doc.updatedAt ? new Date(doc.updatedAt) : undefined,
-      },
-    ]
-  })
-
   return [
     ...pageEntries,
     {
@@ -90,15 +70,6 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
       lastModified: projectEntries[0]?.lastModified,
     },
     ...projectEntries,
-    ...(outcomeEntries.length > 0
-      ? [
-          {
-            url: `${baseURL}${LEARNING_OUTCOMES_PATH}`,
-            lastModified: outcomeEntries[0]?.lastModified,
-          },
-          ...outcomeEntries,
-        ]
-      : []),
   ]
 }
 

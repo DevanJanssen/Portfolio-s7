@@ -7,7 +7,6 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
 import { Courses } from './collections/Courses'
-import { LearningOutcomes } from './collections/LearningOutcomes'
 import { Media } from './collections/Media'
 import { Organisations } from './collections/Organisations'
 import { Pages } from './collections/Pages'
@@ -46,16 +45,7 @@ export default buildConfig({
     },
   },
 
-  collections: [
-    Pages,
-    Projects,
-    LearningOutcomes,
-    Technologies,
-    Courses,
-    Organisations,
-    Media,
-    Users,
-  ],
+  collections: [Pages, Projects, Technologies, Courses, Organisations, Media, Users],
   globals: [Header, Footer],
 
   editor: defaultLexical,

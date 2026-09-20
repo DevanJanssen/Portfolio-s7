@@ -1,18 +1,15 @@
 import { revalidatePath } from 'next/cache'
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
 
-import { LEARNING_OUTCOMES_PATH } from '@/utilities/learningOutcomePath'
 import type { Project } from '@/payload-types'
 import { PROJECTS_PATH, projectPath } from '@/utilities/projectPath'
 
 /**
- * Clears the route cache for the project, the overview, the learning-outcome
- * pages and the sitemap.
+ * Clears the route cache for the project, the overview and the sitemap.
  *
  * The overview and every `projects` block elsewhere read the whole collection,
  * so the layout under `/` goes too. Without that a new project stays invisible
- * on the homepage until the cache expires on its own. The learning-outcome
- * pages are derived from project data, so they go as well.
+ * on the homepage until the cache expires on its own.
  *
  * `revalidatePath` only exists inside a Next request. Scripts writing through
  * the Local API must pass `context: { disableRevalidate: true }`.
@@ -20,7 +17,6 @@ import { PROJECTS_PATH, projectPath } from '@/utilities/projectPath'
 const revalidate = (path: string) => {
   revalidatePath(path)
   revalidatePath(PROJECTS_PATH)
-  revalidatePath(LEARNING_OUTCOMES_PATH, 'page')
   revalidatePath('/', 'layout')
   revalidatePath('/sitemap.xml')
 }

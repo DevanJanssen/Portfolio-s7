@@ -11,7 +11,6 @@ import { slugField } from 'payload'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
 import { canEditContent, isAdmin } from '@/access/roles'
 import { pageBlocks } from '@/blocks'
-import { PROFICIENCY_LEVEL_OPTIONS } from '@/collections/LearningOutcomes'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 import { projectPath } from '@/utilities/projectPath'
 import { revalidateProject, revalidateProjectDelete } from './hooks/revalidateProject'
@@ -387,54 +386,11 @@ export const Projects: CollectionConfig<'projects'> = {
           ],
         },
         // ------------------------------------------------------------------
-        // The assessor-facing layer. Feeds the per-outcome view at
-        // /learning-outcomes, which is why `outcome` is a relationship.
+        // What you took away from it, and what others said about it.
         // ------------------------------------------------------------------
         {
-          label: 'Assessment',
+          label: 'Reflection',
           fields: [
-            {
-              name: 'learningOutcomes',
-              type: 'array',
-              label: 'Learning outcomes',
-              labels: { singular: 'Learning outcome', plural: 'Learning outcomes' },
-              admin: {
-                description:
-                  'What this project proves, and where. Each entry shows up under its outcome on /learning-outcomes.',
-                initCollapsed: true,
-              },
-              fields: [
-                {
-                  type: 'row',
-                  fields: [
-                    {
-                      name: 'outcome',
-                      type: 'relationship',
-                      relationTo: 'learning-outcomes',
-                      label: 'Outcome',
-                      required: true,
-                      admin: { width: '70%' },
-                    },
-                    {
-                      name: 'level',
-                      type: 'select',
-                      label: 'Level',
-                      options: [...PROFICIENCY_LEVEL_OPTIONS],
-                      admin: { width: '30%' },
-                    },
-                  ],
-                },
-                {
-                  name: 'evidence',
-                  type: 'richText',
-                  label: 'Evidence',
-                  admin: {
-                    description:
-                      'Point at something concrete in this project. Link to the commit, the document, the decision.',
-                  },
-                },
-              ],
-            },
             {
               name: 'reflection',
               type: 'richText',

@@ -3,7 +3,7 @@ import { getPayload } from 'payload'
 import { cache } from 'react'
 
 import configPromise from '@payload-config'
-import type { LearningOutcome, Project } from '@/payload-types'
+import type { Project } from '@/payload-types'
 
 /**
  * Finds the project behind this slug.
@@ -62,88 +62,3 @@ export const queryFeaturedProjects = cache(async (limit?: number): Promise<Proje
 
   return typeof limit === 'number' && limit > 0 ? pool.slice(0, limit) : pool
 })
-
-export type LearningOutcomeEvidence = {
-  project: Project
-  level: string | null
-  evidence: NonNullable<Project['learningOutcomes']>[number]['evidence'] | null
-}
-
-export type LearningOutcomeWithEvidence = {
-  outcome: LearningOutcome
-  entries: LearningOutcomeEvidence[]
-}
-
-/**
- * The assessor-facing view, inverted: per learning outcome, every project that
- * claims it plus the evidence given there.
- *
- * Nothing is written twice — this is the same data an editor enters on the
- * project, read from the other end. Outcomes without evidence are kept, because
- * an empty outcome is itself information: it is the gap you still have to fill.
- */
-export const queryLearningOutcomesWithEvidence = cache(
-  async (): Promise<LearningOutcomeWithEvidence[]> => {
-    const payload = await getPayload({ config: configPromise })
-
-    const [{ docs: outcomes }, projects] = await Promise.all([
-      payload.find({
-        collection: 'learning-outcomes',
-        depth: 0,
-        limit: 100,
-        pagination: false,
-        overrideAccess: false,
-        sort: ['sortOrder', 'code'],
-      }),
-      queryPublishedProjectsWithOutcomes(),
-    ])
-
-    return outcomes.map((outcome) => {
-      const entries: LearningOutcomeEvidence[] = []
-
-      for (const project of projects) {
-        for (const claim of project.learningOutcomes ?? []) {
-          const claimedId = typeof claim.outcome === 'object' ? claim.outcome?.id : claim.outcome
-
-          if (claimedId !== outcome.id) continue
-
-          entries.push({
-            project,
-            level: claim.level ?? null,
-            evidence: claim.evidence ?? null,
-          })
-        }
-      }
-
-      return { outcome, entries }
-    })
-  },
-)
-
-/**
- * Separate from `queryPublishedProjects` because that one is tuned for cards:
- * depth 1 leaves the outcome relationship unresolved, and the grouping needs it.
- */
-const queryPublishedProjectsWithOutcomes = cache(async (): Promise<Project[]> => {
-  const payload = await getPayload({ config: configPromise })
-
-  const { docs } = await payload.find({
-    collection: 'projects',
-    depth: 2,
-    limit: 200,
-    pagination: false,
-    overrideAccess: false,
-    sort: ['sortOrder', '-startDate'],
-    where: { _status: { equals: 'published' } },
-  })
-
-  return docs
-})
-
-export const queryLearningOutcomeBySlug = cache(
-  async (slug: string): Promise<LearningOutcomeWithEvidence | null> => {
-    const all = await queryLearningOutcomesWithEvidence()
-
-    return all.find((item) => item.outcome.slug === slug) ?? null
-  },
-)

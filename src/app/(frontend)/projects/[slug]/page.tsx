@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { draftMode } from 'next/headers'
 import { getPayload } from 'payload'
 
@@ -10,10 +9,9 @@ import Media from '@/components/Media'
 import PayloadRedirects from '@/components/PayloadRedirects'
 import RichText from '@/components/RichText'
 import { PROJECT_LINK_TYPE_OPTIONS } from '@/collections/Projects/options'
-import type { LearningOutcome, Project } from '@/payload-types'
+import type { Project } from '@/payload-types'
 import { generateMeta } from '@/utilities/generateMeta'
 import { getServerSideURL } from '@/utilities/getURL'
-import { learningOutcomePath } from '@/utilities/learningOutcomePath'
 import {
   formatProjectPeriod,
   projectContextLabel,
@@ -96,7 +94,6 @@ const ProjectPage = async ({ params }: Args) => {
   const links = project.links ?? []
   const gallery = project.gallery ?? []
   const documents = project.documents ?? []
-  const outcomes = project.learningOutcomes ?? []
   const feedback = project.feedback ?? []
   const hasStory = Boolean(
     project.problem || project.approach || project.myContribution || project.outcome,
@@ -205,40 +202,6 @@ const ProjectPage = async ({ params }: Args) => {
                   {item.caption ? <p className={styles.caption}>{item.caption}</p> : null}
                 </li>
               ))}
-            </ul>
-          </div>
-        </section>
-      ) : null}
-
-      {outcomes.length > 0 ? (
-        <section className={styles.outcomes}>
-          <div className="container">
-            <h2>What this project proves</h2>
-            <ul className={styles.outcomeList}>
-              {outcomes.map((item) => {
-                const outcome =
-                  item.outcome && typeof item.outcome === 'object'
-                    ? (item.outcome as LearningOutcome)
-                    : null
-
-                return (
-                  <li className={styles.outcome} key={item.id ?? outcome?.id}>
-                    <h3>
-                      {outcome ? (
-                        <Link href={learningOutcomePath(outcome.slug)}>
-                          {outcome.code} — {outcome.title}
-                        </Link>
-                      ) : (
-                        'Learning outcome'
-                      )}
-                      {item.level ? (
-                        <span className={styles.level}> Level {item.level}</span>
-                      ) : null}
-                    </h3>
-                    <RichText data={item.evidence} />
-                  </li>
-                )
-              })}
             </ul>
           </div>
         </section>

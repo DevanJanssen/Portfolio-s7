@@ -4977,129 +4977,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.projects_learning_outcomes": {
-      "name": "projects_learning_outcomes",
-      "schema": "",
-      "columns": {
-        "_order": {
-          "name": "_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "_parent_id": {
-          "name": "_parent_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
-          "type": "varchar",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "outcome_id": {
-          "name": "outcome_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "level": {
-          "name": "level",
-          "type": "enum_projects_learning_outcomes_level",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "evidence": {
-          "name": "evidence",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "projects_learning_outcomes_order_idx": {
-          "name": "projects_learning_outcomes_order_idx",
-          "columns": [
-            {
-              "expression": "_order",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "projects_learning_outcomes_parent_id_idx": {
-          "name": "projects_learning_outcomes_parent_id_idx",
-          "columns": [
-            {
-              "expression": "_parent_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "projects_learning_outcomes_outcome_idx": {
-          "name": "projects_learning_outcomes_outcome_idx",
-          "columns": [
-            {
-              "expression": "outcome_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "projects_learning_outcomes_outcome_id_learning_outcomes_id_fk": {
-          "name": "projects_learning_outcomes_outcome_id_learning_outcomes_id_fk",
-          "tableFrom": "projects_learning_outcomes",
-          "tableTo": "learning_outcomes",
-          "columnsFrom": [
-            "outcome_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "projects_learning_outcomes_parent_id_fk": {
-          "name": "projects_learning_outcomes_parent_id_fk",
-          "tableFrom": "projects_learning_outcomes",
-          "tableTo": "projects",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.projects_feedback": {
       "name": "projects_feedback",
       "schema": "",
@@ -7458,135 +7335,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public._projects_v_version_learning_outcomes": {
-      "name": "_projects_v_version_learning_outcomes",
-      "schema": "",
-      "columns": {
-        "_order": {
-          "name": "_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "_parent_id": {
-          "name": "_parent_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "outcome_id": {
-          "name": "outcome_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "level": {
-          "name": "level",
-          "type": "enum__projects_v_version_learning_outcomes_level",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "evidence": {
-          "name": "evidence",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "_uuid": {
-          "name": "_uuid",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "_projects_v_version_learning_outcomes_order_idx": {
-          "name": "_projects_v_version_learning_outcomes_order_idx",
-          "columns": [
-            {
-              "expression": "_order",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "_projects_v_version_learning_outcomes_parent_id_idx": {
-          "name": "_projects_v_version_learning_outcomes_parent_id_idx",
-          "columns": [
-            {
-              "expression": "_parent_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "_projects_v_version_learning_outcomes_outcome_idx": {
-          "name": "_projects_v_version_learning_outcomes_outcome_idx",
-          "columns": [
-            {
-              "expression": "outcome_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "_projects_v_version_learning_outcomes_outcome_id_learning_outcomes_id_fk": {
-          "name": "_projects_v_version_learning_outcomes_outcome_id_learning_outcomes_id_fk",
-          "tableFrom": "_projects_v_version_learning_outcomes",
-          "tableTo": "learning_outcomes",
-          "columnsFrom": [
-            "outcome_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "_projects_v_version_learning_outcomes_parent_id_fk": {
-          "name": "_projects_v_version_learning_outcomes_parent_id_fk",
-          "tableFrom": "_projects_v_version_learning_outcomes",
-          "tableTo": "_projects_v",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public._projects_v_version_feedback": {
       "name": "_projects_v_version_feedback",
       "schema": "",
@@ -8328,233 +8076,6 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.learning_outcomes_levels": {
-      "name": "learning_outcomes_levels",
-      "schema": "",
-      "columns": {
-        "_order": {
-          "name": "_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "_parent_id": {
-          "name": "_parent_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
-          "type": "varchar",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "level": {
-          "name": "level",
-          "type": "enum_learning_outcomes_levels_level",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "learning_outcomes_levels_order_idx": {
-          "name": "learning_outcomes_levels_order_idx",
-          "columns": [
-            {
-              "expression": "_order",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "learning_outcomes_levels_parent_id_idx": {
-          "name": "learning_outcomes_levels_parent_id_idx",
-          "columns": [
-            {
-              "expression": "_parent_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "learning_outcomes_levels_parent_id_fk": {
-          "name": "learning_outcomes_levels_parent_id_fk",
-          "tableFrom": "learning_outcomes_levels",
-          "tableTo": "learning_outcomes",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.learning_outcomes": {
-      "name": "learning_outcomes",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "code": {
-          "name": "code",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "title": {
-          "name": "title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "short_description": {
-          "name": "short_description",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "description": {
-          "name": "description",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "generate_slug": {
-          "name": "generate_slug",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        },
-        "slug": {
-          "name": "slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "sort_order": {
-          "name": "sort_order",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false,
-          "default": 0
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "learning_outcomes_code_idx": {
-          "name": "learning_outcomes_code_idx",
-          "columns": [
-            {
-              "expression": "code",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "learning_outcomes_slug_idx": {
-          "name": "learning_outcomes_slug_idx",
-          "columns": [
-            {
-              "expression": "slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "learning_outcomes_updated_at_idx": {
-          "name": "learning_outcomes_updated_at_idx",
-          "columns": [
-            {
-              "expression": "updated_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "learning_outcomes_created_at_idx": {
-          "name": "learning_outcomes_created_at_idx",
-          "columns": [
-            {
-              "expression": "created_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -10439,12 +9960,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "learning_outcomes_id": {
-          "name": "learning_outcomes_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "technologies_id": {
           "name": "technologies_id",
           "type": "integer",
@@ -10548,21 +10063,6 @@
           "columns": [
             {
               "expression": "projects_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "payload_locked_documents_rels_learning_outcomes_id_idx": {
-          "name": "payload_locked_documents_rels_learning_outcomes_id_idx",
-          "columns": [
-            {
-              "expression": "learning_outcomes_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -10697,19 +10197,6 @@
           "tableTo": "projects",
           "columnsFrom": [
             "projects_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "payload_locked_documents_rels_learning_outcomes_fk": {
-          "name": "payload_locked_documents_rels_learning_outcomes_fk",
-          "tableFrom": "payload_locked_documents_rels",
-          "tableTo": "learning_outcomes",
-          "columnsFrom": [
-            "learning_outcomes_id"
           ],
           "columnsTo": [
             "id"
@@ -11943,16 +11430,6 @@
         "other"
       ]
     },
-    "public.enum_projects_learning_outcomes_level": {
-      "name": "enum_projects_learning_outcomes_level",
-      "schema": "public",
-      "values": [
-        "1",
-        "2",
-        "3",
-        "4"
-      ]
-    },
     "public.enum_projects_kind": {
       "name": "enum_projects_kind",
       "schema": "public",
@@ -12123,16 +11600,6 @@
         "other"
       ]
     },
-    "public.enum__projects_v_version_learning_outcomes_level": {
-      "name": "enum__projects_v_version_learning_outcomes_level",
-      "schema": "public",
-      "values": [
-        "1",
-        "2",
-        "3",
-        "4"
-      ]
-    },
     "public.enum__projects_v_version_kind": {
       "name": "enum__projects_v_version_kind",
       "schema": "public",
@@ -12167,16 +11634,6 @@
       "values": [
         "draft",
         "published"
-      ]
-    },
-    "public.enum_learning_outcomes_levels_level": {
-      "name": "enum_learning_outcomes_levels_level",
-      "schema": "public",
-      "values": [
-        "1",
-        "2",
-        "3",
-        "4"
       ]
     },
     "public.enum_technologies_category": {
@@ -12273,6 +11730,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "1a4bb90f-36c7-46b3-b360-7cecdeba5da4",
+  "id": "9dd10088-e9fb-4b8d-882f-e48d93d804a9",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

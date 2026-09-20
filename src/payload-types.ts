@@ -69,7 +69,6 @@ export interface Config {
   collections: {
     pages: Page;
     projects: Project;
-    'learning-outcomes': LearningOutcome;
     technologies: Technology;
     courses: Course;
     organisations: Organisation;
@@ -86,7 +85,6 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
-    'learning-outcomes': LearningOutcomesSelect<false> | LearningOutcomesSelect<true>;
     technologies: TechnologiesSelect<false> | TechnologiesSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
     organisations: OrganisationsSelect<false> | OrganisationsSelect<true>;
@@ -600,34 +598,6 @@ export interface Project {
       }[]
     | null;
   /**
-   * What this project proves, and where. Each entry shows up under its outcome on /learning-outcomes.
-   */
-  learningOutcomes?:
-    | {
-        outcome: number | LearningOutcome;
-        level?: ('1' | '2' | '3' | '4') | null;
-        /**
-         * Point at something concrete in this project. Link to the commit, the document, the decision.
-         */
-        evidence?: {
-          root: {
-            type: string;
-            children: {
-              type: any;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
-          [k: string]: unknown;
-        } | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
    * What went well, what you would do differently next time.
    */
   reflection?: {
@@ -758,63 +728,6 @@ export interface Technology {
    */
   generateSlug?: boolean | null;
   slug: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * The outcomes you are assessed on, in your programme’s own wording. Projects link to these, which is what lets /learning-outcomes list the evidence per outcome.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "learning-outcomes".
- */
-export interface LearningOutcome {
-  id: number;
-  /**
-   * Short handle, for example "LO1".
-   */
-  code: string;
-  title: string;
-  /**
-   * One or two lines, used on cards and the overview.
-   */
-  shortDescription?: string | null;
-  /**
-   * Paste the exact text from your programme so assessors recognise it.
-   */
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * Optional. What each level means for this outcome.
-   */
-  levels?:
-    | {
-        level: '1' | '2' | '3' | '4';
-        description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  /**
-   * Lowest first, so LO1 stays above LO2.
-   */
-  sortOrder?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -989,10 +902,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'projects';
         value: number | Project;
-      } | null)
-    | ({
-        relationTo: 'learning-outcomes';
-        value: number | LearningOutcome;
       } | null)
     | ({
         relationTo: 'technologies';
@@ -1267,14 +1176,6 @@ export interface ProjectsSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
-  learningOutcomes?:
-    | T
-    | {
-        outcome?: T;
-        level?: T;
-        evidence?: T;
-        id?: T;
-      };
   reflection?: T;
   feedback?:
     | T
@@ -1303,28 +1204,6 @@ export interface ProjectsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "learning-outcomes_select".
- */
-export interface LearningOutcomesSelect<T extends boolean = true> {
-  code?: T;
-  title?: T;
-  shortDescription?: T;
-  description?: T;
-  levels?:
-    | T
-    | {
-        level?: T;
-        description?: T;
-        id?: T;
-      };
-  generateSlug?: T;
-  slug?: T;
-  sortOrder?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

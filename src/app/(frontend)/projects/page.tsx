@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 
 import ProjectCard from '@/components/ProjectCard'
 import {
@@ -8,7 +7,6 @@ import {
   type ProjectKind,
 } from '@/collections/Projects/options'
 import type { Project } from '@/payload-types'
-import { LEARNING_OUTCOMES_PATH } from '@/utilities/learningOutcomePath'
 import { queryPublishedProjects } from '@/utilities/queryProjects'
 import styles from './index.module.scss'
 
@@ -49,10 +47,6 @@ const ProjectsPage = async () => {
           <p className={styles.intro}>
             Everything I have built, at school, at work and in my own time. Each project covers the
             problem, what I did, and what came out of it.
-          </p>
-          <p className={styles.intro}>
-            Assessing my work? <Link href={LEARNING_OUTCOMES_PATH}>Browse by learning outcome</Link>{' '}
-            instead.
           </p>
         </header>
 

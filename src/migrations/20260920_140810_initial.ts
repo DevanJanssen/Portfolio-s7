@@ -44,7 +44,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_projects_blocks_projects_kind" AS ENUM('school', 'work', 'side');
   CREATE TYPE "public"."enum_projects_blocks_projects_background" AS ENUM('none', 'light', 'dark');
   CREATE TYPE "public"."enum_projects_links_type" AS ENUM('repo', 'demo', 'report', 'design', 'video', 'package', 'article', 'other');
-  CREATE TYPE "public"."enum_projects_learning_outcomes_level" AS ENUM('1', '2', '3', '4');
   CREATE TYPE "public"."enum_projects_kind" AS ENUM('school', 'work', 'side');
   CREATE TYPE "public"."enum_projects_project_status" AS ENUM('in-progress', 'completed', 'shipped', 'archived');
   CREATE TYPE "public"."enum_projects_visibility" AS ENUM('public', 'anonymised', 'on-request');
@@ -63,12 +62,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum__projects_v_blocks_projects_kind" AS ENUM('school', 'work', 'side');
   CREATE TYPE "public"."enum__projects_v_blocks_projects_background" AS ENUM('none', 'light', 'dark');
   CREATE TYPE "public"."enum__projects_v_version_links_type" AS ENUM('repo', 'demo', 'report', 'design', 'video', 'package', 'article', 'other');
-  CREATE TYPE "public"."enum__projects_v_version_learning_outcomes_level" AS ENUM('1', '2', '3', '4');
   CREATE TYPE "public"."enum__projects_v_version_kind" AS ENUM('school', 'work', 'side');
   CREATE TYPE "public"."enum__projects_v_version_project_status" AS ENUM('in-progress', 'completed', 'shipped', 'archived');
   CREATE TYPE "public"."enum__projects_v_version_visibility" AS ENUM('public', 'anonymised', 'on-request');
   CREATE TYPE "public"."enum__projects_v_version_status" AS ENUM('draft', 'published');
-  CREATE TYPE "public"."enum_learning_outcomes_levels_level" AS ENUM('1', '2', '3', '4');
   CREATE TYPE "public"."enum_technologies_category" AS ENUM('language', 'framework', 'database', 'infrastructure', 'tooling', 'design');
   CREATE TYPE "public"."enum_organisations_type" AS ENUM('employer', 'client', 'school');
   CREATE TYPE "public"."enum_users_roles" AS ENUM('admin', 'editor');
@@ -496,15 +493,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"label" varchar
   );
   
-  CREATE TABLE "projects_learning_outcomes" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"outcome_id" integer,
-  	"level" "enum_projects_learning_outcomes_level",
-  	"evidence" jsonb
-  );
-  
   CREATE TABLE "projects_feedback" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
@@ -710,16 +698,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"_uuid" varchar
   );
   
-  CREATE TABLE "_projects_v_version_learning_outcomes" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"outcome_id" integer,
-  	"level" "enum__projects_v_version_learning_outcomes_level",
-  	"evidence" jsonb,
-  	"_uuid" varchar
-  );
-  
   CREATE TABLE "_projects_v_version_feedback" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
@@ -777,27 +755,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"parent_id" integer NOT NULL,
   	"path" varchar NOT NULL,
   	"technologies_id" integer
-  );
-  
-  CREATE TABLE "learning_outcomes_levels" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"level" "enum_learning_outcomes_levels_level" NOT NULL,
-  	"description" varchar
-  );
-  
-  CREATE TABLE "learning_outcomes" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"code" varchar NOT NULL,
-  	"title" varchar NOT NULL,
-  	"short_description" varchar,
-  	"description" jsonb,
-  	"generate_slug" boolean DEFAULT true,
-  	"slug" varchar NOT NULL,
-  	"sort_order" numeric DEFAULT 0,
-  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   );
   
   CREATE TABLE "technologies" (
@@ -980,7 +937,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"path" varchar NOT NULL,
   	"pages_id" integer,
   	"projects_id" integer,
-  	"learning_outcomes_id" integer,
   	"technologies_id" integer,
   	"courses_id" integer,
   	"organisations_id" integer,
@@ -1112,8 +1068,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "projects_gallery" ADD CONSTRAINT "projects_gallery_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "projects_documents" ADD CONSTRAINT "projects_documents_file_id_media_id_fk" FOREIGN KEY ("file_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "projects_documents" ADD CONSTRAINT "projects_documents_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "projects_learning_outcomes" ADD CONSTRAINT "projects_learning_outcomes_outcome_id_learning_outcomes_id_fk" FOREIGN KEY ("outcome_id") REFERENCES "public"."learning_outcomes"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "projects_learning_outcomes" ADD CONSTRAINT "projects_learning_outcomes_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "projects_feedback" ADD CONSTRAINT "projects_feedback_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "projects" ADD CONSTRAINT "projects_cover_id_media_id_fk" FOREIGN KEY ("cover_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "projects" ADD CONSTRAINT "projects_course_id_courses_id_fk" FOREIGN KEY ("course_id") REFERENCES "public"."courses"("id") ON DELETE set null ON UPDATE no action;
@@ -1141,8 +1095,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_projects_v_version_gallery" ADD CONSTRAINT "_projects_v_version_gallery_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_projects_v_version_documents" ADD CONSTRAINT "_projects_v_version_documents_file_id_media_id_fk" FOREIGN KEY ("file_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_projects_v_version_documents" ADD CONSTRAINT "_projects_v_version_documents_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_projects_v_version_learning_outcomes" ADD CONSTRAINT "_projects_v_version_learning_outcomes_outcome_id_learning_outcomes_id_fk" FOREIGN KEY ("outcome_id") REFERENCES "public"."learning_outcomes"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_projects_v_version_learning_outcomes" ADD CONSTRAINT "_projects_v_version_learning_outcomes_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_projects_v_version_feedback" ADD CONSTRAINT "_projects_v_version_feedback_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_projects_v" ADD CONSTRAINT "_projects_v_parent_id_projects_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."projects"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_projects_v" ADD CONSTRAINT "_projects_v_version_cover_id_media_id_fk" FOREIGN KEY ("version_cover_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
@@ -1151,7 +1103,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "_projects_v" ADD CONSTRAINT "_projects_v_version_meta_image_id_media_id_fk" FOREIGN KEY ("version_meta_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "_projects_v_rels" ADD CONSTRAINT "_projects_v_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."_projects_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "_projects_v_rels" ADD CONSTRAINT "_projects_v_rels_technologies_fk" FOREIGN KEY ("technologies_id") REFERENCES "public"."technologies"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "learning_outcomes_levels" ADD CONSTRAINT "learning_outcomes_levels_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."learning_outcomes"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "technologies" ADD CONSTRAINT "technologies_logo_id_media_id_fk" FOREIGN KEY ("logo_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "organisations" ADD CONSTRAINT "organisations_logo_id_media_id_fk" FOREIGN KEY ("logo_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "users_roles" ADD CONSTRAINT "users_roles_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
@@ -1162,7 +1113,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."payload_locked_documents"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_projects_fk" FOREIGN KEY ("projects_id") REFERENCES "public"."projects"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_learning_outcomes_fk" FOREIGN KEY ("learning_outcomes_id") REFERENCES "public"."learning_outcomes"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_technologies_fk" FOREIGN KEY ("technologies_id") REFERENCES "public"."technologies"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_courses_fk" FOREIGN KEY ("courses_id") REFERENCES "public"."courses"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_organisations_fk" FOREIGN KEY ("organisations_id") REFERENCES "public"."organisations"("id") ON DELETE cascade ON UPDATE no action;
@@ -1294,9 +1244,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "projects_documents_order_idx" ON "projects_documents" USING btree ("_order");
   CREATE INDEX "projects_documents_parent_id_idx" ON "projects_documents" USING btree ("_parent_id");
   CREATE INDEX "projects_documents_file_idx" ON "projects_documents" USING btree ("file_id");
-  CREATE INDEX "projects_learning_outcomes_order_idx" ON "projects_learning_outcomes" USING btree ("_order");
-  CREATE INDEX "projects_learning_outcomes_parent_id_idx" ON "projects_learning_outcomes" USING btree ("_parent_id");
-  CREATE INDEX "projects_learning_outcomes_outcome_idx" ON "projects_learning_outcomes" USING btree ("outcome_id");
   CREATE INDEX "projects_feedback_order_idx" ON "projects_feedback" USING btree ("_order");
   CREATE INDEX "projects_feedback_parent_id_idx" ON "projects_feedback" USING btree ("_parent_id");
   CREATE INDEX "projects_cover_idx" ON "projects" USING btree ("cover_id");
@@ -1349,9 +1296,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_projects_v_version_documents_order_idx" ON "_projects_v_version_documents" USING btree ("_order");
   CREATE INDEX "_projects_v_version_documents_parent_id_idx" ON "_projects_v_version_documents" USING btree ("_parent_id");
   CREATE INDEX "_projects_v_version_documents_file_idx" ON "_projects_v_version_documents" USING btree ("file_id");
-  CREATE INDEX "_projects_v_version_learning_outcomes_order_idx" ON "_projects_v_version_learning_outcomes" USING btree ("_order");
-  CREATE INDEX "_projects_v_version_learning_outcomes_parent_id_idx" ON "_projects_v_version_learning_outcomes" USING btree ("_parent_id");
-  CREATE INDEX "_projects_v_version_learning_outcomes_outcome_idx" ON "_projects_v_version_learning_outcomes" USING btree ("outcome_id");
   CREATE INDEX "_projects_v_version_feedback_order_idx" ON "_projects_v_version_feedback" USING btree ("_order");
   CREATE INDEX "_projects_v_version_feedback_parent_id_idx" ON "_projects_v_version_feedback" USING btree ("_parent_id");
   CREATE INDEX "_projects_v_parent_idx" ON "_projects_v" USING btree ("parent_id");
@@ -1371,12 +1315,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "_projects_v_rels_parent_idx" ON "_projects_v_rels" USING btree ("parent_id");
   CREATE INDEX "_projects_v_rels_path_idx" ON "_projects_v_rels" USING btree ("path");
   CREATE INDEX "_projects_v_rels_technologies_id_idx" ON "_projects_v_rels" USING btree ("technologies_id");
-  CREATE INDEX "learning_outcomes_levels_order_idx" ON "learning_outcomes_levels" USING btree ("_order");
-  CREATE INDEX "learning_outcomes_levels_parent_id_idx" ON "learning_outcomes_levels" USING btree ("_parent_id");
-  CREATE UNIQUE INDEX "learning_outcomes_code_idx" ON "learning_outcomes" USING btree ("code");
-  CREATE UNIQUE INDEX "learning_outcomes_slug_idx" ON "learning_outcomes" USING btree ("slug");
-  CREATE INDEX "learning_outcomes_updated_at_idx" ON "learning_outcomes" USING btree ("updated_at");
-  CREATE INDEX "learning_outcomes_created_at_idx" ON "learning_outcomes" USING btree ("created_at");
   CREATE INDEX "technologies_logo_idx" ON "technologies" USING btree ("logo_id");
   CREATE UNIQUE INDEX "technologies_slug_idx" ON "technologies" USING btree ("slug");
   CREATE INDEX "technologies_updated_at_idx" ON "technologies" USING btree ("updated_at");
@@ -1430,7 +1368,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "payload_locked_documents_rels_path_idx" ON "payload_locked_documents_rels" USING btree ("path");
   CREATE INDEX "payload_locked_documents_rels_pages_id_idx" ON "payload_locked_documents_rels" USING btree ("pages_id");
   CREATE INDEX "payload_locked_documents_rels_projects_id_idx" ON "payload_locked_documents_rels" USING btree ("projects_id");
-  CREATE INDEX "payload_locked_documents_rels_learning_outcomes_id_idx" ON "payload_locked_documents_rels" USING btree ("learning_outcomes_id");
   CREATE INDEX "payload_locked_documents_rels_technologies_id_idx" ON "payload_locked_documents_rels" USING btree ("technologies_id");
   CREATE INDEX "payload_locked_documents_rels_courses_id_idx" ON "payload_locked_documents_rels" USING btree ("courses_id");
   CREATE INDEX "payload_locked_documents_rels_organisations_id_idx" ON "payload_locked_documents_rels" USING btree ("organisations_id");
@@ -1490,7 +1427,6 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "projects_links" CASCADE;
   DROP TABLE "projects_gallery" CASCADE;
   DROP TABLE "projects_documents" CASCADE;
-  DROP TABLE "projects_learning_outcomes" CASCADE;
   DROP TABLE "projects_feedback" CASCADE;
   DROP TABLE "projects" CASCADE;
   DROP TABLE "projects_rels" CASCADE;
@@ -1506,12 +1442,9 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "_projects_v_version_links" CASCADE;
   DROP TABLE "_projects_v_version_gallery" CASCADE;
   DROP TABLE "_projects_v_version_documents" CASCADE;
-  DROP TABLE "_projects_v_version_learning_outcomes" CASCADE;
   DROP TABLE "_projects_v_version_feedback" CASCADE;
   DROP TABLE "_projects_v" CASCADE;
   DROP TABLE "_projects_v_rels" CASCADE;
-  DROP TABLE "learning_outcomes_levels" CASCADE;
-  DROP TABLE "learning_outcomes" CASCADE;
   DROP TABLE "technologies" CASCADE;
   DROP TABLE "courses" CASCADE;
   DROP TABLE "organisations" CASCADE;
@@ -1575,7 +1508,6 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TYPE "public"."enum_projects_blocks_projects_kind";
   DROP TYPE "public"."enum_projects_blocks_projects_background";
   DROP TYPE "public"."enum_projects_links_type";
-  DROP TYPE "public"."enum_projects_learning_outcomes_level";
   DROP TYPE "public"."enum_projects_kind";
   DROP TYPE "public"."enum_projects_project_status";
   DROP TYPE "public"."enum_projects_visibility";
@@ -1594,12 +1526,10 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TYPE "public"."enum__projects_v_blocks_projects_kind";
   DROP TYPE "public"."enum__projects_v_blocks_projects_background";
   DROP TYPE "public"."enum__projects_v_version_links_type";
-  DROP TYPE "public"."enum__projects_v_version_learning_outcomes_level";
   DROP TYPE "public"."enum__projects_v_version_kind";
   DROP TYPE "public"."enum__projects_v_version_project_status";
   DROP TYPE "public"."enum__projects_v_version_visibility";
   DROP TYPE "public"."enum__projects_v_version_status";
-  DROP TYPE "public"."enum_learning_outcomes_levels_level";
   DROP TYPE "public"."enum_technologies_category";
   DROP TYPE "public"."enum_organisations_type";
   DROP TYPE "public"."enum_users_roles";

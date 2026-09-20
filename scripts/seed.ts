@@ -7,10 +7,6 @@ import config from '../src/payload.config'
  * homepage, an about page, a few technologies, one course and one example
  * project.
  *
- * Learning outcomes are deliberately left empty — they have to match your
- * programme's own wording, so you add those yourself under Taxonomy → Learning
- * outcomes.
- *
  * Only runs on an empty database — overwriting existing content is never what
  * you meant if you called this by accident.
  *
@@ -115,15 +111,15 @@ const seed = async () => {
         },
         {
           blockType: 'callToAction',
-          heading: 'Assessing my work?',
-          text: 'The learning outcomes page lists the same projects indexed by outcome, with the evidence per claim.',
+          heading: 'Want to know more?',
+          text: 'Every project covers the problem, my own contribution and what came out of it.',
           background: 'dark',
           links: [
             {
               link: {
                 type: 'custom',
-                url: '/learning-outcomes',
-                label: 'Learning outcomes',
+                url: '/projects',
+                label: 'All projects',
                 appearance: 'default',
               },
             },
@@ -203,7 +199,6 @@ const seed = async () => {
       navItems: [
         { link: { type: 'custom', url: '/', label: 'Home' } },
         { link: { type: 'custom', url: '/projects', label: 'Projects' } },
-        { link: { type: 'custom', url: '/learning-outcomes', label: 'Learning outcomes' } },
         { link: { type: 'custom', url: '/about', label: 'About' } },
       ],
     },
@@ -212,7 +207,6 @@ const seed = async () => {
 
   payload.logger.info(`Done. Sign in with ${email} / ${password}`)
   payload.logger.info(`Paths: ${home.path}, ${about.path}, /projects/${project.slug}`)
-  payload.logger.info('Next: add your learning outcomes under Taxonomy → Learning outcomes.')
   process.exit(0)
 }
 
