@@ -149,7 +149,7 @@ gebruiker via `/admin`):
 
 ```bash
 # .env tijdelijk op de Neon-URL, of:
-DATABASE_URL='postgres://…-pooler…/neondb?sslmode=require' pnpm seed
+DATABASE_URL='postgres://…-pooler…/neondb?sslmode=verify-full' pnpm seed
 ```
 
 ### 2. S3
