@@ -72,6 +72,7 @@ export interface Config {
     technologies: Technology;
     courses: Course;
     organisations: Organisation;
+    logos: Logo;
     media: Media;
     users: User;
     redirects: Redirect;
@@ -88,6 +89,7 @@ export interface Config {
     technologies: TechnologiesSelect<false> | TechnologiesSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
     organisations: OrganisationsSelect<false> | OrganisationsSelect<true>;
+    logos: LogosSelect<false> | LogosSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
@@ -150,7 +152,9 @@ export interface UserAuthOperations {
 export interface Page {
   id: number;
   title: string;
-  layout: (HeroBlock | RichTextBlock | MediaBlock | ColumnsBlock | CallToActionBlock | ProjectsBlock)[];
+  layout: (
+    HeroBlock | RichTextBlock | MediaBlock | ColumnsBlock | CallToActionBlock | ProjectsBlock | ImportantProjectsBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -434,6 +438,55 @@ export interface ProjectsBlock {
   blockType: 'projects';
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImportantProjectsBlock".
+ */
+export interface ImportantProjectsBlock {
+  /**
+   * The line above the stack, for example "The work I am most proud of."
+   */
+  heading: string;
+  /**
+   * The projects arrive as a stack of browser windows that slide away one by one as you scroll; the first stays put and travels to the window beside the list. After that they open one by one — the line above a project shows how much scrolling that still takes — and a visitor can also click one open. Drag to set the order: every extra project is nearly two screen heights of extra scrolling. Title, tagline, summary, cover and tech stack all come from the project itself, so editing the project updates this block.
+   */
+  projects: (number | Project)[];
+  /**
+   * The logos sliding past below the projects. Pick from the library under Taxonomy → Logos. Pick enough to fill the strip; drag to set the order.
+   */
+  tools?: (number | Logo)[] | null;
+  /**
+   * The buttons at the bottom of the block.
+   */
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom' | 'mailto' | 'tel' | 'download') | null;
+          reference?: (number | null) | Page;
+          url?: string | null;
+          mailto?: string | null;
+          tel?: string | null;
+          media?: (number | null) | Media;
+          /**
+           * Optional. Makes the link jump to a section; a block gets its anchor under Layout → Anchor.
+           */
+          anchor?: string | null;
+          newTab?: boolean | null;
+          label: string;
+          appearance?: ('default' | 'outline' | 'plain') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional. Letters, numbers and dashes only. A link can jump here with #anchor.
+   */
+  anchor?: string | null;
+  background?: ('none' | 'light' | 'dark') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'importantProjects';
+}
+/**
  * One document per project, whether it is school, work or side. The overview lives at /projects; each project gets /projects/<slug>.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -562,7 +615,17 @@ export interface Project {
   /**
    * Optional deep dive below the story: screenshots, diagrams, a long write-up.
    */
-  layout?: (HeroBlock | RichTextBlock | MediaBlock | ColumnsBlock | CallToActionBlock | ProjectsBlock)[] | null;
+  layout?:
+    | (
+        | HeroBlock
+        | RichTextBlock
+        | MediaBlock
+        | ColumnsBlock
+        | CallToActionBlock
+        | ProjectsBlock
+        | ImportantProjectsBlock
+      )[]
+    | null;
   /**
    * Repository, live demo, report, design file.
    */
@@ -728,6 +791,25 @@ export interface Technology {
    */
   generateSlug?: boolean | null;
   slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * The library for the sliding strip. Put them on a page with the "Important projects" block; the same logo may appear on several pages.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logos".
+ */
+export interface Logo {
+  id: number;
+  /**
+   * Such as "OpenAI" or "Vercel". This is what you see when picking it in a block.
+   */
+  name: string;
+  /**
+   * The wordmark or symbol in the strip. Use an SVG or PNG with a transparent background, preferably in one colour: the logo takes on the colour of the page.
+   */
+  logo: number | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -916,6 +998,10 @@ export interface PayloadLockedDocument {
         value: number | Organisation;
       } | null)
     | ({
+        relationTo: 'logos';
+        value: number | Logo;
+      } | null)
+    | ({
         relationTo: 'media';
         value: number | Media;
       } | null)
@@ -984,6 +1070,7 @@ export interface PagesSelect<T extends boolean = true> {
         columns?: T | ColumnsBlockSelect<T>;
         callToAction?: T | CallToActionBlockSelect<T>;
         projects?: T | ProjectsBlockSelect<T>;
+        importantProjects?: T | ImportantProjectsBlockSelect<T>;
       };
   meta?:
     | T
@@ -1124,6 +1211,38 @@ export interface ProjectsBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ImportantProjectsBlock_select".
+ */
+export interface ImportantProjectsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  projects?: T;
+  tools?: T;
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              reference?: T;
+              url?: T;
+              mailto?: T;
+              tel?: T;
+              media?: T;
+              anchor?: T;
+              newTab?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  anchor?: T;
+  background?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
@@ -1153,6 +1272,7 @@ export interface ProjectsSelect<T extends boolean = true> {
         columns?: T | ColumnsBlockSelect<T>;
         callToAction?: T | CallToActionBlockSelect<T>;
         projects?: T | ProjectsBlockSelect<T>;
+        importantProjects?: T | ImportantProjectsBlockSelect<T>;
       };
   links?:
     | T
@@ -1244,6 +1364,16 @@ export interface OrganisationsSelect<T extends boolean = true> {
   url?: T;
   generateSlug?: T;
   slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "logos_select".
+ */
+export interface LogosSelect<T extends boolean = true> {
+  name?: T;
+  logo?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -3,6 +3,7 @@ import { Fragment, type ReactNode } from 'react'
 import { CallToActionBlockComponent } from '@/blocks/CallToAction/Component'
 import { ColumnsBlockComponent } from '@/blocks/Columns/Component'
 import { HeroBlockComponent } from '@/blocks/Hero/Component'
+import { ImportantProjectsBlockComponent } from '@/blocks/ImportantProjects/Component'
 import { MediaBlockComponent } from '@/blocks/MediaBlock/Component'
 import { ProjectsBlockComponent } from '@/blocks/Projects/Component'
 import { RichTextBlockComponent } from '@/blocks/RichText/Component'
@@ -14,6 +15,7 @@ const BLOCK_COMPONENTS: Record<string, (props: any) => ReactNode> = {
   callToAction: CallToActionBlockComponent,
   columns: ColumnsBlockComponent,
   hero: HeroBlockComponent,
+  importantProjects: ImportantProjectsBlockComponent,
   mediaBlock: MediaBlockComponent,
   projects: ProjectsBlockComponent,
   richText: RichTextBlockComponent,

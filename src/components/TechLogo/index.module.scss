@@ -1,0 +1,20 @@
+.logo {
+  display: block;
+  background: currentcolor;
+
+  /* `contain` rather than `100% 100%`: that keeps the logo in proportion when
+   * the box around it has a different shape than the logo itself — a wordmark
+   * in a square chip does not get stretched. */
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+
+  /* The strip draws every logo at 58px tall. The width follows from the ratio
+   * of the file, so a wordmark is not squeezed into a square and an oversized
+   * upload does not push the strip apart. */
+  &.strip {
+    height: 3.625rem;
+    width: auto;
+    max-width: 16rem;
+  }
+}

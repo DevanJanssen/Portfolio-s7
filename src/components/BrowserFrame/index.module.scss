@@ -1,0 +1,193 @@
+/**
+ * Every measurement comes from a design of a window 940px wide, written here as
+ * a multiple of `--u`: one design pixel.
+ *
+ * `--u` hangs off the width of the window (`cqw`), so the whole title bar scales
+ * in proportion instead of each part needing its own `clamp()`. Note that `cqw`
+ * in a value is resolved where it is *used*, and an element is never its own
+ * container. Hence `.browser` being only the container, with everything visible
+ * inside `.window`.
+ */
+.browser {
+  container-type: inline-size;
+}
+
+.window {
+  /* On `.window` and not on `.browser`: an element is never its own container,
+   * so `cqw` only counts from one level in. That also lets the container query
+   * at the bottom adjust this value. */
+  --u: 0.10638cqw;
+
+  position: relative;
+  overflow: hidden;
+  border-radius: calc(17.565 * var(--u));
+  background: #fff;
+  box-shadow: 0 calc(10.809 * var(--u)) calc(32.427 * var(--u)) rgb(0 0 0 / 35%);
+}
+
+.bar {
+  position: relative;
+  height: calc(35.129 * var(--u));
+  background: #fff;
+  color: #4c4c4c;
+  font-family: var(--font-body);
+}
+
+/* --- Window buttons ------------------------------------------------------ */
+
+.dots {
+  position: absolute;
+  top: 50%;
+  left: calc(11.485 * var(--u));
+  display: flex;
+  gap: calc(6.08 * var(--u));
+  transform: translateY(-50%);
+}
+
+.dot {
+  width: calc(9.458 * var(--u));
+  height: calc(9.458 * var(--u));
+  border: calc(0.338 * var(--u)) solid rgb(0 0 0 / 10%);
+  border-radius: 50%;
+
+  &:nth-child(1) {
+    background: #ff736a;
+  }
+
+  &:nth-child(2) {
+    background: #febc2e;
+  }
+
+  &:nth-child(3) {
+    background: #19c332;
+  }
+}
+
+/* --- The glass pills ------------------------------------------------------ */
+
+/**
+ * In the design this is a translucent layer with a blur under it. On a white
+ * title bar that resolves to a single light grey; that grey is set directly
+ * here, with a soft shadow for the glow the design draws around it.
+ */
+.pill {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  height: calc(24.32 * var(--u));
+  border-radius: 100px;
+  background: #f4f4f4;
+  box-shadow: 0 calc(0.5 * var(--u)) calc(2.5 * var(--u)) rgb(0 0 0 / 6%);
+  transform: translateY(-50%);
+}
+
+.button {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  min-width: calc(18.916 * var(--u));
+  height: calc(18.916 * var(--u));
+  padding-inline: calc(3.378 * var(--u));
+}
+
+/**
+ * Only the height is fixed; the width follows from the symbol's `viewBox`. That
+ * box is the design's text box per symbol, so a button lands on its designed
+ * width by itself.
+ */
+.buttonIcon {
+  flex: none;
+  width: auto;
+  height: calc(15 * var(--u));
+}
+
+/* --- Sidebar button with menu arrow --------------------------------------- */
+
+.sidebar {
+  left: calc(64.179 * var(--u));
+  gap: calc(1.351 * var(--u));
+  padding-inline: calc(5.405 * var(--u));
+}
+
+/* --- Back / forward -------------------------------------------------------- */
+
+.history {
+  left: calc(110.117 * var(--u));
+  padding: calc(2.702 * var(--u));
+}
+
+.separator {
+  width: calc(0.676 * var(--u));
+  height: calc(13.511 * var(--u));
+  margin-inline: calc(0.676 * var(--u));
+  background: #e6e6e6;
+}
+
+/* There is no page to go forward to; the design renders it lighter. */
+.disabled {
+  color: #c6c6c6;
+}
+
+/* --- Address bar ---------------------------------------------------------- */
+
+.address {
+  left: calc(301.977 * var(--u));
+  gap: calc(4.053 * var(--u));
+  width: calc(335.37 * var(--u));
+  padding-inline: calc(6.756 * var(--u));
+}
+
+.addressIcon {
+  flex: none;
+  width: auto;
+  height: calc(10.809 * var(--u));
+  color: #808080;
+}
+
+.url {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: calc(8.78 * var(--u));
+  line-height: calc(10.809 * var(--u));
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- Buttons on the right -------------------------------------------------- */
+
+.actions {
+  right: calc(4.729 * var(--u));
+  gap: calc(2.702 * var(--u));
+  padding: calc(2.702 * var(--u));
+}
+
+/**
+ * Below this width the symbols are only a few pixels across and turn into
+ * smudges. The window buttons and the address stay — those keep the window
+ * recognisable even when small.
+ */
+@container (max-width: 480px) {
+  .window {
+    /* Without those buttons the bar no longer has to hold the design's ratio,
+     * and may grow until it is legible again. */
+    --u: 0.19cqw;
+  }
+
+  .sidebar,
+  .history,
+  .actions {
+    display: none;
+  }
+
+  /* The address bar sat at its designed position; that falls out of view once
+   * `--u` grows, so here it simply centres. */
+  .address {
+    left: 50%;
+    width: 60%;
+    transform: translate(-50%, -50%);
+  }
+}

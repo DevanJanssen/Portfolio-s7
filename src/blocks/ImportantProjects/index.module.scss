@@ -1,0 +1,796 @@
+@use 'styles/breakpoints' as *;
+
+/* The maximum number of projects. Below there is one rule per position in the
+ * list, so this value has to track `MAX_IMPORTANT_PROJECTS` in `config.ts` —
+ * change them together. */
+$max-projects: 6;
+
+/* On the section itself and not on a container inside it: the logo strip runs
+ * edge to edge and therefore sits outside the container, but shares this
+ * typography.
+ *
+ * The element in the selector is there because `Section` brings its own
+ * `padding-block` at the same specificity; without the `section` in front, the
+ * order of the stylesheets decides who wins.
+ *
+ * No `color` here on purpose: the page already sets one and a dark `Section`
+ * overrides it. The greys below are mixed from `currentcolor` for the same
+ * reason — they then hold on a light section and on a dark one, instead of
+ * needing a second set of values. */
+section.importantProjects {
+  /* The dividing lines of the list, and the darker one above the open project. */
+  --rule: color-mix(in srgb, currentcolor 20%, transparent);
+  --rule-open: color-mix(in srgb, currentcolor 45%, transparent);
+  /* The grey of the second paragraph. */
+  --muted: color-mix(in srgb, currentcolor 68%, transparent);
+  /* The chip a technology logo sits in. */
+  --chip: color-mix(in srgb, currentcolor 8%, transparent);
+  /* The beads of the player. */
+  --bead: color-mix(in srgb, currentcolor 32%, transparent);
+  --bead-surface: color-mix(in srgb, currentcolor 7%, transparent);
+  /* The panel the stack lies on, and the pill on it. In the original design the
+   * pill is the lighter of the two; a tint that has to work on any section
+   * background can only go darker, so the relation is inverted here. It reads
+   * the same way: a soft shape behind the stack. */
+  --field: color-mix(in srgb, currentcolor 4%, transparent);
+  --pill: color-mix(in srgb, currentcolor 3%, transparent);
+
+  padding-block: 7.875rem 6.0625rem;
+}
+
+/* --- The stage ----------------------------------------------------------- *
+ *
+ * Everything in this part is off until `Stage` puts `data-staged` on the track.
+ * What the server renders is therefore the bare layout — heading, list, window —
+ * and that is also what a visitor without JavaScript or on a narrow screen gets.
+ * The choice of when the choreography switches on lives in `Stage.tsx`, not
+ * here; this stylesheet only carries out what that attribute says.
+ */
+
+/**
+ * One screen height per card sliding away, plus the run-up, the journey of the
+ * last card and the reveal of the heading and the list — and then the screen the
+ * stage itself stands in. `--track` comes from the component, because only that
+ * knows how many projects there are.
+ */
+.track[data-staged] {
+  height: calc((var(--track, 0) + 1) * 100svh);
+}
+
+/**
+ * What the visitor sees while the stage is pinned. `overflow` keeps the cards
+ * sliding out of frame inside the block, so no horizontal scrollbar appears
+ * under the page; `isolation` keeps the layers below together, so their
+ * `z-index` does not reach over the header.
+ */
+.track[data-staged] .scene {
+  position: sticky;
+  top: 0;
+  display: grid;
+  place-items: center;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/**
+ * The panel behind the stack: the tinted field edge to edge with the lighter
+ * pill on it. It sits on the stage and not on the section, because the editor
+ * picks the background of this block. It goes away together with the pill as
+ * soon as the last card leaves for the window (see `Stage.tsx`), so the chosen
+ * background comes out from under it.
+ */
+.backdrop {
+  display: none;
+}
+
+.track[data-staged] .backdrop {
+  display: grid;
+  grid-area: 1 / 1;
+  place-items: center;
+  place-self: stretch;
+  z-index: 0;
+  background: var(--field);
+}
+
+/**
+ * In the design 1326 x 727 with a radius of 460 — more than half the height, so
+ * the browser clamps the corners back to exactly a pill. Hence `999px`: it gives
+ * the same shape and says better what it is.
+ */
+.pill {
+  width: min(76.7vw, 1326px);
+  aspect-ratio: 1326 / 727;
+  translate: 0 22%;
+  border-radius: 999px;
+  background: var(--pill);
+}
+
+/**
+ * The layer with the cards. It lies above the layout: the card travelling to the
+ * window has to pass over the heading and the list. Once it has landed, the real
+ * window takes over and this layer goes away — twice the same image in the same
+ * place, so that swap cannot be seen.
+ */
+.stage {
+  display: none;
+}
+
+.track[data-staged] .stage {
+  display: grid;
+  grid-area: 1 / 1;
+  place-items: center;
+  place-self: stretch;
+  z-index: 2;
+  /* Decoration, and after the landing decoration that is no longer there: it
+   * must never catch a click meant for the list underneath. */
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    visibility 0.15s;
+}
+
+.track[data-staged][data-landed] .stage {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/**
+ * The box all cards lie in: exactly one card big, so that every card fits in it
+ * with `inset: 0` and finds its own place in the stack from there.
+ *
+ * The box itself sits in the middle of the screen, and the front card fills it
+ * exactly: that one is centred, and the cards behind it stick out below.
+ * `--card` is its width: 1002 in a design of 1728 (58vw). The limit on `svh` is
+ * there because the stack sticks out downwards — on a short screen it still has
+ * to fit whole. The ratio is that of the window itself: title bar plus image,
+ * the same measurements `BrowserFrame` draws.
+ */
+.stack {
+  --card: clamp(260px, min(58vw, 92svh), 1002px);
+
+  position: relative;
+  width: var(--card);
+  aspect-ratio: 1002.33 / 615.393;
+}
+
+/**
+ * How far back a card lies. `--depth` comes from the component: 0 is the front
+ * one, and the first project gets the greatest depth. All cards share the same
+ * centre; every step back is 15% smaller and drops 13%. The front one therefore
+ * stands centred at full size, the second at 85% and slightly lower, the third
+ * at 70% and lower again.
+ *
+ * That 13% is made of two things: 7.5% to compensate for the shrinking — a card
+ * that gets 15% smaller pulls its bottom edge up by 7.5% — plus 5.5% that you
+ * see sticking out below. Both in percentages of the card itself, so the stack
+ * holds its shape on any screen.
+ *
+ * The series runs on linearly: at the maximum of six projects the back one lies
+ * at a quarter. Small, but a stack of six is a deep stack anyway — and every
+ * extra project is also a screen height of extra scrolling (see `config.ts`).
+ */
+.slot {
+  position: absolute;
+  inset: 0;
+  z-index: calc(100 - var(--depth));
+  transform: translate(0, calc(var(--depth) * 13%)) scale(calc(1 - var(--depth) * 0.15));
+}
+
+/**
+ * The layer GSAP moves. The stacking sits on the `.slot` around it: that way the
+ * stylesheet and the script do not both write to the same `transform`. The
+ * height comes from the window inside it and not from the `.slot`; it is a
+ * fraction of a difference, and `Stage` reckons with it.
+ */
+.card {
+  width: 100%;
+}
+
+/**
+ * Every card its own paint layer, as long as the stage runs.
+ *
+ * This is not here for speed but against a ghost. Without this promise the
+ * browser paints the card in the stage's layer, and only promotes it to its own
+ * layer the moment GSAP sets it in motion. That swap happens a frame too late:
+ * the drop shadow of the window — a soft smudge of nearly thirty pixels, see
+ * `BrowserFrame` — is then left standing where the card lay. That smudge only
+ * disappears when something else passes by that forces the browser to repaint
+ * that patch, and until then you see the shadow of a card that is no longer
+ * there.
+ *
+ * With `will-change` the layer is there before anything moves, so there is no
+ * swap and the shadow simply travels with the card. `backface-visibility` does
+ * the same for browsers that ignore `will-change`.
+ *
+ * Only while the stage runs: in the ordinary layout nothing moves, and then a
+ * separate layer per card is only memory.
+ */
+.track[data-staged] .card {
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* --- Heading ------------------------------------------------------------- */
+
+.heading {
+  /* 1060px in a design of 1728px: the heading wraps sooner than the page. */
+  max-width: 1060px;
+  margin: 0 auto clamp(var(--space-8), 5vw, 66px);
+  font-size: clamp(2rem, 1.35rem + 2.7vw, 3.75rem);
+  font-weight: 450;
+  letter-spacing: -0.022em;
+  line-height: 1.05;
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* --- Projects on the left, screenshot on the right ----------------------- */
+
+/**
+ * The layout is there from the start, even while the stage runs: `Stage`
+ * measures the window in it to work out the journey of the last card, and that
+ * is only possible once everything is in place. Heading and list therefore go
+ * away on `visibility` and `opacity` and not on `display`.
+ */
+.track[data-staged] .reveal {
+  grid-area: 1 / 1;
+  z-index: 1;
+  align-self: center;
+  justify-self: stretch;
+}
+
+.layout {
+  display: grid;
+  gap: var(--space-8);
+
+  @include from('lg') {
+    /* 347 : 940 with 210 between them — the ratios from the design, not the
+     * absolute measurements, so it scales with the container. */
+    grid-template-columns: minmax(0, 347fr) minmax(0, 940fr);
+    gap: clamp(var(--space-12), 12vw, 210px);
+    align-items: start;
+  }
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  position: relative;
+  border-top: 1px solid var(--rule);
+
+  &:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* The open project gets a darker line above it. */
+  &:has(.toggle:checked) {
+    border-top-color: var(--rule-open);
+  }
+}
+
+/**
+ * The line above a project, a second time: as a progress bar.
+ *
+ * Once the stack has dissolved the stage stays pinned for a while and the
+ * projects open one by one. This bar says how much scrolling that still takes:
+ * it is drawn from left to right and then stays put — that way you read off the
+ * list how far along you are.
+ *
+ * It is about one line at a time: the one above the project that is open. That
+ * line does not lie *over* the fixed border, it *is* it — the border underneath
+ * goes `transparent`, because a grey line already fully drawn makes the drawing
+ * invisible. The rest of the list simply keeps its lines; without those lines
+ * the list falls apart while the visitor is still at the front.
+ *
+ * A project that has been therefore gets its fixed line back instead of keeping
+ * a full dark one. The bar says "you are here and this far along", and that is
+ * something other than a checklist.
+ *
+ * `top: -1px` puts it exactly where that border is: an absolutely positioned
+ * child reckons from the padding box, and the border lies just outside it.
+ *
+ * Only when there is actually paging — see `data-browse` in `Stage.tsx`. Without
+ * JavaScript, on a narrow screen, with `prefers-reduced-motion` or with a single
+ * project the visitor clicks through the list themselves; there the fixed lines
+ * belong everywhere, and a bar that never fills promises something that is not
+ * there.
+ */
+.progress {
+  display: none;
+}
+
+.track[data-browse] .progress {
+  display: block;
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: currentcolor;
+  transition: opacity 0.3s ease;
+}
+
+.track[data-browse] .item:has(.toggle:checked) .progress {
+  opacity: 1;
+}
+
+/**
+ * And so: no fixed line above the open project, as long as the bar draws it.
+ * `transparent` and not `none` or `0`, so the border keeps its pixel and the
+ * list does not jump the moment the stage switches on.
+ *
+ * The transition runs alongside that of the bar: when switching project the line
+ * fades from dark to grey instead of flipping over.
+ */
+.track[data-browse] .item {
+  transition: border-top-color 0.3s ease;
+}
+
+.track[data-browse] .item:has(.toggle:checked) {
+  border-top-color: transparent;
+}
+
+/**
+ * The radio button drives everything: which project is open and which screenshot
+ * stands beside it. It is invisible but not `display: none`, because then it
+ * could no longer be operated with the keyboard either.
+ */
+.toggle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.summary {
+  display: block;
+  padding-block: 24px;
+  font-size: 1.0625rem;
+  line-height: 1.29;
+  cursor: pointer;
+
+  /* The label is the only visible part of the radio button, so that is where the
+   * focus ring belongs. */
+  .toggle:focus-visible + & {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .toggle:checked + & {
+    padding-bottom: 26px;
+    font-size: 1.25rem;
+    line-height: 1.1;
+  }
+}
+
+.panel {
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 19px;
+  padding-bottom: 24px;
+
+  .toggle:checked ~ & {
+    display: flex;
+  }
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 29px;
+  width: 100%;
+}
+
+.description {
+  font-size: 1rem;
+  line-height: 1.375;
+
+  /* The tagline is the core and stands dark; the summary after it is context. */
+  p {
+    margin: 0 0 16px;
+    color: var(--muted);
+
+    &:first-child {
+      color: inherit;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.projectLink {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.375;
+  text-decoration: none;
+}
+
+.projectLinkChevron {
+  flex: none;
+  width: 5px;
+  height: 9px;
+}
+
+/* --- Tech stack ---------------------------------------------------------- */
+
+.techstack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding-top: 16px;
+  border-top: 1px dashed var(--rule-open);
+}
+
+.techstackLabel {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.23;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 86.4px;
+  /* The design puts three on a row. In a column narrower than the 347px from the
+   * design they shrink along instead of becoming two. */
+  max-width: calc((100% - 14px) / 3);
+  height: 42px;
+  padding: 8px 7px;
+  border-radius: 8px;
+  background: var(--chip);
+}
+
+.chipLogo {
+  width: 100%;
+  height: 100%;
+}
+
+/* --- Screenshots --------------------------------------------------------- */
+
+/**
+ * All screenshots lie on top of each other in one grid cell; only the one of the
+ * open project is visible. Without `:has()` the first stays put — the list then
+ * still works, but the image does not follow.
+ */
+.screens {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include from('lg') {
+    /* The window sits slightly lower than the list beside it in the design. */
+    margin-top: 23px;
+  }
+}
+
+/**
+ * While the stage runs this list is only there to establish its position: the
+ * card from the stack is still lying over it, and twice the same window on top
+ * of each other gives a double image. It switches on the moment the card lands,
+ * over the same time the card layer takes to disappear.
+ */
+.track[data-staged] .screens {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.track[data-staged][data-landed] .screens {
+  opacity: 1;
+}
+
+/**
+ * The screenshots lie in one stack and change like a roll of film: the new one
+ * comes into view from below, the old one slides away upwards. Which way a
+ * window waits therefore depends on where it stands in the list relative to the
+ * open project — before it is "already been" and waits above, after it is "still
+ * to come" and waits below. The loop below makes that distinction; without it
+ * they would all wait on the same side and the departing one would jump down
+ * instead of up.
+ *
+ * `--shift` is how far, in percentages of a window: enough to see the movement,
+ * too little to run over the heading above it.
+ */
+.screen {
+  --shift: 12%;
+
+  grid-area: 1 / 1;
+  visibility: hidden;
+  opacity: 0;
+  translate: 0 var(--shift);
+  transition:
+    opacity 0.45s ease,
+    translate 0.45s ease,
+    visibility 0.45s;
+
+  /* Without `:has()` this one stays put: the list then still works, only the
+   * image does not follow. */
+  &:first-child {
+    visibility: visible;
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  /* The loop below is more specific and keeps its `translate`; that does not
+   * matter, because without a transition the image simply flips over and the
+   * windows standing shifted are invisible anyway. */
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+@for $i from 2 through $max-projects {
+  .layout:has(.list > .item:nth-child(#{$i}) .toggle:checked) {
+    /* Everything before the open project has been past and waits above the
+     * image. */
+    .screen:nth-child(-n + #{$i - 1}) {
+      visibility: hidden;
+      opacity: 0;
+      translate: 0 calc(-1 * var(--shift));
+    }
+
+    .screen:nth-child(#{$i}) {
+      visibility: visible;
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+}
+
+.screenshot {
+  width: 100%;
+  /* 940 x 542: the image area under the title bar from the design. */
+  aspect-ratio: 940 / 542;
+  object-fit: cover;
+}
+
+/* --- The player ---------------------------------------------------------- *
+ *
+ * Only in the narrow layout, where one project is in view at a time: then it
+ * says which of the projects that is, how far along it is, and whether the block
+ * pages on by itself. Beside the window the whole list already stands with a
+ * line above every project, and then it would say the same thing twice.
+ */
+.player {
+  display: none;
+}
+
+/* --- Logo strip and buttons ---------------------------------------------- */
+
+.strip {
+  margin-top: clamp(var(--space-12), 10vw, 170px);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-top: clamp(var(--space-8), 6vw, 100px);
+}
+
+/**
+ * The buttons from the design: 56px tall with a radius of 21px. Only the shape
+ * lives here; which colour a button gets is the editor's choice and `CMSLink`
+ * delivers it.
+ */
+.button {
+  min-height: 56px;
+  padding-inline: 36px;
+  border-radius: 21px;
+}
+
+/* --- Below the breakpoint: everything stacked ---------------------------- *
+ *
+ * The choreography runs on a phone too: the same stack, the same cards sliding
+ * diagonally out of frame in turn, the same last card travelling to its place.
+ * Only that place is a different one here — the layout stands stacked instead of
+ * side by side, and then the heading belongs above the window with the list of
+ * projects below it.
+ */
+@include to('lg') {
+  /**
+   * In the DOM the list comes before the window, because that is how they stand
+   * side by side in the design: list on the left, image on the right. Stacked
+   * that order flips — the window is where the card lands, so that belongs
+   * directly under the heading, with the projects below it again.
+   */
+  .screens {
+    order: -1;
+  }
+
+  /**
+   * Tighter than above, and not out of thrift: heading, window and list have to
+   * stay within one screen height together, or the measurement in `Stage` skips
+   * the whole stage and the visitor gets the bare layout.
+   *
+   * Without `[data-staged]`, and that is necessary: that measurement happens
+   * precisely *before* the stage switches on. A tighter size that only applies
+   * once the stage is already there always comes too late — the measurement will
+   * have rejected the roomier size already. So this layout applies here always,
+   * whether the choreography runs or not.
+   */
+  .layout {
+    gap: var(--space-4);
+  }
+
+  .heading {
+    margin-bottom: var(--space-6);
+  }
+
+  /**
+   * The stack may be wider here: above, 58vw is a card of a thousand pixels,
+   * here that same sum would land on the lower bound of 260px. The last card
+   * would then nearly double on its way to the window instead of growing calmly
+   * to size.
+   */
+  .stack {
+    --card: min(86vw, 92svh);
+  }
+
+  /**
+   * One project at a time. A list of three titles with one opened asks for room
+   * a phone does not have, and that room is exactly where the block gives out:
+   * if heading, window and project do not fit in one screen height together,
+   * `Stage` skips the whole stage. Which project it is, the player above points
+   * out.
+   */
+  .item:not(:has(.toggle:checked)) {
+    display: none;
+  }
+
+  /**
+   * And so no drawn line above that one project any more: the bar of the player
+   * says the same thing, and better. The border comes back as it stands in the
+   * design.
+   */
+  .progress {
+    display: none;
+  }
+
+  .track[data-browse] .item:has(.toggle:checked) {
+    border-top-color: var(--rule-open);
+  }
+
+  /* --- The player --- */
+
+  /**
+   * Between the window and the project: a row with the beads on the left and the
+   * button on the right. `order` and not the order in the DOM, because side by
+   * side the list and the window belong the other way around — see above.
+   */
+  .player {
+    display: flex;
+    order: 0;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .list {
+    order: 1;
+  }
+
+  .beads {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    height: 56px;
+    padding-inline: 24px;
+    border-radius: 60px;
+    background: var(--bead-surface);
+  }
+
+  /**
+   * A bead of 8px, and 47px for the project whose turn it is (the measurements
+   * from the design). The transition is on the width, so the stretching and
+   * shrinking back runs along with the change of project.
+   */
+  .bead {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    overflow: hidden;
+    border-radius: 16px;
+    background: var(--bead);
+    transition: width 0.4s ease;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  /**
+   * The progress within that one bead. The design draws only the shape and not
+   * the filling, so its colour is a choice: dark on the bead, so you see at a
+   * glance how much is still to come. Only on the project whose turn it is —
+   * otherwise the beads you have had would stay dark and it becomes a checklist
+   * instead of a player.
+   */
+  .beadFill {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: currentcolor;
+  }
+
+  @for $i from 1 through $max-projects {
+    .layout:has(.list > .item:nth-child(#{$i}) .toggle:checked) {
+      .bead:nth-child(#{$i}) {
+        width: 47px;
+      }
+
+      .bead:nth-child(#{$i}) .beadFill {
+        opacity: 1;
+      }
+    }
+  }
+
+  /**
+   * The button from the design: a circle of 56px with the triangle in it. The
+   * circle lives here and not in the file, because the icons of this project are
+   * single-colour masks — that way the triangle takes on the colour of the
+   * button, and the same button can show the pause symbol too.
+   */
+  .play {
+    flex: none;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--bead-surface);
+    color: inherit;
+    cursor: pointer;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: currentcolor;
+      mask: url('/icons/play.svg') center / 100% 100% no-repeat;
+      -webkit-mask: url('/icons/play.svg') center / 100% 100% no-repeat;
+    }
+
+    /* If the block is running, the button is a pause button. */
+    &[data-playing='true']::before {
+      mask-image: url('/icons/pause.svg');
+      -webkit-mask-image: url('/icons/pause.svg');
+    }
+  }
+}

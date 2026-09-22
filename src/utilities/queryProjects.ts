@@ -62,3 +62,40 @@ export const queryFeaturedProjects = cache(async (limit?: number): Promise<Proje
 
   return typeof limit === 'number' && limit > 0 ? pool.slice(0, limit) : pool
 })
+
+/**
+ * Published projects for a list of ids, in the order the ids were given.
+ *
+ * A block that points at projects gets them populated to the depth of its own
+ * page query, and that is one level short: it reaches a technology but not the
+ * logo hanging off it. Asking here instead puts `projects` at the root of the
+ * query, so `techStack.logo` lands within depth 2 — and it keeps the page query
+ * light for every block that does not need this.
+ *
+ * Payload returns rows in its own order, so the ids do the sorting: the editor
+ * dragged them into place and that order is the one that should show.
+ */
+export const queryProjectsByIds = cache(async (ids: number[]): Promise<Project[]> => {
+  if (ids.length === 0) return []
+
+  const payload = await getPayload({ config: configPromise })
+
+  const { docs } = await payload.find({
+    collection: 'projects',
+    depth: 2,
+    limit: ids.length,
+    pagination: false,
+    overrideAccess: false,
+    where: {
+      and: [{ id: { in: ids } }, { _status: { equals: 'published' } }],
+    },
+  })
+
+  const byId = new Map(docs.map((doc) => [doc.id, doc]))
+
+  return ids.flatMap((id) => {
+    const doc = byId.get(id)
+
+    return doc ? [doc] : []
+  })
+})

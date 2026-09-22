@@ -20,3 +20,21 @@ $breakpoints: (
     @content;
   }
 }
+
+// De andere kant op: alles tót een breekpunt. Gebruik dit spaarzaam — de
+// styling hier is van onderaf opgebouwd, dus normaal groeit een blok mee met
+// `from()`. Het is bedoeld voor het geval dat een ontwerp op een telefoon een
+// wezenlijk andere indeling vraagt dan erboven; dan is "hieronder geldt iets
+// anders" eerlijker dan de basisregels binnenstebuiten keren.
+//
+// 0.02px eraf en niet 1px: tussen 767px en 768px liggen op een scherm met een
+// hoge pixeldichtheid nog breedtes, en die horen bij precies één van de twee.
+@mixin to($name) {
+  @if not map.has-key($breakpoints, $name) {
+    @error 'Onbekend breekpunt: #{$name}';
+  }
+
+  @media (max-width: (map.get($breakpoints, $name) - 0.02px)) {
+    @content;
+  }
+}

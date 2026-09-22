@@ -1,0 +1,57 @@
+/* The spacing between two logos. A row carries it as trailing padding, so the
+ * seam between two copies does not stand out. A strip with different spacing
+ * sets `--strip-gap`. */
+$gap: 81.078px;
+
+.strip {
+  overflow: hidden;
+  color: var(--color-text);
+
+  /* The edges run out into nothing rather than into a colour, so the strip is
+   * correct on a section with a different background too. The design fades over
+   * 210 of 1728px — rounded, 12%. */
+  mask-image: linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: scroll var(--strip-duration, 45s) linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/**
+ * The spacing sits between the logos and once behind the row, not as a half
+ * margin on either side. Two reasons: the seam between two rows gets exactly one
+ * whole gap, and the first logo starts at the left edge of the row. With a
+ * margin in front, every lap would begin with an empty half-gap in view.
+ */
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--strip-gap, $gap);
+  margin: 0;
+  padding: 0 var(--strip-gap, $gap) 0 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+/**
+ * Exactly one of the two rows; after that the second sits where the first was
+ * and the track is back at its starting position. There are always two — a row
+ * repeats itself until it is wide enough, rather than rows being added — so this
+ * stays a fixed percentage.
+ */
+@keyframes scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
