@@ -1,28 +1,66 @@
+// Graphite Shell — zie DESIGN.md in de root. Elke kleur, radius en schaduw in
+// de site komt hiervandaan; voeg hier niets toe zonder het ook daar vast te
+// leggen. Het accent is roze in plaats van het salie uit het origineel.
 :root {
-  --color-text: #14181f;
-  --color-text-muted: #5a6472;
-  --color-background: #ffffff;
-  --color-surface: #f4f6f8;
-  --color-surface-dark: #14181f;
-  --color-on-dark: #ffffff;
-  --color-primary: #1c5cff;
-  --color-primary-contrast: #ffffff;
-  --color-border: #dfe4ea;
+  color-scheme: dark;
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  /* Oppervlakken: warm grafiet, nooit zwart, nooit koel grijs. */
+  --color-shell: #161513;
+  --color-pane: #1f1e1b;
+  --color-pane-lift: #262420;
 
+  /* Inkt. */
+  --color-bone: #e8e6df;
+  --color-bone-55: #8a8780;
+
+  /* Het ene accent: primaire knop, actieve tab, uitgelichte kaart. */
+  --color-accent: #f0b8ca;
+  --color-accent-soft: rgba(240, 184, 202, 0.14);
+
+  /* Haarlijnen. */
+  --hairline: rgba(232, 230, 223, 0.08);
+  --hairline-10: rgba(232, 230, 223, 0.1);
+  --hairline-16: rgba(232, 230, 223, 0.16);
+  --hairline-strong: rgba(232, 230, 223, 0.5);
+
+  /* Rollen — de rest van de code praat alleen in deze namen. */
+  --color-text: var(--color-bone);
+  --color-text-muted: var(--color-bone-55);
+  --color-background: var(--color-shell);
+  --color-surface: var(--color-pane);
+  --color-surface-dark: var(--color-pane-lift);
+  --color-on-dark: var(--color-bone);
+  --color-primary: var(--color-accent);
+  --color-primary-contrast: var(--color-shell);
+  --color-border: var(--hairline);
+
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+  --radius-pill: 9999px;
+
+  --shadow-card: rgba(0, 0, 0, 0.35) 0 1px 0 inset, rgba(0, 0, 0, 0.4) 0 1px 2px;
+
+  --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
+  --space-5: 1.25rem;
   --space-6: 1.5rem;
   --space-8: 2rem;
   --space-12: 3rem;
   --space-16: 4rem;
+  --space-20: 5rem;
 
   --container-width: 72rem;
   --container-narrow: 40rem;
 
-  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-body: var(--font-inter), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Beweging: een cursor, aan of uit. */
+  --duration-fast: 60ms;
+  --duration-base: 120ms;
+  --duration-slow: 200ms;
+  --ease: linear;
 }

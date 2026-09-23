@@ -1,23 +1,31 @@
+@use 'styles/breakpoints' as *;
+
 .section {
   padding-block: var(--space-12);
+
+  @include from('md') {
+    padding-block: var(--space-20);
+  }
 
   :where(.section) + & {
     padding-top: 0;
   }
 }
 
+/* Twee vlakken boven de pagina: `light` is het paneel, `dark` het opgetilde
+ * paneel. Een haarlijn boven en onder houdt de rand scherp. */
+.light,
+.dark {
+  border-block: 1px solid var(--hairline);
+}
+
 .light {
-  background: var(--color-surface);
+  background: var(--color-pane);
 }
 
 .dark {
-  background: var(--color-surface-dark);
+  background: var(--color-pane-lift);
   color: var(--color-on-dark);
-
-  /* `outline` en `plain` uit `CMSLink` hebben geen eigen vulling en zouden hier
-   * dus zwart op zwart staan. */
-  --button-ink: var(--color-on-dark);
-  --button-ink-contrast: var(--color-surface-dark);
 }
 
 // Overbodig naast de regel hierboven, maar hij legt de bedoeling vast: twee
@@ -26,4 +34,18 @@
 :where(.light) + .light,
 :where(.dark) + .dark {
   padding-top: 0;
+  border-top: 0;
+}
+
+/* Een vlak na een kaal blok heeft wél zijn bovenruimte nodig, anders plakt de
+ * inhoud tegen de haarlijn. */
+:where(.section:not(.light, .dark)) + .light,
+:where(.section:not(.light, .dark)) + .dark,
+:where(.light) + .dark,
+:where(.dark) + .light {
+  padding-top: var(--space-12);
+
+  @include from('md') {
+    padding-top: var(--space-20);
+  }
 }

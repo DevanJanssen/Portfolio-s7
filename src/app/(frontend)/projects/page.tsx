@@ -43,6 +43,9 @@ const ProjectsPage = async () => {
     <article className={styles.page}>
       <div className="container">
         <header className={styles.header}>
+          <p className={`label ${styles.eyebrow}`}>
+            {projects.length} {projects.length === 1 ? 'project' : 'projects'}
+          </p>
           <h1>Projects</h1>
           <p className={styles.intro}>
             Everything I have built, at school, at work and in my own time. Each project covers the
@@ -54,7 +57,12 @@ const ProjectsPage = async () => {
           <div className={styles.groups}>
             {groups.map((group) => (
               <section key={group.kind}>
-                <h2 className={styles.groupTitle}>{group.label}</h2>
+                <h2 className={styles.groupTitle}>
+                  {group.label}
+                  <span className={styles.count}>
+                    {String(group.items.length).padStart(2, '0')}
+                  </span>
+                </h2>
                 <ul className={styles.grid}>
                   {group.items.map((project) => (
                     <li key={project.id}>

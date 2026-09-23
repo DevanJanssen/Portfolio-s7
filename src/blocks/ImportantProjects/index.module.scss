@@ -217,10 +217,10 @@ section.importantProjects {
   /* 1060px in a design of 1728px: the heading wraps sooner than the page. */
   max-width: 1060px;
   margin: 0 auto clamp(var(--space-8), 5vw, 66px);
-  font-size: clamp(2rem, 1.35rem + 2.7vw, 3.75rem);
-  font-weight: 450;
-  letter-spacing: -0.022em;
-  line-height: 1.05;
+  font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.25rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.06;
   text-align: center;
   text-wrap: balance;
 }
@@ -314,7 +314,7 @@ section.importantProjects {
   opacity: 0;
   transform: scaleX(0);
   transform-origin: left center;
-  background: currentcolor;
+  background: var(--color-accent);
   transition: opacity 0.3s ease;
 }
 
@@ -365,13 +365,15 @@ section.importantProjects {
   /* The label is the only visible part of the radio button, so that is where the
    * focus ring belongs. */
   .toggle:focus-visible + & {
-    outline: 2px solid var(--color-primary);
+    outline: 1px dashed var(--color-bone);
     outline-offset: 2px;
   }
 
   .toggle:checked + & {
     padding-bottom: 26px;
     font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.012em;
     line-height: 1.1;
   }
 }
@@ -419,10 +421,17 @@ section.importantProjects {
   display: inline-flex;
   gap: 6px;
   align-items: center;
-  font-size: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
   font-weight: 600;
-  line-height: 1.375;
+  line-height: 1.4;
   text-decoration: none;
+  transition: color var(--duration-base) var(--ease);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-accent);
+  }
 }
 
 .projectLinkChevron {
@@ -444,8 +453,13 @@ section.importantProjects {
 
 .techstackLabel {
   margin: 0;
-  font-size: 0.8125rem;
-  line-height: 1.23;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .chips {
@@ -468,7 +482,8 @@ section.importantProjects {
   max-width: calc((100% - 14px) / 3);
   height: 42px;
   padding: 8px 7px;
-  border-radius: 8px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
   background: var(--chip);
 }
 
@@ -602,14 +617,11 @@ section.importantProjects {
 }
 
 /**
- * The buttons from the design: 56px tall with a radius of 21px. Only the shape
- * lives here; which colour a button gets is the editor's choice and `CMSLink`
- * delivers it.
+ * The buttons follow the Graphite Shell recipe from `CMSLink`; here they only
+ * get a little more room, because they close the whole block.
  */
 .button {
-  min-height: 56px;
-  padding-inline: 36px;
-  border-radius: 21px;
+  padding: 12px 24px;
 }
 
 /* --- Below the breakpoint: everything stacked ---------------------------- *
@@ -745,7 +757,7 @@ section.importantProjects {
     opacity: 0;
     transform: scaleX(0);
     transform-origin: left center;
-    background: currentcolor;
+    background: var(--color-accent);
   }
 
   @for $i from 1 through $max-projects {

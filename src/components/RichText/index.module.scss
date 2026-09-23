@@ -1,4 +1,6 @@
 .richText {
+  max-width: 78ch;
+
   > :first-child {
     margin-top: 0;
   }
@@ -16,15 +18,42 @@
   ul,
   ol {
     margin: 0 0 var(--space-4);
-    padding-left: var(--space-6);
+    padding-left: 1.25em;
   }
 
   li {
-    margin-bottom: var(--space-2);
+    margin-bottom: 0.35em;
+
+    &::marker {
+      color: var(--color-text-muted);
+    }
   }
 
   a {
-    color: var(--color-primary);
-    text-underline-offset: 0.2em;
+    color: var(--color-text);
+    text-decoration: underline;
+    text-decoration-color: var(--hairline-strong);
+
+    &:hover,
+    &:focus-visible {
+      text-decoration-color: currentcolor;
+    }
+  }
+
+  blockquote {
+    margin: 0 0 var(--space-4);
+    padding: 0.7em 1em;
+    border-left: 1px solid var(--hairline-strong);
+    color: var(--color-text-muted);
+  }
+
+  pre {
+    overflow-x: auto;
+    margin: 0 0 var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    background: var(--color-pane);
+    line-height: 1.55;
   }
 }

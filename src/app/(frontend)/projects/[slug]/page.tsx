@@ -105,7 +105,7 @@ const ProjectPage = async ({ params }: Args) => {
 
       <header className={styles.hero}>
         <div className="container">
-          {meta ? <p className={styles.meta}>{meta}</p> : null}
+          {meta ? <p className={`label ${styles.meta}`}>{meta}</p> : null}
           <h1>{project.title}</h1>
           {project.summary ? <p className={styles.summary}>{project.summary}</p> : null}
 
@@ -138,7 +138,7 @@ const ProjectPage = async ({ params }: Args) => {
                     {item.label}
                   </a>
                   {linkTypeLabel(item.type) ? (
-                    <span className={styles.linkType}> — {linkTypeLabel(item.type)}</span>
+                    <span className={styles.linkType}>{linkTypeLabel(item.type)}</span>
                   ) : null}
                 </li>
               ))}
@@ -237,7 +237,7 @@ const ProjectPage = async ({ params }: Args) => {
         <section className={styles.documents}>
           <div className="container container--narrow">
             <h2>Documents</h2>
-            <ul>
+            <ul className={styles.documentList}>
               {documents.map((item) => {
                 const file = item.file && typeof item.file === 'object' ? item.file : null
 

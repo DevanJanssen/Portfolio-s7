@@ -5,45 +5,55 @@
   text-decoration: none;
 }
 
+/* De knoppen van Graphite Shell. Mono op elk label: een knop leest als een
+ * commando. `default` is de primaire (accent), `outline` de tertiaire en
+ * `plain` de ghost. */
 .button {
   justify-content: center;
-  min-height: 2.75rem;
-  padding-inline: 1.25rem;
+  padding: 9px 18px;
+  border: 1px solid transparent;
   border-radius: var(--radius-md);
-  font-weight: 600;
-  line-height: 1;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
   text-align: center;
+  transition:
+    background-color var(--duration-base) var(--ease),
+    border-color var(--duration-base) var(--ease),
+    color var(--duration-base) var(--ease);
 }
 
 .default {
-  background: var(--color-primary);
-  color: var(--color-primary-contrast);
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-shell);
+  font-weight: 600;
 
   &:hover,
   &:focus-visible {
-    filter: brightness(0.92);
+    border-color: var(--color-bone);
+    background: var(--color-bone);
   }
 }
 
 .outline {
-  border: 1px solid var(--button-ink, var(--color-text));
+  border-color: var(--hairline-16);
   color: var(--button-ink, var(--color-text));
 
   &:hover,
   &:focus-visible {
-    background: var(--button-ink, var(--color-text));
-    color: var(--button-ink-contrast, var(--color-background));
+    border-color: var(--color-bone);
+    background: rgba(232, 230, 223, 0.15);
   }
 }
 
 .plain {
-  min-height: 0;
-  padding-inline: 0;
-  color: var(--button-ink, var(--color-text));
+  padding-inline: 14px;
+  color: var(--color-text-muted);
 
   &:hover,
   &:focus-visible {
-    text-decoration: underline;
-    text-underline-offset: 0.25em;
+    color: var(--color-text);
   }
 }

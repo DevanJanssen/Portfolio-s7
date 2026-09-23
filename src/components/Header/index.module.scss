@@ -1,8 +1,8 @@
 @use 'styles/breakpoints' as *;
 
 .header {
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-background);
+  border-bottom: 1px solid var(--hairline);
+  background: var(--color-shell);
 }
 
 .inner {
@@ -15,12 +15,25 @@
 }
 
 .logo {
-  font-weight: 700;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35em;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.012em;
   text-decoration: none;
+}
 
-  &:hover,
-  &:focus-visible {
-    color: var(--color-primary);
+.prompt {
+  color: var(--color-bone-55);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: color var(--duration-base) var(--ease);
+
+  .logo:hover &,
+  .logo:focus-visible & {
+    color: var(--color-bone);
   }
 }
 
@@ -28,26 +41,49 @@
   min-width: 0;
 }
 
+/* Boxed tabs, als een tmux-paneelkiezer: het actieve item krijgt de accentrand. */
 .nav {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--space-4);
+  gap: var(--space-1);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .navLink {
+  display: inline-block;
+  padding: 7px 12px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--color-bone-55);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
   text-decoration: none;
+  transition:
+    color var(--duration-base) var(--ease),
+    border-color var(--duration-base) var(--ease),
+    background-color var(--duration-base) var(--ease);
 
   &:hover,
   &:focus-visible {
-    text-decoration: underline;
-    text-underline-offset: 0.3em;
+    border-color: var(--hairline-10);
+    color: var(--color-bone);
   }
 }
 
 .navLinkActive {
+  border-color: var(--color-accent);
+  background: var(--color-pane-lift);
+  color: var(--color-accent);
   font-weight: 600;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
 }

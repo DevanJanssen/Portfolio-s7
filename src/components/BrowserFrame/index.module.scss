@@ -20,17 +20,19 @@
 
   position: relative;
   overflow: hidden;
+  border: 1px solid var(--hairline-10);
   border-radius: calc(17.565 * var(--u));
-  background: #fff;
+  background: var(--color-pane);
   box-shadow: 0 calc(10.809 * var(--u)) calc(32.427 * var(--u)) rgb(0 0 0 / 35%);
 }
 
 .bar {
   position: relative;
   height: calc(35.129 * var(--u));
-  background: #fff;
-  color: #4c4c4c;
-  font-family: var(--font-body);
+  border-bottom: 1px solid var(--hairline);
+  background: var(--color-pane-lift);
+  color: var(--color-bone-55);
+  font-family: var(--font-mono);
 }
 
 /* --- Window buttons ------------------------------------------------------ */
@@ -50,25 +52,17 @@
   border: calc(0.338 * var(--u)) solid rgb(0 0 0 / 10%);
   border-radius: 50%;
 
-  &:nth-child(1) {
-    background: #ff736a;
-  }
-
-  &:nth-child(2) {
-    background: #febc2e;
-  }
-
-  &:nth-child(3) {
-    background: #19c332;
-  }
+  /* Graphite Shell has one accent, so the traffic lights go neutral: the
+   * shape alone still reads as a window. */
+  background: rgba(232, 230, 223, 0.22);
 }
 
 /* --- The glass pills ------------------------------------------------------ */
 
 /**
- * In the design this is a translucent layer with a blur under it. On a white
- * title bar that resolves to a single light grey; that grey is set directly
- * here, with a soft shadow for the glow the design draws around it.
+ * In the design this is a translucent layer with a blur under it. On the
+ * graphite title bar that resolves to the pane colour, with a hairline ring
+ * instead of the glow.
  */
 .pill {
   position: absolute;
@@ -77,8 +71,8 @@
   align-items: center;
   height: calc(24.32 * var(--u));
   border-radius: 100px;
-  background: #f4f4f4;
-  box-shadow: 0 calc(0.5 * var(--u)) calc(2.5 * var(--u)) rgb(0 0 0 / 6%);
+  background: var(--color-pane);
+  box-shadow: 0 0 0 calc(0.5 * var(--u)) var(--hairline-10);
   transform: translateY(-50%);
 }
 
@@ -122,12 +116,12 @@
   width: calc(0.676 * var(--u));
   height: calc(13.511 * var(--u));
   margin-inline: calc(0.676 * var(--u));
-  background: #e6e6e6;
+  background: var(--hairline-10);
 }
 
 /* There is no page to go forward to; the design renders it lighter. */
 .disabled {
-  color: #c6c6c6;
+  opacity: 0.35;
 }
 
 /* --- Address bar ---------------------------------------------------------- */
@@ -143,7 +137,7 @@
   flex: none;
   width: auto;
   height: calc(10.809 * var(--u));
-  color: #808080;
+  color: var(--color-bone-55);
 }
 
 .url {

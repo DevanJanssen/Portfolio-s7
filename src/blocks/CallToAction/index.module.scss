@@ -1,22 +1,38 @@
 @use 'styles/breakpoints' as *;
 
-.cta {
+/* Een kaart, zodat de oproep los staat van de doorlopende tekst eromheen. */
+.card {
   display: grid;
   gap: var(--space-6);
   align-items: center;
+  padding: var(--space-6);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-pane);
+  box-shadow: var(--shadow-card);
+
+  @include from('md') {
+    padding: var(--space-8) 28px;
+  }
 
   @include from('lg') {
     grid-template-columns: 1fr auto;
+    gap: var(--space-12);
+  }
+
+  :global(h2) {
+    margin-bottom: var(--space-3);
   }
 }
 
 .text {
-  margin-bottom: 0;
   max-width: 60ch;
+  margin-bottom: 0;
+  color: var(--color-text-muted);
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }

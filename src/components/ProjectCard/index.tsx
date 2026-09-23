@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import Media from '@/components/Media'
+import { cn } from '@/utilities/cn'
 import type { Project } from '@/payload-types'
 import { projectContextLabel, projectTechnologies } from '@/utilities/projectMeta'
 import { projectPath } from '@/utilities/projectPath'
@@ -21,7 +22,7 @@ export const ProjectCard = ({ project }: Props) => {
   const hiddenTechCount = technologies.length - visibleTech.length
 
   return (
-    <article className={styles.card}>
+    <article className={cn(styles.card, project.featured && styles.featured)}>
       <Link className={styles.link} href={href}>
         {project.cover && typeof project.cover === 'object' ? (
           <Media
@@ -30,7 +31,9 @@ export const ProjectCard = ({ project }: Props) => {
             sizes="(min-width: 1024px) 30vw, 100vw"
           />
         ) : (
-          <div className={styles.placeholder} />
+          <div aria-hidden className={styles.placeholder}>
+            <span className={styles.placeholderText}>~/{project.slug}</span>
+          </div>
         )}
 
         <div className={styles.body}>

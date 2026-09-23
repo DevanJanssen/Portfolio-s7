@@ -2,29 +2,39 @@
 
 .hero {
   display: grid;
-  gap: var(--space-8);
+  gap: var(--space-12);
   align-items: center;
 
   @include from('lg') {
     grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+  }
+}
+
+.body {
+  :global(h1) {
+    max-width: 16ch;
+    margin-bottom: var(--space-6);
   }
 }
 
 .intro {
-  font-size: 1.125rem;
-  color: var(--color-text-muted);
   max-width: 55ch;
+  color: var(--color-text-muted);
+  font-size: 1.0625rem;
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-4);
-  margin-top: var(--space-6);
+  gap: var(--space-3);
+  margin-top: var(--space-8);
 }
 
 .image {
-  border-radius: var(--radius-md);
   width: 100%;
   height: auto;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
 }

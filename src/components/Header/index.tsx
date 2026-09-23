@@ -13,13 +13,18 @@ export const Header = async () => {
     const href = resolveLinkHref(item.link)
     if (!href || !item.link?.label) return []
 
-    return [{ href, key: item.id ?? String(index), label: item.link.label, newTab: item.link.newTab }]
+    return [
+      { href, key: item.id ?? String(index), label: item.link.label, newTab: item.link.newTab },
+    ]
   })
 
   return (
     <header className={styles.header}>
       <div className={`container ${styles.inner}`}>
         <Link className={styles.logo} href="/">
+          <span aria-hidden className={styles.prompt}>
+            ~/
+          </span>
           {title}
         </Link>
         <HeaderNav items={navItems} />

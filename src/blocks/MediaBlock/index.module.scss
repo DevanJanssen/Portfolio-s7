@@ -1,9 +1,16 @@
 .figure {
   margin: 0;
+
+  :global(img),
+  :global(video) {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+  }
 }
 
 .caption {
   margin-top: var(--space-3);
-  font-size: 0.875rem;
   color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
 }

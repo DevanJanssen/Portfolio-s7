@@ -1,9 +1,5 @@
 @use 'styles/breakpoints' as *;
 
-.projects {
-  color: var(--color-text);
-}
-
 .heading {
   margin: 0 0 var(--space-4);
 }
@@ -16,7 +12,7 @@
 
 .grid {
   display: grid;
-  gap: var(--space-6);
+  gap: var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -30,6 +26,29 @@
   }
 }
 
+/* Een ghost-knop: de primaire actie van de pagina zit elders. */
 .more {
   margin: var(--space-8) 0 0;
+
+  a {
+    display: inline-block;
+    padding: 9px 14px;
+    margin-left: -14px;
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color var(--duration-base) var(--ease);
+
+    &::after {
+      content: ' →';
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--color-text);
+    }
+  }
 }
