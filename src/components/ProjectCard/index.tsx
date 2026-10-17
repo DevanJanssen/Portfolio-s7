@@ -1,60 +1,55 @@
+// Projectkaart in de geest van 21st.dev "Image Card" (neobrutalism, @ekmas):
+// dikke rand, harde offset-schaduw, beeld boven/naast een tekstblok. Zelf
+// gebouwd op de tokens (de broncode lag achter de dagelijkse 21st-limiet).
 import Link from 'next/link'
 
-import Media from '@/components/Media'
-import { cn } from '@/utilities/cn'
-import type { Project } from '@/payload-types'
-import { projectContextLabel, projectTechnologies } from '@/utilities/projectMeta'
-import { projectPath } from '@/utilities/projectPath'
+import type { Project } from '@/content/types'
+import { ImageFrame } from '@/components/ImageFrame'
+import { phClass } from '@/lib/ph'
+
 import styles from './index.module.scss'
 
-type Props = {
+interface Props {
   project: Project
+  index: number
 }
 
-/** How many technologies fit on a card before it turns into a wall of chips. */
-const MAX_VISIBLE_TECH = 4
-
-export const ProjectCard = ({ project }: Props) => {
-  const href = projectPath(project.slug)
-  const meta = projectContextLabel(project)
-  const technologies = projectTechnologies(project)
-  const visibleTech = technologies.slice(0, MAX_VISIBLE_TECH)
-  const hiddenTechCount = technologies.length - visibleTech.length
+export const ProjectCard = ({ project, index }: Props) => {
+  const number = String(index + 1).padStart(2, '0')
 
   return (
-    <article className={cn(styles.card, project.featured && styles.featured)}>
-      <Link className={styles.link} href={href}>
-        {project.cover && typeof project.cover === 'object' ? (
-          <Media
-            className={styles.cover}
-            resource={project.cover}
-            sizes="(min-width: 1024px) 30vw, 100vw"
-          />
-        ) : (
-          <div aria-hidden className={styles.placeholder}>
-            <span className={styles.placeholderText}>~/{project.slug}</span>
-          </div>
-        )}
+    <article className={styles.card} data-reveal data-flip={index % 2 === 1 ? '' : undefined}>
+      <div className={styles.media} data-tone={project.tone}>
+        <span className={styles.number} aria-hidden="true">
+          {number}
+        </span>
+        <ImageFrame image={project.cover} className={styles.image} />
+      </div>
 
-        <div className={styles.body}>
-          {meta ? <p className={styles.meta}>{meta}</p> : null}
-          <h3 className={styles.title}>{project.title}</h3>
-          {project.tagline ? <p className={styles.summary}>{project.tagline}</p> : null}
+      <div className={styles.body}>
+        <ul className={styles.tags} aria-label="Tags">
+          {project.tags.map((tag) => (
+            <li key={tag} className={phClass(tag, styles.tag)}>
+              {tag}
+            </li>
+          ))}
+        </ul>
 
-          {visibleTech.length > 0 ? (
-            <ul className={styles.stack}>
-              {visibleTech.map((technology) => (
-                <li className={styles.chip} key={technology.id}>
-                  {technology.name}
-                </li>
-              ))}
-              {hiddenTechCount > 0 ? <li className={styles.chip}>+{hiddenTechCount}</li> : null}
-            </ul>
-          ) : null}
-        </div>
-      </Link>
+        <h3 className={styles.title}>
+          <Link className={styles.link} href={`/projects/${project.slug}/`}>
+            {project.title}
+          </Link>
+        </h3>
+
+        <p className={phClass(project.tagline, styles.tagline)}>{project.tagline}</p>
+
+        <span className={styles.more} aria-hidden="true">
+          Read the case
+          <svg width="28" height="16" viewBox="0 0 28 16">
+            <path d="M0 8h25M18 1l7 7-7 7" fill="none" stroke="currentColor" strokeWidth="2.5" />
+          </svg>
+        </span>
+      </div>
     </article>
   )
 }
-
-export default ProjectCard

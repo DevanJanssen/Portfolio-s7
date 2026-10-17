@@ -1,23 +1,12 @@
 import type { MetadataRoute } from 'next'
 
-import { getServerSideURL } from '@/utilities/getURL'
+import { site } from '@/content/site'
 
-// Staat in `app/` en niet in `app/(frontend)/`: vanuit een routegroep pikt Next
-// dit bestand niet op, en dan levert de site stilzwijgend geen robots.txt.
+export const dynamic = 'force-static'
 
-const robots = (): MetadataRoute.Robots => {
-  const baseURL = getServerSideURL()
-
-  // Een acceptatie- of previewomgeving hoort niet in de index. Alles wat niet de
-  // productie-URL is, wordt hier dichtgezet.
-  const isProduction = process.env.ROBOTS_ALLOW_INDEXING === 'true'
-
-  return {
-    rules: isProduction
-      ? { userAgent: '*', allow: '/', disallow: ['/admin', '/api'] }
-      : { userAgent: '*', disallow: '/' },
-    sitemap: `${baseURL}/sitemap.xml`,
-  }
-}
+const robots = (): MetadataRoute.Robots => ({
+  rules: { userAgent: '*', allow: '/' },
+  sitemap: `${site.url}/sitemap.xml`,
+})
 
 export default robots

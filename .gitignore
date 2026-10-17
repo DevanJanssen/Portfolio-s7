@@ -5,9 +5,7 @@ node_modules
 .env
 .env.local
 .next
+out
 next-env.d.ts
 build
 dist
-
-# Payload's lokale uploadmap (alleen in gebruik zonder S3)
-public/media/

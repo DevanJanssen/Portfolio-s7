@@ -1,0 +1,170 @@
+@use 'styles/breakpoints' as bp;
+
+.hero {
+  --block-w: min(30vw, 26rem);
+  position: relative;
+  overflow: hidden;
+  border-bottom: var(--line) solid var(--color-border);
+  min-height: calc(100svh - var(--nav-height));
+  display: flex;
+}
+
+/* Zichtbaar kolommengrid — 4 kolommen mobiel, 12 vanaf tablet. */
+.grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  --cols: 4;
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--color-border) 12%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: calc(100% / var(--cols)) 100%;
+
+  @include bp.md {
+    --cols: 12;
+  }
+}
+
+.block {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 0;
+  width: var(--block-w);
+  height: 62%;
+  background: var(--color-primary);
+  border: var(--line) solid var(--color-border);
+  border-bottom: 0;
+  display: none;
+
+  @include bp.md {
+    display: block;
+  }
+}
+
+.inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-xl);
+  padding-block: var(--space-xl) var(--space-xl);
+}
+
+.eyebrow {
+  align-self: flex-start;
+  padding: var(--space-xs) var(--space-sm);
+  border: var(--line) solid var(--color-border);
+  background: var(--color-surface);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: var(--text-display);
+  font-weight: 900;
+  line-height: 0.86;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.04em;
+}
+
+.line {
+  display: block;
+}
+
+.mask:nth-child(2) .line {
+  @include bp.md {
+    padding-left: 1.2ch;
+  }
+}
+
+.bottom {
+  display: grid;
+  gap: var(--space-xl);
+  align-items: end;
+
+  @include bp.md {
+    max-width: calc(100% - var(--block-w) - var(--space-lg));
+  }
+
+  @include bp.lg {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.intro {
+  max-width: var(--measure);
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border: var(--line) solid var(--color-border);
+  font-size: var(--text-lg);
+  line-height: 1.45;
+}
+
+.index {
+  border: var(--line) solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.indexHeading {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: var(--line) solid var(--color-border);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.indexList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li + li {
+    border-top: var(--line) solid var(--color-border);
+  }
+}
+
+.indexLink {
+  display: flex;
+  gap: var(--space-md);
+  align-items: baseline;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: var(--text-lg);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background var(--dur-fast) var(--ease-out);
+
+  span {
+    min-width: 2.5ch;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-primary-text);
+  }
+
+  &:hover {
+    background: var(--color-primary);
+
+    span {
+      color: var(--color-on-primary);
+    }
+  }
+
+  &:focus-visible {
+    outline-offset: -6px;
+    outline-color: currentColor;
+  }
+}
