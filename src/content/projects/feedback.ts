@@ -14,7 +14,11 @@ export const feedback: Project = {
     { label: 'Team', value: ph('solo / team size') },
   ],
   tags: ['HCD'],
-  cover: { alt: ph('describe the cover image'), ratio: '4/3' },
+  cover: {
+    src: '/images/feedback/cover.webp',
+    alt: "Camera-based survey asking how strongly you agree with 'I prefer structured routines over spontaneous plans', answered by holding up five fingers while hand tracking highlights the hand.",
+    ratio: '16/9',
+  },
   chapters: [
     {
       kind: 'hook',
