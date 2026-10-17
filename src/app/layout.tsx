@@ -3,14 +3,16 @@ import { Archivo, Space_Grotesk } from 'next/font/google'
 import type { ReactNode } from 'react'
 
 import { Footer } from '@/components/Footer'
+import { Cursor } from '@/components/motion/Cursor'
 import { Nav } from '@/components/Nav'
 import { site } from '@/content/site'
 
 import './globals.scss'
 
+// Variabel (gewicht + breedte): de koppen spelen met beide assen.
 const archivo = Archivo({
   subsets: ['latin'],
-  weight: ['700', '800', '900'],
+  axes: ['wdth'],
   variable: '--font-archivo',
   display: 'swap',
 })
@@ -29,9 +31,9 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  // Meta-tag: kan geen CSS-variabele zijn; houd gelijk aan --raw-paper.
-  themeColor: '#f5f2eb',
-  colorScheme: 'light',
+  // Meta-tag: kan geen CSS-variabele zijn; houd gelijk aan --raw-ink.
+  themeColor: '#0a0a0a',
+  colorScheme: 'dark',
 }
 
 const RootLayout = ({ children }: { children: ReactNode }) => (
@@ -43,6 +45,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
       <Nav />
       <main id="main">{children}</main>
       <Footer />
+      <Cursor />
     </body>
   </html>
 )

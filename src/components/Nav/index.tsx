@@ -1,11 +1,14 @@
 'use client'
 
-// Gebaseerd op 21st.dev "Navbar 1" (@preetsuthar17): balk met logo, links en
-// CTA, en op mobiel een menu dat over het hele scherm schuift. Omgezet naar
-// SCSS-modules en design tokens, zonder motion/lucide, met toetsenbord- en
-// focusafhandeling erbij.
+// Gebaseerd op 21st.dev "Navbar 1" (@preetsuthar17): zwevende pil met logo,
+// links en CTA, en op mobiel een menu dat over het hele scherm schuift. Omgezet
+// naar SCSS-modules en design tokens, GSAP-magneet in plaats van motion, met
+// toetsenbord- en focusafhandeling erbij.
 import Link from 'next/link'
+import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+
+import { Magnetic } from '@/components/motion/Magnetic'
 
 import styles from './index.module.scss'
 
@@ -56,13 +59,17 @@ export const Nav = () => {
 
         <nav className={styles.desktop} aria-label="Main">
           {links.map((link) => (
-            <Link key={link.href} className={styles.link} href={link.href}>
-              {link.label}
-            </Link>
+            <Magnetic key={link.href} strength={0.3}>
+              <Link className={styles.link} href={link.href}>
+                {link.label}
+              </Link>
+            </Magnetic>
           ))}
-          <Link className={styles.cta} href="/#contact">
-            Contact
-          </Link>
+          <Magnetic strength={0.4}>
+            <Link className={styles.cta} href="/#contact">
+              Contact
+            </Link>
+          </Magnetic>
         </nav>
 
         <button
@@ -95,7 +102,7 @@ export const Nav = () => {
         <nav aria-label="Mobile">
           <ul className={styles.panelList}>
             {[...links, { label: 'Contact', href: '/#contact' }].map((link, index) => (
-              <li key={link.href}>
+              <li key={link.href} style={{ '--i': index } as React.CSSProperties}>
                 <Link
                   className={styles.panelLink}
                   href={link.href}

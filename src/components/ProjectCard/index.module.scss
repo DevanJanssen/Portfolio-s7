@@ -1,14 +1,11 @@
 @use 'styles/breakpoints' as bp;
 
 .card {
-  position: relative;
   display: grid;
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
-  border: var(--line) solid var(--color-border);
-  box-shadow: var(--shadow-block);
-  transition:
-    transform var(--dur-base) var(--ease-out),
-    box-shadow var(--dur-base) var(--ease-out);
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow var(--dur-slow) var(--ease-out);
 
   @include bp.md {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
@@ -18,61 +15,61 @@
 
       .media {
         order: 2;
-        border-right: 0;
-        border-left: var(--line) solid var(--color-border);
       }
     }
   }
 
-  /* Hele kaart klikbaar, maar met één echte link (de titel) voor screenreaders. */
-  &:hover,
+  &[data-hover],
   &:focus-within {
-    transform: translate(-4px, -4px);
-    box-shadow: 10px 10px 0 0 var(--color-border);
+    box-shadow: var(--shadow-lift);
   }
 
   &:focus-within {
     outline: var(--line-bold) solid var(--color-focus);
     outline-offset: 4px;
   }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
 }
 
 .media {
   position: relative;
+  overflow: hidden;
   padding: var(--space-xl) var(--space-md) var(--space-md);
-  border-bottom: var(--line) solid var(--color-border);
+  border-radius: calc(var(--radius-lg) - 0.5rem);
+  margin: 0.5rem;
 
   @include bp.md {
-    padding: var(--space-xl);
-    border-bottom: 0;
-    border-right: var(--line) solid var(--color-border);
+    padding: var(--space-2xl) var(--space-xl) var(--space-xl);
   }
 }
 
 .number {
   position: absolute;
-  top: var(--space-sm);
+  top: var(--space-md);
   left: var(--space-md);
   z-index: 1;
   font-family: var(--font-heading);
   font-weight: 900;
   font-size: var(--text-xl);
   line-height: 1;
+
+  @include bp.md {
+    left: var(--space-xl);
+  }
 }
 
-.image {
-  position: relative;
+.depth {
+  transition: scale var(--dur-slow) var(--ease-out);
+
+  .card[data-hover] & {
+    scale: 1.03;
+  }
 }
 
 .body {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
-  padding: var(--space-md);
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
 
   @include bp.md {
     padding: var(--space-xl);
@@ -91,16 +88,24 @@
 
 .tag {
   padding: var(--space-xs) var(--space-sm);
-  border: var(--line) solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-background);
   font-size: var(--text-sm);
   font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 
 .title {
   font-size: var(--text-2xl);
   text-transform: uppercase;
+  transition: font-variation-settings var(--dur-slow) var(--ease-out);
+
+  .card[data-hover] & {
+    font-variation-settings:
+      'wght' 900,
+      'wdth' 115;
+  }
 }
 
 .link {
@@ -110,6 +115,8 @@
     content: '';
     position: absolute;
     inset: 0;
+    z-index: 2;
+    border-radius: inherit;
   }
 
   &:focus-visible {
@@ -127,16 +134,35 @@
   align-items: center;
   gap: var(--space-sm);
   align-self: flex-start;
-  padding: var(--space-sm) var(--space-md);
+  padding: var(--space-xs) var(--space-xs) var(--space-xs) var(--space-md);
+  border-radius: var(--radius-pill);
   background: var(--color-inverse);
   color: var(--color-on-inverse);
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
   font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
 
-  .card:hover & {
-    background: var(--color-primary);
-    color: var(--color-on-primary);
+.arrow {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  transition: rotate var(--dur-slow) var(--ease-spring);
+
+  .card[data-hover] & {
+    rotate: -45deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow,
+  .depth,
+  .title {
+    transition: none;
   }
 }

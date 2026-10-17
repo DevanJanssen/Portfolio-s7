@@ -6,7 +6,7 @@ export const feedback: Project = {
   slug: 'feedback',
   title: 'Feedback',
   tagline: ph('one-line hook for the project card'),
-  tone: 'ink',
+  tone: 'charcoal',
   meta: [
     { label: 'Course', value: 'Semester 7 — Human Centered Design' },
     { label: 'Role', value: ph('your role') },
@@ -38,7 +38,7 @@ export const feedback: Project = {
     {
       kind: 'process',
       label: 'The journey',
-      tone: 'paper',
+      tone: 'charcoal',
       heading: ph('how did you get from problem to solution?'),
       body: [ph('a short overview of your approach.')],
       steps: [
@@ -54,7 +54,7 @@ export const feedback: Project = {
     {
       kind: 'solution',
       label: 'The solution',
-      tone: 'cyan',
+      tone: 'deep',
       heading: ph('what did you make?'),
       body: [
         ph('describe the final design and the key decisions behind it.'),
@@ -65,7 +65,7 @@ export const feedback: Project = {
     {
       kind: 'result',
       label: 'The result',
-      tone: 'tint',
+      tone: 'blush',
       heading: ph('what happened, and what did you learn?'),
       body: [
         ph('outcome: feedback, test results, grade or impact.'),

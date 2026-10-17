@@ -1,10 +1,11 @@
-// Projectkaart in de geest van 21st.dev "Image Card" (neobrutalism, @ekmas):
-// dikke rand, harde offset-schaduw, beeld boven/naast een tekstblok. Zelf
-// gebouwd op de tokens (de broncode lag achter de dagelijkse 21st-limiet).
+// Projectkaart: kantelt in 3D op de cursor (Tilt, naar 21st.dev "Optimized
+// Tilt Card"), het beeld ligt dieper en schuift tegen de beweging in, en de
+// cursor wordt een "View case"-schijf. Op touch en bij reduced motion: stil.
 import Link from 'next/link'
 
-import type { Project } from '@/content/types'
 import { ImageFrame } from '@/components/ImageFrame'
+import { Tilt } from '@/components/motion/Tilt'
+import type { Project } from '@/content/types'
 import { phClass } from '@/lib/ph'
 
 import styles from './index.module.scss'
@@ -18,12 +19,20 @@ export const ProjectCard = ({ project, index }: Props) => {
   const number = String(index + 1).padStart(2, '0')
 
   return (
-    <article className={styles.card} data-reveal data-flip={index % 2 === 1 ? '' : undefined}>
+    <Tilt
+      className={styles.card}
+      max={5}
+      data-reveal=""
+      data-cursor="View case"
+      data-flip={index % 2 === 1 ? '' : undefined}
+    >
       <div className={styles.media} data-tone={project.tone}>
-        <span className={styles.number} aria-hidden="true">
+        <span className={styles.number} aria-hidden="true" data-depth="2.5">
           {number}
         </span>
-        <ImageFrame image={project.cover} className={styles.image} />
+        <div className={styles.depth} data-depth="-1.2">
+          <ImageFrame image={project.cover} className={styles.image} />
+        </div>
       </div>
 
       <div className={styles.body}>
@@ -45,11 +54,13 @@ export const ProjectCard = ({ project, index }: Props) => {
 
         <span className={styles.more} aria-hidden="true">
           Read the case
-          <svg width="28" height="16" viewBox="0 0 28 16">
-            <path d="M0 8h25M18 1l7 7-7 7" fill="none" stroke="currentColor" strokeWidth="2.5" />
-          </svg>
+          <span className={styles.arrow}>
+            <svg width="20" height="14" viewBox="0 0 20 14">
+              <path d="M0 7h17M11 1l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" />
+            </svg>
+          </span>
         </span>
       </div>
-    </article>
+    </Tilt>
   )
 }

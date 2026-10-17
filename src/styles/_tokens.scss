@@ -1,63 +1,54 @@
-// Editorial Brutalist — zie DESIGN.md en design-system/devan-janssen-portfolio/MASTER.md.
+// Editorial Kinetic — zwart en roze. Zie DESIGN.md.
 // Dit is het ENIGE bestand met hexwaardes. Componenten praten alleen in de
 // rol-variabelen hieronder. Elke tekst/achtergrond-combinatie is gecontroleerd
 // op minimaal 4.5:1 (zie DESIGN.md → Contrast).
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
-  /* Ruwe palette */
+  /* Ruwe palette: alleen zwart, wit-papier en roze. */
   --raw-ink: #0a0a0a;
+  --raw-charcoal: #1a1718;
   --raw-paper: #f5f2eb;
   --raw-white: #ffffff;
-  --raw-graphite: #4a4744;
+  --raw-muted: #b3aaae;
   --raw-pink: #ec4899;
+  --raw-pink-hot: #f472b6;
   --raw-pink-deep: #be185d;
-  --raw-pink-tint: #fce7f3;
-  --raw-cyan: #0891b2;
-  --raw-cyan-deep: #0e7490;
-  --raw-cyan-tint: #cffafe;
+  --raw-pink-blush: #fce7f3;
 
   /* Rollen */
-  --color-background: var(--raw-paper);
-  --color-surface: var(--raw-white);
-  --color-text: var(--raw-ink);
-  --color-text-muted: var(--raw-graphite);
-  --color-border: var(--raw-ink);
+  --color-background: var(--raw-ink);
+  --color-surface: var(--raw-charcoal);
+  --color-text: var(--raw-paper);
+  --color-text-muted: var(--raw-muted);
+  --color-border: var(--raw-paper);
   --color-primary: var(--raw-pink);
   --color-on-primary: var(--raw-ink);
-  --color-primary-text: var(--raw-pink-deep);
-  --color-accent: var(--raw-cyan);
-  --color-on-accent: var(--raw-ink);
-  --color-accent-text: var(--raw-cyan-deep);
-  --color-inverse: var(--raw-ink);
-  --color-on-inverse: var(--raw-paper);
-  --color-focus: var(--raw-cyan-deep);
-  --color-focus-on-dark: var(--raw-cyan-tint);
+  --color-primary-text: var(--raw-pink);
+  --color-inverse: var(--raw-paper);
+  --color-on-inverse: var(--raw-ink);
+  --color-focus: var(--raw-pink);
 
   /* Tonen: elke sectie/hoofdstuk kiest er één via [data-tone]. */
-  --tone-ink-bg: var(--raw-ink);
-  --tone-ink-fg: var(--raw-paper);
-  --tone-ink-accent: var(--raw-pink);
-  --tone-pink-bg: var(--raw-pink);
-  --tone-pink-fg: var(--raw-ink);
-  --tone-pink-accent: var(--raw-ink);
-  --tone-paper-bg: var(--raw-paper);
-  --tone-paper-fg: var(--raw-ink);
-  --tone-paper-accent: var(--raw-pink-deep);
-  --tone-cyan-bg: var(--raw-cyan);
-  --tone-cyan-fg: var(--raw-ink);
-  --tone-cyan-accent: var(--raw-ink);
-  --tone-tint-bg: var(--raw-pink-tint);
-  --tone-tint-fg: var(--raw-ink);
-  --tone-tint-accent: var(--raw-cyan-deep);
+  --tone-bg: var(--color-background);
+  --tone-fg: var(--color-text);
+  --tone-accent: var(--color-primary-text);
 
-  /* Lijnen: zichtbaar, nooit haarlijn. */
-  --line: 2px;
-  --line-bold: 4px;
-  --radius: 0px;
-  /* Harde offset-schaduw, geen blur. */
-  --shadow-block: 6px 6px 0 0 var(--color-border);
-  --shadow-block-sm: 4px 4px 0 0 var(--color-border);
+  /* Lijnen: dun en zacht; vorm komt uit vlakken en beweging, niet uit randen. */
+  --line: 1px;
+  --line-bold: 3px;
+  --hairline: color-mix(in srgb, var(--tone-fg) 14%, transparent);
+  --radius-sm: 0.75rem;
+  --radius: 1.25rem;
+  --radius-lg: 2rem;
+  --radius-pill: 999px;
+  --shadow-soft:
+    0 1px 0 color-mix(in srgb, var(--raw-white) 6%, transparent) inset,
+    0 18px 50px -18px color-mix(in srgb, var(--raw-ink) 80%, transparent);
+  --shadow-lift:
+    0 1px 0 color-mix(in srgb, var(--raw-white) 8%, transparent) inset,
+    0 40px 80px -24px color-mix(in srgb, var(--raw-pink) 35%, transparent);
+  --glass: color-mix(in srgb, var(--raw-charcoal) 62%, transparent);
 
   /* Ruimte — density 3/10 (spacious) uit MASTER.md */
   --space-xs: 0.25rem;
@@ -82,12 +73,13 @@
   --text-2xl: clamp(2rem, 4.5vw, 3.75rem);
   --text-display: clamp(3rem, 11vw, 10.5rem);
 
-  /* Beweging: snel en functioneel, nooit traag. */
   --dur-fast: 150ms;
   --dur-base: 220ms;
+  --dur-slow: 600ms;
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --nav-height: 4rem;
+  --nav-height: 4.5rem;
 }
 
 [data-tone] {
@@ -95,31 +87,32 @@
   color: var(--tone-fg);
 }
 [data-tone='ink'] {
-  --tone-bg: var(--tone-ink-bg);
-  --tone-fg: var(--tone-ink-fg);
-  --tone-accent: var(--tone-ink-accent);
-  --color-focus: var(--color-focus-on-dark);
-  --color-border: var(--tone-ink-fg);
+  --tone-bg: var(--raw-ink);
+  --tone-fg: var(--raw-paper);
+  --tone-accent: var(--raw-pink);
+  --color-focus: var(--raw-pink);
+}
+[data-tone='charcoal'] {
+  --tone-bg: var(--raw-charcoal);
+  --tone-fg: var(--raw-paper);
+  --tone-accent: var(--raw-pink-hot);
+  --color-focus: var(--raw-pink-hot);
 }
 [data-tone='pink'] {
-  --tone-bg: var(--tone-pink-bg);
-  --tone-fg: var(--tone-pink-fg);
-  --tone-accent: var(--tone-pink-accent);
+  --tone-bg: var(--raw-pink);
+  --tone-fg: var(--raw-ink);
+  --tone-accent: var(--raw-ink);
   --color-focus: var(--raw-ink);
 }
-[data-tone='paper'] {
-  --tone-bg: var(--tone-paper-bg);
-  --tone-fg: var(--tone-paper-fg);
-  --tone-accent: var(--tone-paper-accent);
+[data-tone='deep'] {
+  --tone-bg: var(--raw-pink-deep);
+  --tone-fg: var(--raw-paper);
+  --tone-accent: var(--raw-pink-blush);
+  --color-focus: var(--raw-pink-blush);
 }
-[data-tone='cyan'] {
-  --tone-bg: var(--tone-cyan-bg);
-  --tone-fg: var(--tone-cyan-fg);
-  --tone-accent: var(--tone-cyan-accent);
-  --color-focus: var(--raw-ink);
-}
-[data-tone='tint'] {
-  --tone-bg: var(--tone-tint-bg);
-  --tone-fg: var(--tone-tint-fg);
-  --tone-accent: var(--tone-tint-accent);
+[data-tone='blush'] {
+  --tone-bg: var(--raw-pink-blush);
+  --tone-fg: var(--raw-ink);
+  --tone-accent: var(--raw-pink-deep);
+  --color-focus: var(--raw-pink-deep);
 }

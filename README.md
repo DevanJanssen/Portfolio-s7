@@ -1,6 +1,6 @@
 # Portfolio — Devan Janssen
 
-Statische Next.js 15-site met drie scroll-gestuurde case studies. Geen CMS en geen
+Statische Next.js 15-site met drie scroll-gestuurde case studies en cursor-reactieve animaties. Geen CMS en geen
 database: alle content staat in getypte bestanden onder `src/content`.
 
 ## Snelstart
@@ -47,8 +47,8 @@ het toe aan de lijst in `index.ts`. De pagina `/projects/<slug>/` wordt automati
 
 ## Ontwerp
 
-Zie [DESIGN.md](DESIGN.md) (editorial brutalist: Archivo + Space Grotesk, roze + cyaan,
-0px hoeken) en de gegenereerde basis in
+Zie [DESIGN.md](DESIGN.md) (editorial kinetic: zwart + roze, variabele Archivo-koppen die
+op de cursor reageren, kantelende kaarten) en de gegenereerde basis in
 [`design-system/devan-janssen-portfolio/MASTER.md`](design-system/devan-janssen-portfolio/MASTER.md).
 Tokens: `src/styles/_tokens.scss`. Beweging: GSAP ScrollTrigger, met een volledig statische
 weergave onder `prefers-reduced-motion`.

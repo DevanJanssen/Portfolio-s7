@@ -14,6 +14,8 @@ export const MOTION_CONDITIONS = {
   desktop: '(min-width: 768px) and (prefers-reduced-motion: no-preference)',
   mobile: '(max-width: 767px) and (prefers-reduced-motion: no-preference)',
   reduce: '(prefers-reduced-motion: reduce)',
+  /** Muis/trackpad: alleen dan cursor-effecten (tilt, magneet, proximity). */
+  pointer: '(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)',
 } as const
 
 /**

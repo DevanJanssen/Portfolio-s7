@@ -4,7 +4,7 @@
  * en worden op de site zichtbaar gemarkeerd.
  */
 
-export type Tone = 'ink' | 'pink' | 'paper' | 'cyan' | 'tint'
+export type Tone = 'ink' | 'charcoal' | 'pink' | 'deep' | 'blush'
 
 export type ChapterKind = 'hook' | 'problem' | 'process' | 'solution' | 'result'
 

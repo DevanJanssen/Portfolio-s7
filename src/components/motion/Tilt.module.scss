@@ -1,0 +1,23 @@
+.tilt {
+  position: relative;
+  will-change: transform;
+}
+
+.glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle at var(--gx, 50%) var(--gy, 50%),
+    color-mix(in srgb, var(--raw-white) 45%, transparent),
+    transparent 55%
+  );
+  mix-blend-mode: soft-light;
+  transition: opacity var(--dur-slow) var(--ease-out);
+
+  .tilt[data-hover] & {
+    opacity: 1;
+  }
+}

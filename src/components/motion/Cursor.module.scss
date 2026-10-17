@@ -1,0 +1,68 @@
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+
+  &[data-visible='true'] {
+    opacity: 1;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid var(--raw-ink);
+    border-radius: 50%;
+    translate: -50% -50%;
+    transition:
+      width var(--dur-slow) var(--ease-spring),
+      height var(--dur-slow) var(--ease-spring),
+      background var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out);
+    mix-blend-mode: difference;
+    border-color: var(--raw-white);
+  }
+
+  &[data-state='link']::before {
+    width: 56px;
+    height: 56px;
+  }
+
+  &[data-state='label']::before {
+    width: 104px;
+    height: 104px;
+    background: var(--color-inverse);
+    border-color: var(--color-inverse);
+    mix-blend-mode: normal;
+  }
+}
+
+.label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  translate: -50% -50%;
+  color: var(--color-on-inverse);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  scale: 0.6;
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    scale var(--dur-slow) var(--ease-spring);
+
+  .cursor[data-state='label'] & {
+    opacity: 1;
+    scale: 1;
+  }
+}

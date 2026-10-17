@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import { Tilt } from '@/components/motion/Tilt'
 import { getNeighbours } from '@/content/projects'
 import { phClass } from '@/lib/ph'
 
@@ -9,27 +10,27 @@ export const ProjectNav = ({ slug }: { slug: string }) => {
   const { previous, next } = getNeighbours(slug)
 
   return (
-    <nav className={styles.nav} aria-label="More case studies">
+    <nav className={`container ${styles.nav}`} aria-label="More case studies">
       {[
         { project: previous, direction: 'Previous', rel: 'prev' },
         { project: next, direction: 'Next', rel: 'next' },
       ].map(({ project, direction, rel }) => (
-        <Link
+        <Tilt
           key={direction}
-          className={styles.link}
-          href={`/projects/${project.slug}/`}
-          rel={rel}
+          className={styles.card}
+          max={6}
           data-tone={project.tone}
           data-direction={direction.toLowerCase()}
+          data-cursor={direction === 'Next' ? 'Next →' : '← Prev'}
         >
-          <span className={styles.direction}>
-            {direction === 'Previous' ? '← ' : ''}
-            {direction} case
-            {direction === 'Next' ? ' →' : ''}
-          </span>
-          <span className={styles.title}>{project.title}</span>
+          <Link className={styles.link} href={`/projects/${project.slug}/`} rel={rel}>
+            <span className={styles.direction}>{direction} case</span>
+            <span className={styles.title} data-depth="1.5">
+              {project.title}
+            </span>
+          </Link>
           <span className={phClass(project.tagline, styles.tagline)}>{project.tagline}</span>
-        </Link>
+        </Tilt>
       ))}
     </nav>
   )

@@ -2,63 +2,83 @@
 
 .article {
   position: relative;
-}
+  padding-top: var(--nav-height);
 
-/* ---------- Voortgang ---------- */
-
-.progress {
-  position: sticky;
-  top: var(--nav-height);
-  z-index: 40;
-  border-bottom: var(--line) solid var(--color-border);
-  transition:
-    background var(--dur-base) var(--ease-out),
-    color var(--dur-base) var(--ease-out);
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
+  /* Met beweging vloeit de achtergrond mee met het actieve hoofdstuk. */
+  &[data-fluid] {
+    transition:
+      background-color 600ms var(--ease-out),
+      color 600ms var(--ease-out);
   }
 }
 
+/* ---------- Voortgang: zwevende pil ---------- */
+
+.progress {
+  position: sticky;
+  top: calc(var(--nav-height) + var(--space-xs));
+  z-index: 40;
+  width: fit-content;
+  max-width: calc(100% - 2 * var(--gutter));
+  margin-inline: auto;
+  padding: 0.3rem;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-soft);
+  transition:
+    background-color var(--dur-slow) var(--ease-out),
+    color var(--dur-slow) var(--ease-out);
+}
+
 .progressBar {
-  height: 6px;
-  background: var(--tone-fg);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--tone-accent);
   transform-origin: left;
   transform: scaleX(var(--progress, 0));
 }
 
 .progressChapters {
   display: flex;
+  gap: 2px;
   margin: 0;
   padding: 0;
   list-style: none;
-
-  li {
-    flex: 1 1 0;
-    min-width: 0;
-
-    & + li {
-      border-left: var(--line) solid var(--color-border);
-    }
-  }
 
   a {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-sm);
-    min-height: 44px;
+    min-width: 44px;
+    min-height: 40px;
     padding-inline: var(--space-sm);
+    border-radius: var(--radius-pill);
     font-size: var(--text-sm);
     font-weight: 700;
+    font-variant-numeric: tabular-nums;
     text-decoration: none;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     white-space: nowrap;
+    transition:
+      background-color var(--dur-base) var(--ease-out),
+      color var(--dur-base) var(--ease-out);
+
+    &:hover {
+      background: var(--hairline);
+    }
 
     &:focus-visible {
-      outline-offset: -5px;
+      outline-offset: -3px;
       outline-color: currentColor;
+    }
+
+    @include bp.md {
+      padding-inline: var(--space-md);
     }
   }
 
@@ -69,7 +89,7 @@
 }
 
 .progressLabel {
-  /* Mobiel alleen het nummer zichtbaar; de naam blijft voor screenreaders. */
+  /* Mobiel alleen het nummer; de naam blijft voor screenreaders. */
   position: absolute;
   width: 1px;
   height: 1px;
@@ -77,18 +97,29 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
 
-  @include bp.md {
+  @include bp.lg {
     position: static;
     width: auto;
     height: auto;
     clip: auto;
-    text-overflow: ellipsis;
+  }
+
+  li[data-active='true'] & {
+    @include bp.md {
+      position: static;
+      width: auto;
+      height: auto;
+      clip: auto;
+    }
   }
 }
 
 /* ---------- Gedeeld ---------- */
 
 .kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
   font-size: var(--text-sm);
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -96,10 +127,16 @@
   color: var(--tone-accent);
 }
 
+.kickerDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
 /* ---------- Intro (pin) ---------- */
 
 .hook {
-  border-bottom: var(--line) solid var(--color-border);
   overflow: hidden;
 }
 
@@ -111,7 +148,7 @@
   @include bp.md {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     gap: var(--space-xl);
-    min-height: calc(100svh - var(--nav-height) - 52px);
+    min-height: calc(100svh - var(--nav-height) - 60px);
     align-content: start;
   }
 }
@@ -125,14 +162,15 @@
   }
 }
 
-.hookTitle {
-  font-size: var(--text-display);
-  font-weight: 900;
-  line-height: 0.86;
-  letter-spacing: -0.05em;
-  text-transform: uppercase;
+.hookTitleWrap {
   transform-origin: left bottom;
-  overflow-wrap: anywhere;
+}
+
+.hookTitle {
+  font-size: clamp(3rem, 12vw, 11rem);
+  line-height: 0.86;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
 }
 
 .hookHeading {
@@ -146,9 +184,13 @@
 .meta {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px;
   margin: 0;
-  border: var(--line) solid var(--color-border);
+  padding: 2px;
+  border-radius: var(--radius);
+  background: var(--hairline);
   align-self: start;
+  overflow: hidden;
 
   @include bp.md {
     grid-column: 2;
@@ -158,15 +200,8 @@
 
 .metaItem {
   padding: var(--space-sm) var(--space-md);
-  border-bottom: var(--line) solid var(--color-border);
-
-  &:nth-child(odd) {
-    border-right: var(--line) solid var(--color-border);
-  }
-
-  &:nth-last-child(-n + 2) {
-    border-bottom: 0;
-  }
+  background: var(--tone-bg);
+  border-radius: calc(var(--radius) - 2px);
 
   dt {
     font-size: var(--text-sm);
@@ -199,8 +234,8 @@
 /* ---------- Hoofdstukken ---------- */
 
 .chapter {
+  position: relative;
   padding-block: var(--space-2xl) var(--space-3xl);
-  border-bottom: var(--line) solid var(--color-border);
   overflow: hidden;
 
   @include bp.md {
@@ -225,13 +260,15 @@
 }
 
 .chapterNumber {
+  display: inline-block;
   font-family: var(--font-heading);
   font-weight: 900;
   font-size: clamp(5rem, 16vw, 13rem);
   line-height: 0.8;
   letter-spacing: -0.06em;
   color: transparent;
-  -webkit-text-stroke: var(--line) var(--tone-fg);
+  -webkit-text-stroke: 1.5px var(--tone-accent);
+  transform-origin: left bottom;
 }
 
 .chapterBody {
@@ -245,6 +282,18 @@
   font-size: var(--text-2xl);
 }
 
+.word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+
+  > span {
+    display: inline-block;
+  }
+}
+
 .text {
   max-width: var(--measure);
   font-size: var(--text-lg);
@@ -252,32 +301,33 @@
 }
 
 .quote {
+  position: relative;
   margin: var(--space-md) 0 0;
-  padding: var(--space-md) var(--space-lg);
-  border: var(--line) solid var(--color-border);
-  border-left-width: 12px;
-  background: var(--tone-bg);
+  padding: var(--space-lg) var(--space-lg) var(--space-lg) var(--space-2xl);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--tone-fg) 8%, transparent);
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: var(--text-xl);
   line-height: 1.2;
 
-  p::before {
+  &::before {
     content: '“';
-  }
-
-  p::after {
-    content: '”';
+    position: absolute;
+    left: var(--space-md);
+    top: var(--space-sm);
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--tone-accent);
   }
 }
 
 .steps {
   display: grid;
-  gap: 0;
+  gap: var(--space-md);
   margin: var(--space-2xl) 0 0;
   padding: 0;
   list-style: none;
-  border: var(--line) solid var(--color-border);
 
   @include bp.md {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -288,17 +338,11 @@
   display: grid;
   gap: var(--space-sm);
   align-content: start;
+  height: 100%;
   padding: var(--space-lg) var(--space-md);
-  background: var(--color-surface);
-
-  & + & {
-    border-top: var(--line) solid var(--color-border);
-
-    @include bp.md {
-      border-top: 0;
-      border-left: var(--line) solid var(--color-border);
-    }
-  }
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--tone-fg) 7%, transparent);
+  box-shadow: inset 0 0 0 1px var(--hairline);
 }
 
 .stepNumber {
@@ -306,7 +350,7 @@
   font-weight: 900;
   font-size: var(--text-2xl);
   line-height: 1;
-  color: var(--color-primary-text);
+  color: var(--tone-accent);
 }
 
 .stepTitle {
@@ -327,4 +371,29 @@
       }
     }
   }
+}
+
+.mediaTilt {
+  border-radius: var(--radius);
+}
+
+.end {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-2xl);
+}
+
+.top {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-pill);
+  background: var(--tone-fg);
+  color: var(--tone-bg);
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: var(--text-sm);
 }

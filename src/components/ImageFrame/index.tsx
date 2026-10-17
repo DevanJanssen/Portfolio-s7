@@ -21,7 +21,7 @@ export const ImageFrame = ({ image, parallax, priority, className }: Props) => {
 
   return (
     <figure className={[styles.figure, className].filter(Boolean).join(' ')}>
-      <div className={styles.frame} style={{ aspectRatio: ratio }}>
+      <div className={styles.frame} style={{ aspectRatio: ratio }} data-frame>
         <div className={styles.inner} data-parallax={parallax ? '' : undefined}>
           {image.src ? (
             // Statische export: geen image-optimizer, dus gewoon <img>.
