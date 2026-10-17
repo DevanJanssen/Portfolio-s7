@@ -1,0 +1,22 @@
+.text {
+  font-family: var(--font-heading);
+  font-variation-settings:
+    'wght' 900,
+    'wdth' 88;
+}
+
+.line {
+  display: block;
+}
+
+/* Woorden breken niet midden in; tussen woorden mag de regel wel omslaan. */
+.word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.letter {
+  display: inline-block;
+  font-variation-settings: inherit;
+  will-change: font-variation-settings;
+}

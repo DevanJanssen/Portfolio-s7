@@ -1,60 +1,66 @@
+// Projectkaart: kantelt in 3D op de cursor (Tilt, naar 21st.dev "Optimized
+// Tilt Card"), het beeld ligt dieper en schuift tegen de beweging in, en de
+// cursor wordt een "View case"-schijf. Op touch en bij reduced motion: stil.
 import Link from 'next/link'
 
-import Media from '@/components/Media'
-import { cn } from '@/utilities/cn'
-import type { Project } from '@/payload-types'
-import { projectContextLabel, projectTechnologies } from '@/utilities/projectMeta'
-import { projectPath } from '@/utilities/projectPath'
+import { ImageFrame } from '@/components/ImageFrame'
+import { Tilt } from '@/components/motion/Tilt'
+import type { Project } from '@/content/types'
+import { phClass } from '@/lib/ph'
+
 import styles from './index.module.scss'
 
-type Props = {
+interface Props {
   project: Project
+  index: number
 }
 
-/** How many technologies fit on a card before it turns into a wall of chips. */
-const MAX_VISIBLE_TECH = 4
-
-export const ProjectCard = ({ project }: Props) => {
-  const href = projectPath(project.slug)
-  const meta = projectContextLabel(project)
-  const technologies = projectTechnologies(project)
-  const visibleTech = technologies.slice(0, MAX_VISIBLE_TECH)
-  const hiddenTechCount = technologies.length - visibleTech.length
+export const ProjectCard = ({ project, index }: Props) => {
+  const number = String(index + 1).padStart(2, '0')
 
   return (
-    <article className={cn(styles.card, project.featured && styles.featured)}>
-      <Link className={styles.link} href={href}>
-        {project.cover && typeof project.cover === 'object' ? (
-          <Media
-            className={styles.cover}
-            resource={project.cover}
-            sizes="(min-width: 1024px) 30vw, 100vw"
-          />
-        ) : (
-          <div aria-hidden className={styles.placeholder}>
-            <span className={styles.placeholderText}>~/{project.slug}</span>
-          </div>
-        )}
-
-        <div className={styles.body}>
-          {meta ? <p className={styles.meta}>{meta}</p> : null}
-          <h3 className={styles.title}>{project.title}</h3>
-          {project.tagline ? <p className={styles.summary}>{project.tagline}</p> : null}
-
-          {visibleTech.length > 0 ? (
-            <ul className={styles.stack}>
-              {visibleTech.map((technology) => (
-                <li className={styles.chip} key={technology.id}>
-                  {technology.name}
-                </li>
-              ))}
-              {hiddenTechCount > 0 ? <li className={styles.chip}>+{hiddenTechCount}</li> : null}
-            </ul>
-          ) : null}
+    <Tilt
+      className={styles.card}
+      max={5}
+      data-reveal=""
+      data-cursor="View case"
+      data-flip={index % 2 === 1 ? '' : undefined}
+    >
+      <div className={styles.media} data-tone={project.tone}>
+        <span className={styles.number} aria-hidden="true" data-depth="2.5">
+          {number}
+        </span>
+        <div className={styles.depth} data-depth="-1.2">
+          <ImageFrame image={project.cover} className={styles.image} />
         </div>
-      </Link>
-    </article>
+      </div>
+
+      <div className={styles.body}>
+        <ul className={styles.tags} aria-label="Tags">
+          {project.tags.map((tag) => (
+            <li key={tag} className={phClass(tag, styles.tag)}>
+              {tag}
+            </li>
+          ))}
+        </ul>
+
+        <h3 className={styles.title}>
+          <Link className={styles.link} href={`/projects/${project.slug}/`}>
+            {project.title}
+          </Link>
+        </h3>
+
+        <p className={phClass(project.tagline, styles.tagline)}>{project.tagline}</p>
+
+        <span className={styles.more} aria-hidden="true">
+          Read the case
+          <span className={styles.arrow}>
+            <svg width="20" height="14" viewBox="0 0 20 14">
+              <path d="M0 7h17M11 1l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" />
+            </svg>
+          </span>
+        </span>
+      </div>
+    </Tilt>
   )
 }
-
-export default ProjectCard

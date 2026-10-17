@@ -30,13 +30,8 @@ const eslintConfig = [
     },
   },
   {
-    // Gegenereerd door Payload; migraties zijn bewust letterlijke SQL.
-    ignores: [
-      '.next/**',
-      'src/migrations/**',
-      'src/payload-types.ts',
-      'src/app/(payload)/admin/importMap.js',
-    ],
+    // Build-output.
+    ignores: ['.next/**', 'out/**', 'design-system/**'],
   },
 ]
 

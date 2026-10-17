@@ -1,66 +1,118 @@
-// Graphite Shell — zie DESIGN.md in de root. Elke kleur, radius en schaduw in
-// de site komt hiervandaan; voeg hier niets toe zonder het ook daar vast te
-// leggen. Het accent is roze in plaats van het salie uit het origineel.
+// Editorial Kinetic — zwart en roze. Zie DESIGN.md.
+// Dit is het ENIGE bestand met hexwaardes. Componenten praten alleen in de
+// rol-variabelen hieronder. Elke tekst/achtergrond-combinatie is gecontroleerd
+// op minimaal 4.5:1 (zie DESIGN.md → Contrast).
 :root {
   color-scheme: dark;
 
-  /* Oppervlakken: warm grafiet, nooit zwart, nooit koel grijs. */
-  --color-shell: #161513;
-  --color-pane: #1f1e1b;
-  --color-pane-lift: #262420;
+  /* Ruwe palette: alleen zwart, wit-papier en roze. */
+  --raw-ink: #0a0a0a;
+  --raw-charcoal: #1a1718;
+  --raw-paper: #f5f2eb;
+  --raw-white: #ffffff;
+  --raw-muted: #b3aaae;
+  --raw-pink: #ec4899;
+  --raw-pink-hot: #f472b6;
+  --raw-pink-deep: #be185d;
+  --raw-pink-blush: #fce7f3;
 
-  /* Inkt. */
-  --color-bone: #e8e6df;
-  --color-bone-55: #8a8780;
+  /* Rollen */
+  --color-background: var(--raw-ink);
+  --color-surface: var(--raw-charcoal);
+  --color-text: var(--raw-paper);
+  --color-text-muted: var(--raw-muted);
+  --color-border: var(--raw-paper);
+  --color-primary: var(--raw-pink);
+  --color-on-primary: var(--raw-ink);
+  --color-primary-text: var(--raw-pink);
+  --color-inverse: var(--raw-paper);
+  --color-on-inverse: var(--raw-ink);
+  --color-focus: var(--raw-pink);
 
-  /* Het ene accent: primaire knop, actieve tab, uitgelichte kaart. */
-  --color-accent: #f0b8ca;
-  --color-accent-soft: rgba(240, 184, 202, 0.14);
+  /* Tonen: elke sectie/hoofdstuk kiest er één via [data-tone]. */
+  --tone-bg: var(--color-background);
+  --tone-fg: var(--color-text);
+  --tone-accent: var(--color-primary-text);
 
-  /* Haarlijnen. */
-  --hairline: rgba(232, 230, 223, 0.08);
-  --hairline-10: rgba(232, 230, 223, 0.1);
-  --hairline-16: rgba(232, 230, 223, 0.16);
-  --hairline-strong: rgba(232, 230, 223, 0.5);
+  /* Lijnen: dun en zacht; vorm komt uit vlakken en beweging, niet uit randen. */
+  --line: 1px;
+  --line-bold: 3px;
+  --hairline: color-mix(in srgb, var(--tone-fg) 14%, transparent);
+  --radius-sm: 0.75rem;
+  --radius: 1.25rem;
+  --radius-lg: 2rem;
+  --radius-pill: 999px;
+  --shadow-soft:
+    0 1px 0 color-mix(in srgb, var(--raw-white) 6%, transparent) inset,
+    0 18px 50px -18px color-mix(in srgb, var(--raw-ink) 80%, transparent);
+  --shadow-lift:
+    0 1px 0 color-mix(in srgb, var(--raw-white) 8%, transparent) inset,
+    0 40px 80px -24px color-mix(in srgb, var(--raw-pink) 35%, transparent);
+  --glass: color-mix(in srgb, var(--raw-charcoal) 62%, transparent);
 
-  /* Rollen — de rest van de code praat alleen in deze namen. */
-  --color-text: var(--color-bone);
-  --color-text-muted: var(--color-bone-55);
-  --color-background: var(--color-shell);
-  --color-surface: var(--color-pane);
-  --color-surface-dark: var(--color-pane-lift);
-  --color-on-dark: var(--color-bone);
-  --color-primary: var(--color-accent);
-  --color-primary-contrast: var(--color-shell);
-  --color-border: var(--hairline);
+  /* Ruimte — density 3/10 (spacious) uit MASTER.md */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+  --gutter: clamp(1rem, 4vw, 3rem);
 
-  --radius-sm: 3px;
-  --radius-md: 5px;
-  --radius-lg: 8px;
-  --radius-pill: 9999px;
+  --container: 90rem;
+  --measure: 38rem;
 
-  --shadow-card: rgba(0, 0, 0, 0.35) 0 1px 0 inset, rgba(0, 0, 0, 0.4) 0 1px 2px;
+  --font-heading: var(--font-archivo), 'Arial Narrow', Arial, sans-serif;
+  --font-body: var(--font-space-grotesk), system-ui, sans-serif;
 
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
-  --space-20: 5rem;
+  --text-sm: 0.875rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: clamp(1.5rem, 2.4vw, 2rem);
+  --text-2xl: clamp(2rem, 4.5vw, 3.75rem);
+  --text-display: clamp(3rem, 11vw, 10.5rem);
 
-  --container-width: 72rem;
-  --container-narrow: 40rem;
+  --dur-fast: 150ms;
+  --dur-base: 220ms;
+  --dur-slow: 600ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --font-body: var(--font-inter), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, 'SF Mono', Menlo, monospace;
+  --nav-height: 4.5rem;
+}
 
-  /* Beweging: een cursor, aan of uit. */
-  --duration-fast: 60ms;
-  --duration-base: 120ms;
-  --duration-slow: 200ms;
-  --ease: linear;
+[data-tone] {
+  background: var(--tone-bg);
+  color: var(--tone-fg);
+}
+[data-tone='ink'] {
+  --tone-bg: var(--raw-ink);
+  --tone-fg: var(--raw-paper);
+  --tone-accent: var(--raw-pink);
+  --color-focus: var(--raw-pink);
+}
+[data-tone='charcoal'] {
+  --tone-bg: var(--raw-charcoal);
+  --tone-fg: var(--raw-paper);
+  --tone-accent: var(--raw-pink-hot);
+  --color-focus: var(--raw-pink-hot);
+}
+[data-tone='pink'] {
+  --tone-bg: var(--raw-pink);
+  --tone-fg: var(--raw-ink);
+  --tone-accent: var(--raw-ink);
+  --color-focus: var(--raw-ink);
+}
+[data-tone='deep'] {
+  --tone-bg: var(--raw-pink-deep);
+  --tone-fg: var(--raw-paper);
+  --tone-accent: var(--raw-pink-blush);
+  --color-focus: var(--raw-pink-blush);
+}
+[data-tone='blush'] {
+  --tone-bg: var(--raw-pink-blush);
+  --tone-fg: var(--raw-ink);
+  --tone-accent: var(--raw-pink-deep);
+  --color-focus: var(--raw-pink-deep);
 }
