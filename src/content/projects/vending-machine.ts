@@ -14,7 +14,11 @@ export const vendingMachine: Project = {
     { label: 'Team', value: ph('solo / team size') },
   ],
   tags: [ph('tags, e.g. Branding')],
-  cover: { alt: ph('describe the cover image'), ratio: '4/3' },
+  cover: {
+    src: '/images/vending-machine/cover.png',
+    alt: "Camera-based survey asking how strongly you agree with 'I prefer structured routines over spontaneous plans', answered by holding up five fingers while hand tracking highlights the hand.",
+    ratio: '16/9',
+  },
   chapters: [
     {
       kind: 'hook',

@@ -21,13 +21,13 @@ export const site = {
   },
   contact: {
     heading: "Let's talk",
-    intro: ph('one line inviting people to get in touch.'),
+    intro: "I'm always looking for new opportunities to collaborate and learn. Feel free to reach out to me via email, LinkedIn, or GitHub.",
     links: [
       // Vul href in (bv. 'mailto:…' of 'https://linkedin.com/in/…'); zonder href
       // wordt het geen link.
-      { label: 'Email', value: ph('your email address'), href: undefined as string | undefined },
-      { label: 'LinkedIn', value: ph('your LinkedIn URL'), href: undefined as string | undefined },
-      { label: 'GitHub', value: ph('your GitHub URL'), href: undefined as string | undefined },
+      { label: 'Email', value: "devanjanssen@gmail.com", href: "mailto:devanjanssen@gmail.com" as string | undefined },
+      { label: 'LinkedIn', value: "linkedin.com/in/devanjanssen/", href: "https://www.linkedin.com/in/devanjanssen/" as string | undefined },
+      { label: 'GitHub', value: "github.com/devanjanssen", href: "https://github.com/devanjanssen" as string | undefined },
     ],
   },
 }

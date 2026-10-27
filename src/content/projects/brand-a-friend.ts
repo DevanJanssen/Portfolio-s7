@@ -14,7 +14,11 @@ export const brandAFriend: Project = {
     { label: 'Team', value: ph('solo / team size') },
   ],
   tags: [ph('tags, e.g. Branding')],
-  cover: { alt: ph('describe the cover image'), ratio: '4/3' },
+  cover: {
+    src: '/images/brand-a-friend/cover.png',
+    alt: "Brand a Friend logo with a pink background and the text 'Brand a Friend' in white.",
+    ratio: '16/9',
+  },
   chapters: [
     {
       kind: 'hook',
