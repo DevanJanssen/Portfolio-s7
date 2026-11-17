@@ -1,45 +1,32 @@
 {
   "name": "portfolio",
-  "version": "0.2.0",
-  "description": "Schoolportfolio van Devan Janssen: statische Next.js-site met scroll-gestuurde case studies.",
+  "version": "3.0.0",
+  "description": "Portfolio of Devan Janssen: a static Astro site with MDX case studies.",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.33.2",
   "scripts": {
-    "dev": "next dev --turbo",
-    "build": "next build",
-    "start": "npx serve@14 out",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "typecheck": "tsc --noEmit",
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
     "format": "prettier --write ."
-  },
-  "dependencies": {
-    "clsx": "^2.1.1",
-    "gsap": "^3.15.0",
-    "next": "15.4.11",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3.3.7",
-    "@types/node": "22.19.9",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
-    "eslint": "^9.16.0",
-    "eslint-config-next": "15.4.11",
-    "prettier": "^3.4.2",
-    "sass": "^1.83.4",
-    "typescript": "5.7.3"
   },
   "engines": {
     "node": ">=20.9.0",
     "pnpm": "^9 || ^10"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "unrs-resolver"
-    ]
+  "dependencies": {
+    "@astrojs/mdx": "^8.1.6",
+    "@astrojs/sitemap": "^3.7.5",
+    "@fontsource-variable/inter-tight": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "astro": "^7.4.12"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "prettier": "^3.10.1",
+    "prettier-plugin-astro": "^1.1.2",
+    "typescript": "^6.0.3"
   }
 }

@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro'
+import { site } from '../site'
+---
+
+<Base title="Contact">
+  <h1 class="visually-hidden">Contact</h1>
+  <ul class="list">
+    {site.contact.map((c) => (
+      <li>
+        <a href={c.href} target={c.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
+          <span class="t">{c.label}</span>
+          <span class="s mono">{c.value}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</Base>
+
+<style>
+  .list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    gap: clamp(18px, 2.4vw, 28px);
+  }
+  a {
+    display: block;
+  }
+  .t {
+    display: block;
+    font-size: clamp(30px, 3.4vw, 44px);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    transition: color 0.25s;
+  }
+  .s {
+    display: block;
+    margin-top: 6px;
+    text-transform: none;
+  }
+  a:hover .t {
+    color: var(--hover);
+  }
+  @media (max-width: 760px) {
+    .list {
+      align-items: flex-start;
+      text-align: left;
+    }
+  }
+</style>

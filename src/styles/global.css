@@ -1,0 +1,94 @@
+:root {
+  --pink: #ff5fa8;
+  --pink-dim: #b04b7c;
+  --pink-pale: #ffc4de;
+  --ink: #0b0a0b;
+
+  --text: var(--pink);
+  --muted: var(--pink-dim);
+  --hover: var(--pink-pale);
+
+  --sans: 'Inter Tight Variable', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* the pink frame */
+  --gut: clamp(6px, 1vw, 14px);
+  --radius: clamp(16px, 2vw, 28px);
+  --radius-sm: clamp(4px, 0.5vw, 8px);
+  --pad: clamp(20px, 3.2vw, 44px);
+  --edge: calc(var(--gut) + var(--pad));
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* pink shows on overscroll and is picked up by Safari's toolbar */
+  background: var(--pink);
+}
+
+body {
+  background: var(--pink);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--pink);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 1px solid var(--pink-pale);
+  outline-offset: 4px;
+}
+
+.mono {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

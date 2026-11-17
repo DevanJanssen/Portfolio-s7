@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro'
+---
+
+<Base title="Info">
+  <article class="page">
+    <h1>Info</h1>
+    <p class="lede">
+      Placeholder: a short paragraph about you — study, interests, what drives you.
+    </p>
+    <p>Placeholder: optional second paragraph — what you are looking for next.</p>
+    <dl class="facts">
+      <div>
+        <dt class="mono">Study</dt>
+        <dd>Fontys ICT</dd>
+      </div>
+      <div>
+        <dt class="mono">Based in</dt>
+        <dd>Placeholder</dd>
+      </div>
+      <div>
+        <dt class="mono">Tools</dt>
+        <dd>Placeholder</dd>
+      </div>
+    </dl>
+  </article>
+</Base>
+
+<style>
+  .page {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    gap: 20px;
+  }
+  h1 {
+    font-size: clamp(30px, 3.4vw, 44px);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    margin-bottom: 12px;
+  }
+  .lede {
+    font-size: clamp(19px, 1.9vw, 26px);
+    line-height: 1.4;
+    max-width: 30ch;
+  }
+  p {
+    max-width: 52ch;
+    line-height: 1.65;
+  }
+  .facts {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 28px;
+  }
+  @media (max-width: 760px) {
+    .page {
+      align-items: flex-start;
+      text-align: left;
+    }
+  }
+</style>

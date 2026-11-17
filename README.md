@@ -1,54 +1,95 @@
 # Portfolio — Devan Janssen
 
-Statische Next.js 15-site met drie scroll-gestuurde case studies en cursor-reactieve animaties. Geen CMS en geen
-database: alle content staat in getypte bestanden onder `src/content`.
+Static [Astro](https://astro.build) site. No CMS and no database: every project is an MDX file
+in `src/content/projects/`.
 
-## Snelstart
+## Quick start
 
 ```bash
 pnpm install
-pnpm dev          # http://localhost:3000
-pnpm build        # statische export naar out/
+pnpm dev       # http://localhost:4321
+pnpm build     # type-check + static build to dist/
+pnpm preview   # serve dist/ locally
 ```
 
-Controle: `pnpm typecheck`, `pnpm lint`, `pnpm build`.
+## Adding or editing a project
+
+Each project is a folder with an `index.mdx` and its images:
+
+```
+src/content/projects/hydrowear/
+  index.mdx
+  cover.jpg
+  screen-1.png
+```
+
+The frontmatter fills the fixed parts of the page (title, list subtitle, intro, Role / Context /
+Focus, cover image, hover preview). The schema lives in `src/content.config.ts`.
+
+| Field                      | Notes                                                            |
+| -------------------------- | ---------------------------------------------------------------- |
+| `title`                    | Project name                                                     |
+| `category`                 | Shown under the title: `Development & Design / 2026`             |
+| `year`                     | Number                                                           |
+| `order`                    | Position on the list, lowest first                               |
+| `intro`                    | Paragraph under the big title                                    |
+| `role`, `context`, `focus` | The three meta fields next to the intro                          |
+| `cover`, `coverAlt`        | Hero image and hover preview (relative path, e.g. `./cover.jpg`) |
+| `coverFit`                 | `cover` (screenshots, default) or `contain` (logos)              |
+| `coverBackground`          | Optional background behind a contained cover, e.g. `'#ffffff'`   |
+| `previewVideo`             | Optional muted loop for the hover preview, path under `public/`  |
+| `draft`                    | `true` hides the project in production builds                    |
+
+Everything below the header is free-form. Use any of these blocks, in any order, with your own
+headings. They are available in every project file without importing them:
+
+```mdx
+import sketch from './sketch.jpg'
+
+<Section title="Any heading">Markdown text…</Section>
+
+<Numbered items={[{ title: 'Point', text: 'Explanation' }]} />
+
+<Callout>One big statement.</Callout>
+
+<Figure src={sketch} alt="…" caption="…" />
+<Figure alt="Planned image" /> {/* no src = placeholder box */}
+<Figure video="/videos/demo.mp4" alt="…" />
+
+<BeforeAfter before={old} after={next} beforeAlt="…" afterAlt="…">
+  **What changed:** …
+</BeforeAfter>
+
+<Gallery
+  columns={3}
+  images={[
+    { src: a, alt: '…' },
+    { src: b, alt: '…' },
+  ]}
+/>
+```
+
+Text that still has to be written starts with `Placeholder:`. Find it with:
+
+```bash
+grep -rn "Placeholder" src
+```
+
+## Other content
+
+- Name, role, nav and contact links: `src/site.ts`
+- Home and Info page text: `src/pages/index.astro`, `src/pages/info.astro`
+
+## Design
+
+- Pink page with a rounded dark window (`.frame` in `src/layouts/Base.astro`). The
+  `theme-color` meta tag tints Safari's toolbar the same pink.
+- Grainy drifting background: a WebGL shader in `src/components/Grain.astro`
+  (static frame with `prefers-reduced-motion`).
+- Colours and spacing tokens: `src/styles/global.css`.
+- Fonts: Inter Tight (text) and JetBrains Mono (labels), self-hosted via Fontsource.
 
 ## Deploy
 
-`next.config.ts` staat op `output: 'export'` met `trailingSlash: true`: `pnpm build` levert
-een map `out/` met gewone HTML-bestanden (`/projects/feedback/index.html`). Die kan op elke
-statische host (Vercel, Netlify, GitHub Pages, Cloudflare Pages). Het domein is
-`devanjanssen.com` (zie `CNAME`). Er zijn geen environment variables nodig.
-
-## Content invullen
-
-Alles wat nog geschreven moet worden is `ph('…')` en staat op de site zichtbaar
-gestreept en met het woord **PLACEHOLDER**. Zoek ze zo op:
-
-```bash
-grep -rn "ph(" src/content
-```
-
-| Wat                              | Waar                             |
-| -------------------------------- | -------------------------------- |
-| Hero, about, contact, footer     | `src/content/site.ts`            |
-| Projecten (volgorde = homepage)  | `src/content/projects/index.ts`  |
-| Eén case study                   | `src/content/projects/<slug>.ts` |
-| Types (hoofdstukken, beeldslots) | `src/content/types.ts`           |
-
-Elke case study heeft vijf hoofdstukken: **intro (hook) → probleem → proces → oplossing →
-resultaat**, elk met een eigen kleur (`tone`). Afbeeldingen: zet ze in
-`public/images/<slug>/` en vul `src` in bij het beeldslot (`cover` of `images`). Zonder `src`
-toont de site een placeholderblok met de beschrijving uit `alt`. Kies `ratio` passend bij de
-foto, anders wordt hij bijgesneden.
-
-Een nieuw project: kopieer een bestand in `src/content/projects/`, pas `slug` aan, en voeg
-het toe aan de lijst in `index.ts`. De pagina `/projects/<slug>/` wordt automatisch gebouwd.
-
-## Ontwerp
-
-Zie [DESIGN.md](DESIGN.md) (editorial kinetic: zwart + roze, variabele Archivo-koppen die
-op de cursor reageren, kantelende kaarten) en de gegenereerde basis in
-[`design-system/devan-janssen-portfolio/MASTER.md`](design-system/devan-janssen-portfolio/MASTER.md).
-Tokens: `src/styles/_tokens.scss`. Beweging: GSAP ScrollTrigger, met een volledig statische
-weergave onder `prefers-reduced-motion`.
+Vercel (`vercel.json`), domain `devanjanssen.com` (`CNAME`). `pnpm build` outputs plain HTML to
+`dist/`, so any static host works.
