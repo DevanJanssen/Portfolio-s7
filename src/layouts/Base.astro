@@ -1,0 +1,99 @@
+---
+import '@fontsource-variable/inter-tight'
+import '@fontsource/jetbrains-mono/400.css'
+import '../styles/global.css'
+import Grain from '../components/Grain.astro'
+import Sidebar from '../components/Sidebar.astro'
+import { site } from '../site'
+
+interface Props {
+  title?: string
+  description?: string
+  /** Full-width pages (project case studies) hide the sidebar. */
+  wide?: boolean
+  image?: string
+}
+
+const { title, description = site.description, wide = false, image } = Astro.props
+const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.role}`
+const canonical = new URL(Astro.url.pathname, Astro.site)
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ff5fa8" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+  </head>
+  <body>
+    <a class="skip mono" href="#main">
+      Skip to content
+    </a>
+    <Grain />
+    <div class="frame" aria-hidden="true"></div>
+    <div class:list={['layout', { wide }]}>
+      {!wide && <Sidebar />}
+      <main id="main">
+        <slot />
+      </main>
+    </div>
+    <slot name="after" />
+  </body>
+</html>
+
+<style>
+  /* pink border: a fixed rounded "window" punched out of a pink mask */
+  .frame {
+    position: fixed;
+    inset: var(--gut);
+    border-radius: var(--radius-sm) var(--radius) var(--radius-sm) var(--radius);
+    box-shadow: 0 0 0 100vmax var(--pink);
+    z-index: 40;
+    pointer-events: none;
+  }
+  .layout {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) 2fr;
+    gap: var(--pad);
+    padding: var(--edge);
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .layout.wide {
+    grid-template-columns: 1fr;
+  }
+  .skip {
+    position: fixed;
+    left: var(--edge);
+    top: var(--edge);
+    z-index: 50;
+    background: var(--pink);
+    color: var(--ink);
+    padding: 6px 10px;
+    border-radius: 999px;
+    transform: translateY(calc(-100% - var(--edge) - 8px));
+  }
+  .skip:focus {
+    transform: none;
+  }
+  @media (max-width: 760px) {
+    .layout {
+      grid-template-columns: 1fr;
+      align-content: start;
+      gap: 56px;
+    }
+  }
+</style>

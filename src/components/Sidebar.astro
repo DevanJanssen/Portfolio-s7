@@ -1,0 +1,92 @@
+---
+import { site } from '../site'
+
+const path = Astro.url.pathname
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(href)
+---
+
+<aside class="side">
+  <a href="/" class="who">
+    <span class="name">{site.name}</span>
+    <span class="role">{site.role}</span>
+  </a>
+  <nav aria-label="Main">
+    <ul>
+      {site.nav.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            class:list={{ on: isActive(item.href) }}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</aside>
+
+<style>
+  .side {
+    position: sticky;
+    top: var(--edge);
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    font-size: 15px;
+  }
+  .who {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .name {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .role {
+    color: var(--muted);
+  }
+  ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  nav a {
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  nav a:hover,
+  nav a.on {
+    color: var(--text);
+  }
+  nav a.on::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--pink);
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  @media (max-width: 760px) {
+    .side {
+      position: static;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+    }
+    ul {
+      align-items: flex-end;
+    }
+    nav a.on::before {
+      display: none;
+    }
+  }
+</style>

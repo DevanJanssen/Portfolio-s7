@@ -1,0 +1,53 @@
+---
+/** A row of numbered items: pain points, learnings, features… */
+interface Props {
+  items: { title: string; text: string }[]
+}
+const { items } = Astro.props
+const columns = items.length % 3 === 0 && items.length !== 6 ? 3 : Math.min(items.length, 4)
+---
+
+<ol class="numbered" style={`--cols:${columns}`}>
+  {items.map((item, i) => (
+    <li>
+      <span class="mono">{String(i + 1).padStart(2, '0')}</span>
+      <h3>{item.title}</h3>
+      <p>{item.text}</p>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .numbered {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    gap: clamp(28px, 3vw, 40px) clamp(16px, 2vw, 28px);
+  }
+  .mono {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 28px;
+  }
+  h3 {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  p {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  @media (max-width: 760px) {
+    .numbered {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 460px) {
+    .numbered {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

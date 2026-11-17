@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro'
+---
+
+<Base title="Not found">
+  <section>
+    <h1>Not found</h1>
+    <a class="mono" href="/projects/">
+      ← All work
+    </a>
+  </section>
+</Base>
+
+<style>
+  section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 16px;
+  }
+  h1 {
+    font-size: clamp(30px, 3.4vw, 44px);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+  a {
+    color: var(--text);
+  }
+</style>

@@ -1,0 +1,197 @@
+---
+import { Image } from 'astro:assets'
+import { render } from 'astro:content'
+import Base from '../../layouts/Base.astro'
+import { getProjects, href, type Project } from '../../lib/projects'
+import Section from '../../components/blocks/Section.astro'
+import Numbered from '../../components/blocks/Numbered.astro'
+import Callout from '../../components/blocks/Callout.astro'
+import Figure from '../../components/blocks/Figure.astro'
+import BeforeAfter from '../../components/blocks/BeforeAfter.astro'
+import Gallery from '../../components/blocks/Gallery.astro'
+
+export async function getStaticPaths() {
+  const projects = await getProjects()
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: { project, next: projects[(i + 1) % projects.length] },
+  }))
+}
+
+interface Props {
+  project: Project
+  next: Project
+}
+
+const { project, next } = Astro.props
+const { data } = project
+const { Content } = await render(project)
+const components = { Section, Numbered, Callout, Figure, BeforeAfter, Gallery }
+---
+
+<Base title={data.title} description={data.intro} wide image={data.cover.src}>
+  <article class="pj">
+    <div class="top mono">
+      <a href="/projects/">← All work</a>
+      <span>
+        {data.category} / {data.year}
+      </span>
+    </div>
+
+    <header class="head">
+      <h1 class="title">{data.title}</h1>
+      <div class="intro">
+        <p class="lede">{data.intro}</p>
+        <dl class="meta">
+          <div>
+            <dt class="mono">Role</dt>
+            <dd>{data.role}</dd>
+          </div>
+          <div>
+            <dt class="mono">Context</dt>
+            <dd>{data.context}</dd>
+          </div>
+          <div>
+            <dt class="mono">Focus</dt>
+            <dd>{data.focus}</dd>
+          </div>
+        </dl>
+      </div>
+    </header>
+
+    <figure
+      class:list={['hero', data.coverFit]}
+      style={data.coverBackground ? `background:${data.coverBackground}` : undefined}
+    >
+      <Image
+        src={data.cover}
+        alt={data.coverAlt}
+        widths={[800, 1400, 2000]}
+        sizes="(max-width: 760px) 100vw, 92vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </figure>
+
+    <div class="body">
+      <Content components={components} />
+    </div>
+
+    {next.id !== project.id && (
+      <a class="next" href={href(next)}>
+        <span class="mono">Next project</span>
+        <span class="t">{next.data.title} →</span>
+      </a>
+    )}
+  </article>
+</Base>
+
+<style>
+  .pj {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(64px, 9vw, 128px);
+  }
+  .top {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .top a {
+    color: var(--text);
+    transition: color 0.2s;
+  }
+  .top a:hover {
+    color: var(--hover);
+  }
+  .head {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(28px, 4vw, 56px);
+    margin-top: calc(-1 * clamp(32px, 5vw, 80px));
+  }
+  .title {
+    font-size: clamp(52px, 11.5vw, 190px);
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 0.86;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+  .intro {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: clamp(16px, 2vw, 28px);
+  }
+  .lede {
+    grid-column: 1 / 8;
+    font-size: clamp(19px, 1.9vw, 26px);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+  .meta {
+    grid-column: 9 / 13;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .meta dt {
+    margin-bottom: 3px;
+  }
+  .meta dd {
+    font-size: 15px;
+  }
+  .hero {
+    aspect-ratio: 16 / 8;
+    overflow: hidden;
+  }
+  .hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero.contain img {
+    object-fit: contain;
+    padding: 8% 0;
+  }
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(64px, 9vw, 128px);
+  }
+  /* plain markdown paragraphs between blocks */
+  .body > :global(p) {
+    font-size: 17px;
+    line-height: 1.65;
+    max-width: 62ch;
+  }
+  .next {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 12px;
+  }
+  .next .t {
+    font-size: clamp(44px, 8vw, 128px);
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 0.9;
+    text-transform: uppercase;
+    transition: color 0.25s;
+  }
+  .next:hover .t {
+    color: var(--hover);
+  }
+  @media (max-width: 760px) {
+    .lede,
+    .meta {
+      grid-column: 1 / -1;
+    }
+    .meta {
+      margin-top: 28px;
+    }
+    .hero {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>
